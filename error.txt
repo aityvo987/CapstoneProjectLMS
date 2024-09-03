@@ -1,0 +1,18 @@
+Câu lệnh "dev": "ts-node-dev --respawn --transpile-only server.ts" là một lệnh dùng để chạy ứng dụng TypeScript trong môi trường phát triển. 
+Dưới đây là giải thích chi tiết từng phần:
+
+ts-node-dev: Đây là một tiện ích kết hợp ts-node (cho phép bạn chạy mã TypeScript trực tiếp mà không cần phải biên dịch trước) với chức năng 
+tương tự như nodemon (tự động khởi động lại ứng dụng khi có thay đổi trong file).
+
+--respawn: Cờ này yêu cầu ts-node-dev khởi động lại toàn bộ quá trình con khi phát hiện thay đổi trong file, thay vì chỉ tải lại. Điều này 
+hữu ích nếu bạn có một số trạng thái toàn cục hoặc tài nguyên bên ngoài cần được khởi tạo lại mỗi lần khởi động lại.
+
+--transpile-only: Cờ này yêu cầu ts-node bỏ qua việc kiểm tra kiểu dữ liệu và chỉ biên dịch mã TypeScript sang JavaScript. Điều này làm cho 
+quá trình biên dịch nhanh hơn, điều này có lợi trong môi trường phát triển, nhưng nó không kiểm tra lỗi kiểu dữ liệu, vì vậy bất kỳ vấn đề về 
+kiểu dữ liệu nào sẽ không được phát hiện cho đến khi thực hiện biên dịch TypeScript hoàn chỉnh.
+
+server.ts: Đây là điểm đầu vào của ứng dụng TypeScript của bạn.
+
+Giải Thích Lỗi
+Lỗi bạn gặp có thể liên quan đến cờ --transpile-only. Khi bạn sử dụng cờ --transpile-only, ts-node không thực hiện kiểm tra kiểu dữ liệu, 
+điều này đôi khi dẫn đến lỗi nếu mã TypeScript của bạn phụ thuộc nhiều vào các tính năng kiểu mà không thực sự cần thiết cho JavaScript thuần.
