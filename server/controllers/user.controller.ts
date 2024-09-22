@@ -1,9 +1,13 @@
-require ('dotenv').config();
+require('dotenv').config();
 import { Request, Response, NextFunction } from "express";
 import userModel from "../models/user.model";
 const ErrorHandler = require("../utils/ErrorHandler");
 import { CatchAsyncError } from "../middleware/catchAsyncErrors";
 import jwt, { Secret } from "jsonwebtoken";
+import ejs from "ejs";
+import path from "path";
+import sendMail from "../utils/sendMail";
+
 //register user
 interface IRegistrationBody {
     name: string;
@@ -12,7 +16,7 @@ interface IRegistrationBody {
     avatar?: string;
 }
 
-export const registerUser = CatchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
+export const registrationUser = CatchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { name, email, password } = req.body;
 
@@ -27,7 +31,31 @@ export const registerUser = CatchAsyncError(async (req: Request, res: Response, 
             password,
         };
 
+        //Create activation code and send to user email
         const activationToken = createActivationToken(user);
+
+        const activationCode = activationToken.activationCode;
+
+        const data = { user: { name: user.name }, activationCode };
+        const html = await ejs.renderFile(path.join(__dirname, "../mails/activation-mail.ejs"));
+
+        try {
+            await sendMail({
+                email: user.email,
+                subject: "Activate your account",
+                template: "activation-mail.ejs",
+                data,
+            });
+
+            res.status(200).json({
+                success:true,
+                message: `Registration successful. Please check your email: ${user.email} to activate your account.`,
+                activationToken:activationToken.token,
+            });
+        } catch (error:any) {
+            return next(new ErrorHandler(error.message,400));
+        }
+
     } catch (error: any) {
         return next(new ErrorHandler(error.message, 400));
     }
@@ -41,14 +69,14 @@ interface IActivationToken {
 export const createActivationToken = (user: any): IActivationToken => {
     const activationCode = Math.floor(1000 + Math.random() * 9000).toString();
 
-    const token  =jwt.sign({
+    const token = jwt.sign({
         user,
         activationCode
     },
-    process.env.ACTIVATION_SECRET as Secret,
-    {
-        expiresIn:"5m",
-    });
+        process.env.ACTIVATION_SECRET as Secret,
+        {
+            expiresIn: "5m",
+        });
 
-    return {token,activationCode};
+    return { token, activationCode };
 }
