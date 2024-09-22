@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 // import ErrorHandler from "../utils/ErrorHandler";
 const ErrorHandler = require("../utils/ErrorHandler");
 
-module.exports = (
+export const ErrorMiddleware = (
   err: any,
   req: Request,
   res: Response,

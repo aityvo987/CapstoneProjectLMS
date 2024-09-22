@@ -22,11 +22,11 @@ export interface IUser extends Document {
 const userSchema: Schema<IUser> = new Schema({
     name: {
         type: String,
-        require: [true, "Please enter your name"],
+        required: [true, "Please enter your name"],
     },
     email: {
         type: String,
-        require: [true, "Please enter your email"],
+        required: [true, "Please enter your email"],
         validate: {
             validator: function (value: string) {
                 return emailRegexPattern.test(value);
