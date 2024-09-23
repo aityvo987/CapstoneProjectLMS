@@ -4,8 +4,8 @@ import{CatchAsyncError} from "../middleware/catchAsyncError"
 
 import ErrorHandler from "../utils/ErrorHandler";
 
-import cloudinary from "clouddinary";
-import { CreateCourse } from "../services/course_service";
+import cloudinary from "cloudinary";
+import { CreateCourse } from "../services/course.service";
 
 export const uploadCourse = CatchAsyncError(async (req: Request, res: Response, next: NextFunction)=>{
     try{

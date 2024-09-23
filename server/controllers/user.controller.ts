@@ -19,7 +19,6 @@ interface IRegistrationBody {
 export const registrationUser = CatchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { name, email, password } = req.body;
-
         const isEmailExist = await userModel.findOne({ email });
         if (isEmailExist) {
             return next(new ErrorHandler("Email already exists", 400));
@@ -40,6 +39,7 @@ export const registrationUser = CatchAsyncError(async (req: Request, res: Respon
         const html = await ejs.renderFile(path.join(__dirname, "../mails/activation-mail.ejs"));
 
         try {
+            console.log(`User is connecting: ${user.email}`);
             await sendMail({
                 email: user.email,
                 subject: "Activate your account",
