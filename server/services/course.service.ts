@@ -1,6 +1,6 @@
 import { Response } from "express";
-
-import CourseModel from "../models/course_model";
+import { CatchAsyncError } from "../middleware/catchAsyncErrors";
+import CourseModel from "../models/course.model";
 
 export const CreateCourse  = CatchAsyncError(async(data:any,res:Response)=>{
     const course = await CourseModel.create(data);
