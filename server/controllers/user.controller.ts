@@ -126,3 +126,17 @@ export const activateUser = CatchAsyncError(async (req: Request, res: Response, 
         return next(new ErrorHandler(error.message, 400));
     }
 });
+
+// Login user
+interface ILoginRequest{
+    email:string;
+    password: string;
+}
+
+export const loginUser = CatchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
+    try{
+        const {email,password} = req.body as ILoginRequest;
+    }catch(error:any){
+        return next(new ErrorHandler(error.message, 400));
+    }
+});

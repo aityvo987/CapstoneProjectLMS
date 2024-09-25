@@ -1,6 +1,8 @@
+require('dotenv').config();
 import mongoose, { Document, Model, Schema } from "mongoose";
 import bcrypt from "bcryptjs"; //For hashing passwords
 import { timeStamp } from "console";
+import jwt from "jsonwebtoken";
 
 //RegExp-REgular Expression(Biểu thức chính quy):ktra định dạng email
 const emailRegexPattern: RegExp = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
@@ -16,7 +18,9 @@ export interface IUser extends Document {
     role: string;
     isVerified: boolean;
     courses: Array<{ courseTd: string }>;
-    comparePassword( password: string ):  Promise<boolean>;
+    comparePassword(password: string): Promise<boolean>;
+    SignAccessToken: () => string;
+    SignRefreshToken: () => string;
 };
 
 const userSchema: Schema<IUser> = new Schema({
@@ -72,6 +76,16 @@ userSchema.pre<IUser>('save', async function (next) {
     this.password = await bcrypt.hash(this.password, 10);
     next();
 });
+
+// sign access token
+userSchema.methods.SignAccessToken = function(){
+    return jwt.sign({id:this._id},process.env.ACCESS_TOKEN ||'');
+}
+
+// sign refresh token
+userSchema.methods.SignRefreshToken = function(){
+    return jwt.sign({id:this._id},process.env.REFRESH_TOKEN ||'');
+}
 
 //compared password 
 userSchema.methods.comparedPassword = async function (enteredPassword: string): Promise<boolean> {
