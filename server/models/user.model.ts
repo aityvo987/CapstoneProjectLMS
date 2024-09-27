@@ -88,7 +88,7 @@ userSchema.methods.SignRefreshToken = function(){
 }
 
 //compared password 
-userSchema.methods.comparedPassword = async function (enteredPassword: string): Promise<boolean> {
+userSchema.methods.comparePassword = async function (enteredPassword: string): Promise<boolean> {
     return await bcrypt.compare(enteredPassword, this.password);
 };
 
