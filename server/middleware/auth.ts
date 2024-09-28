@@ -39,7 +39,6 @@ export const authorizeRoles = (...roles: string[]) => {
         if(!roles.includes(req.user?.role || '')){
             return next(new ErrorHandler(`Role: ${req.user?.role} is not allowed to access this page`,403));
         }
-
         next();
     }
 }
