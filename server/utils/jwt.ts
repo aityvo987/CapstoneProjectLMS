@@ -7,7 +7,7 @@ interface ITokenOptions { //this save token into cookie
     expires: Date;
     maxAge: number;
     httpOnly: boolean;
-    sameSite: "lax" | "strict" | "none" | undefined;
+    sameSite: 'lax' | 'strict' | 'none' | undefined;
     secure?: boolean; //optional
 }
 
@@ -31,7 +31,7 @@ export const sendToken = (user: IUser, statusCode: number, res: Response) => {
         expires: new Date(Date.now() + accessTokenExpire * 1000),
         maxAge: accessTokenExpire * 1000,
         httpOnly: true,
-        sameSite: "lax",
+        sameSite: 'lax',
 
     };
 
@@ -39,7 +39,7 @@ export const sendToken = (user: IUser, statusCode: number, res: Response) => {
         expires: new Date(Date.now() + refreshTokenExpire * 1000),
         maxAge: refreshTokenExpire * 1000,
         httpOnly: true,
-        sameSite: "lax",
+        sameSite: 'lax',
     };
 
     // only set secure to true in production. It will be set again when deploying
