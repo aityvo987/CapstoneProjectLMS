@@ -17,7 +17,7 @@ userRouter.post('/activate-user', activateUser);
 
 userRouter.post('/login', loginUser);
 
-userRouter.post('/logout', isAutheticated,logoutUser);
+userRouter.get('/logout', isAutheticated,logoutUser);
 
 
 export default userRouter;

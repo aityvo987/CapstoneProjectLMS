@@ -6,7 +6,7 @@ import ErrorHandler from "../utils/ErrorHandler";
 
 
 
-//authentication user
+//authenticated user
 export const isAutheticated = CatchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
 
     const access_token = req.cookies.access_token as string;
@@ -32,3 +32,14 @@ export const isAutheticated = CatchAsyncError(async (req: Request, res: Response
 
     next();
 });
+
+//authorized user: validate user role
+export const authorizeRoles = (...roles: string[]) => {
+    return (req: Request, res: Response, next: NextFunction) => {
+        if(!roles.includes(req.user?.role || '')){
+            return next(new ErrorHandler(`Role: ${req.user?.role} is not allowed to access this page`,403));
+        }
+
+        next();
+    }
+}
