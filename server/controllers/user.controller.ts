@@ -164,7 +164,7 @@ export const loginUser = CatchAsyncError(async (req: Request, res: Response, nex
     }
 });
 
-// Login user
+// Logout user
 
 export const logoutUser = CatchAsyncError(
     async(req: Request, res: Response, next: NextFunction)=>{
