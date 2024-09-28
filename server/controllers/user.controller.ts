@@ -237,6 +237,9 @@ export const updateAccessToken = CatchAsyncError(async (req: Request, res: Respo
             }
         );
 
+        //set request user each time reload token
+        req.user = user;
+        
         //update access token var cookie
         res.cookie("access_token", accessToken, accessTokenOptions);
         res.cookie("refresh_token", refreshToken, refreshTokenOptions);
@@ -263,7 +266,7 @@ export const getUserInfo = CatchAsyncError(async (req: Request, res: Response, n
 });
 
 
-interface ISocialAuthBody{
+interface ISocialAuthBody {
     email: string;
     name: string;
     avatar: string;
@@ -273,7 +276,7 @@ interface ISocialAuthBody{
 
 export const socialAuth = CatchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const { email, name, avatar } = req.body;
+        const { email, name, avatar } = req.body as ISocialAuthBody;
         const user = await userModel.findOne({ email });
         if (!user) {
             const newUser = await userModel.create({ email, name, avatar });
@@ -283,6 +286,49 @@ export const socialAuth = CatchAsyncError(async (req: Request, res: Response, ne
             sendToken(user, 200, res);
         }
     } catch (error: any) {
+        return next(new ErrorHandler(error.message, 400));
+    }
+});
+
+// update user info
+interface IUpdateUserInfo {
+    name?: string;
+    email?: string;
+}
+
+export const upateUserInfo = CatchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { name, email } = req.body as IUpdateUserInfo;
+        const userId = req.user?._id;
+        const user = await userModel.findById(userId);
+
+        //check entered email is exist
+        if (email && user) {
+            const isEmailExist = await userModel.findOne({ email });
+            if (isEmailExist) {
+                return next(new ErrorHandler("Email already exists", 400));
+            }
+            user.email = email;
+        }
+
+        //check entered email is exist
+        if (name && user) {
+            user.name = name;
+        }
+
+        await user?.save();
+
+        // update data in redis
+        await redis.set(userId, JSON.stringify(user));
+
+        res.status(200).json({
+            success: true,
+            user,
+        });
+
+
+    }
+    catch (error: any) {
         return next(new ErrorHandler(error.message, 400));
     }
 });
