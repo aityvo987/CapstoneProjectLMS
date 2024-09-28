@@ -9,6 +9,7 @@ import {
     socialAuth,
     upateUserInfo,
     updatePassword,
+    updateAvatar,
 } from '../controllers/user.controller';
 
 import {authorizeRoles,isAutheticated} from '../middleware/auth';
@@ -34,5 +35,6 @@ userRouter.put('/update-user-info',isAutheticated, upateUserInfo);
 
 userRouter.put('/update-user-password',isAutheticated, updatePassword);
 
+userRouter.put('/update-user-avatar',isAutheticated, updateAvatar);
 
 export default userRouter;

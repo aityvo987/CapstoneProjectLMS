@@ -12,6 +12,8 @@ import { accessTokenOptions, refreshTokenOptions, sendToken } from "../utils/jwt
 import { redis } from "../utils/redis";
 import { getUserById } from "../services/user.service";
 
+import cloudinary from "cloudinary"
+
 //register user
 interface IRegistrationBody {
     name: string;
@@ -373,7 +375,66 @@ export const updatePassword = CatchAsyncError(async (req: Request, res: Response
         await user?.save();
 
         //update data from redis
-        await redis.set(req.user?._id,JSON.stringify(user));
+        await redis.set(req.user?._id, JSON.stringify(user));
+
+        res.status(200).json({
+            success: true,
+            user,
+        });
+
+    } catch (error: any) {
+        return next(new ErrorHandler(error.message, 400));
+    }
+});
+
+//update profile avatar or user picture
+//avatar need to base64 picture since cloudinary support this type of image
+//https://elmah.io/tools/base64-image-encoder/==> Using this website to convert image link to base64
+
+interface IUpdateAvatar {
+    avatar: string;
+}
+
+export const updateAvatar = CatchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { avatar } = req.body as IUpdateAvatar;
+        const userId = req.user?._id;
+        const user = await userModel.findById(userId);
+
+        if (avatar && user) {
+            //destroy old avatar from cloudinary
+            if (user?.avatar?.public_id) {
+                await cloudinary.v2.uploader.destroy(user?.avatar?.public_id);
+
+                //update avatar to cloudinary
+                const myCloud = await cloudinary.v2.uploader.upload(avatar, {
+                    folder: "avatars", //save in avatar folder
+                    width: 150,
+                });
+
+                //set avatar atributes
+                user.avatar = {
+                    public_id: myCloud.public_id,
+                    url: myCloud.secure_url,
+                };
+
+            } else {
+                const myCloud = await cloudinary.v2.uploader.upload(avatar, {
+                    folder: "avatars",
+                    width: 150,
+                });
+
+                user.avatar = {
+                    public_id: myCloud.public_id,
+                    url: myCloud.secure_url,
+                };
+            }
+        }
+
+        await user?.save();
+
+        //update data from redis
+        await redis.set(userId, JSON.stringify(user));
 
         res.status(200).json({
             success: true,
