@@ -1,7 +1,7 @@
 require('dotenv').config();
 import { Request, Response, NextFunction } from "express";
-import {IUser} from "../models/user.model";
-const ErrorHandler = require("../utils/ErrorHandler");
+import { IUser } from "../models/user.model";
+import ErrorHandler from "../utils/ErrorHandler";
 import { CatchAsyncError } from "../middleware/catchAsyncErrors";
 import jwt, { Secret } from "jsonwebtoken";
 import ejs from "ejs";
@@ -97,23 +97,23 @@ export const activateUser = CatchAsyncError(async (req: Request, res: Response, 
         const newUser: { user: IUser; activationCode: string } = jwt.verify(
             activation_token,
             process.env.ACTIVATION_SECRET as string,
-        ) as { user: IUser; activationCode:string };
+        ) as { user: IUser; activationCode: string };
 
         //wrong activation code 
-        if(newUser.activationCode !== activation_code){
-            return next(new ErrorHandler("Invalid activation code",400));
+        if (newUser.activationCode !== activation_code) {
+            return next(new ErrorHandler("Invalid activation code", 400));
         }
 
-        const {name,email,password}=newUser.user;
+        const { name, email, password } = newUser.user;
 
         //Check existed user
-        const existUser =await userModel.findOne({email});
+        const existUser = await userModel.findOne({ email });
 
-        if(existUser){
-            return next(new ErrorHandler("Email already exists",400));
+        if (existUser) {
+            return next(new ErrorHandler("Email already exists", 400));
         }
 
-        const user =await userModel.create({
+        const user = await userModel.create({
             name,
             email,
             password,
@@ -129,37 +129,37 @@ export const activateUser = CatchAsyncError(async (req: Request, res: Response, 
 });
 
 // Login user
-interface ILoginRequest{
-    email:string;
+interface ILoginRequest {
+    email: string;
     password: string;
 }
 
 export const loginUser = CatchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
-    try{
-        const {email,password} = req.body as ILoginRequest;
+    try {
+        const { email, password } = req.body as ILoginRequest;
 
         //check empty fields
-        if(!email||!password) {
+        if (!email || !password) {
             return next(new ErrorHandler("Please provide email and password", 400));
         };
 
         //check user is existed or invalid username
-        const user = await userModel.findOne({email}).select("+password");
+        const user = await userModel.findOne({ email }).select("+password");
 
-        if(!user) {
+        if (!user) {
             return next(new ErrorHandler("Invalid email or password", 400));
         };
 
         //check password is invalid or NOT
-        const isPasswordMatch= await user.comparePassword(password);
-        
-        if(!isPasswordMatch) {
+        const isPasswordMatch = await user.comparePassword(password);
+
+        if (!isPasswordMatch) {
             return next(new ErrorHandler("Invalid email or password", 400));
         };
 
-        sendToken(user,200,res);
-        
-    }catch(error:any){
+        sendToken(user, 200, res);
+
+    } catch (error: any) {
         return next(new ErrorHandler(error.message, 400));
     }
 });
@@ -167,17 +167,17 @@ export const loginUser = CatchAsyncError(async (req: Request, res: Response, nex
 // Logout user
 
 export const logoutUser = CatchAsyncError(
-    async(req: Request, res: Response, next: NextFunction)=>{
-        try{
+    async (req: Request, res: Response, next: NextFunction) => {
+        try {
             //unset cookie when logout
-            res.cookie("access_token","",{maxAge:1});
-            res.cookie("refresh_token","",{maxAge:1});
+            res.cookie("access_token", "", { maxAge: 1 });
+            res.cookie("refresh_token", "", { maxAge: 1 });
 
             res.status(200).json({
                 success: true,
                 message: "Logged out successfully"
             });
-        }catch(error: any){
+        } catch (error: any) {
             return next(new ErrorHandler(error.message, 400));
         }
     }

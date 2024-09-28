@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction } from "express";
 import { CatchAsyncError } from "./catchAsyncErrors";
-const ErrorHandler = require("../utils/ErrorHandler");
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { redis } from "../utils/redis";
+import ErrorHandler from "../utils/ErrorHandler";
 
 
 
