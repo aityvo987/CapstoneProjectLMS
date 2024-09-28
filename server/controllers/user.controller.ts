@@ -239,7 +239,7 @@ export const updateAccessToken = CatchAsyncError(async (req: Request, res: Respo
 
         //set request user each time reload token
         req.user = user;
-        
+
         //update access token var cookie
         res.cookie("access_token", accessToken, accessTokenOptions);
         res.cookie("refresh_token", refreshToken, refreshTokenOptions);
@@ -329,6 +329,58 @@ export const upateUserInfo = CatchAsyncError(async (req: Request, res: Response,
 
     }
     catch (error: any) {
+        return next(new ErrorHandler(error.message, 400));
+    }
+});
+
+
+//Update user password
+
+interface IUpdatePassword {
+    oldPassword: string;
+    newPassword: string;
+}
+
+export const updatePassword = CatchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { oldPassword, newPassword } = req.body as IUpdatePassword;
+
+        const userId = req.user?._id;
+        const user = await userModel.findById(userId).select("+password");
+        //Check empty input fields
+        if (!oldPassword || !newPassword) {
+            return next(new ErrorHandler("Empty fields", 400));
+        }
+
+        //Check user var exists
+        if (user?.password === undefined) {
+            return next(new ErrorHandler("Invalid user", 400));
+        }
+
+        //Check invalid old password
+        const isPasswordMatch = await user?.comparePassword(oldPassword);
+        if (!isPasswordMatch) {
+            return next(new ErrorHandler("Incorrect old password", 400));
+        }
+
+        const isSamePassword = await user?.comparePassword(newPassword);
+        if (isSamePassword) {
+            return next(new ErrorHandler("New password is same with the old password. Please enter new password.", 400));
+        }
+
+        user.password = newPassword;
+
+        await user?.save();
+
+        //update data from redis
+        await redis.set(req.user?._id,JSON.stringify(user));
+
+        res.status(200).json({
+            success: true,
+            user,
+        });
+
+    } catch (error: any) {
         return next(new ErrorHandler(error.message, 400));
     }
 });

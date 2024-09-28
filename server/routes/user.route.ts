@@ -8,6 +8,7 @@ import {
     getUserInfo,
     socialAuth,
     upateUserInfo,
+    updatePassword,
 } from '../controllers/user.controller';
 
 import {authorizeRoles,isAutheticated} from '../middleware/auth';
@@ -30,5 +31,8 @@ userRouter.get('/user',isAutheticated, getUserInfo);
 userRouter.post('/social-auth' ,socialAuth);
 
 userRouter.put('/update-user-info',isAutheticated, upateUserInfo);
+
+userRouter.put('/update-user-password',isAutheticated, updatePassword);
+
 
 export default userRouter;
