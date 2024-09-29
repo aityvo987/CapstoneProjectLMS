@@ -12,5 +12,5 @@ courseRouter.get("/get-course/:id", getSingleCourse);
 
 courseRouter.get("/get-courses/", getAllCourse);
 
-courseRouter.get("/get-course-content/:id",getCourseContent);
+courseRouter.get("/get-course-content/:id",isAutheticated,getCourseContent);
 export default courseRouter;
