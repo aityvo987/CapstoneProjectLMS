@@ -9,7 +9,7 @@ import { Redis } from "ioredis";
 import cloudinary from "cloudinary";
 import { CreateCourse } from "../services/course.service";
 import CourseModel from "../models/course.model";
-import redis from "../utils/redis";
+import {redis} from "../utils/redis";
 
 export const uploadCourse = CatchAsyncError(async (req: Request, res: Response, next: NextFunction)=>{
     try{
@@ -75,8 +75,8 @@ export const getSingleCourse = CatchAsyncError(async (req: Request, res: Respons
         }
         else{
             const course = await CourseModel.findById(req.params.id).select(
-                "-courseData.videoUrl -courseData.suggestion - courseData.question -courseData.links"
-            );
+                "-courseData.videoUrl -courseData.suggestion -courseData.question -courseData.links"
+            ).select("courseData");
             await redis.set(courseId,JSON.stringify(course))
             res.status(200).json({
                 success:true,
@@ -102,8 +102,8 @@ export const getAllCourse = CatchAsyncError(async (req: Request, res: Response, 
             });
         } else{
             const courses = await CourseModel.find().select(
-                "-courseData.videoUrl -courseData.suggestion - courseData.question -courseData.links"
-            );
+                "-courseData.videoUrl -courseData.suggestion -courseData.question -courseData.links"
+            ).select("courseData");
 
             await redis.set("allCourses",JSON.stringify(courses));
 
