@@ -118,7 +118,6 @@ export const getCourseContent = CatchAsyncError(async (req: Request, res: Respon
     try{
         const userCourseList = req.user?.courses;
         const courseId = req.params.id;
-        
         const courseExists = userCourseList?.find((course:any)=>course._id.toString()===courseId);
 
         if(!courseExists){
@@ -127,7 +126,6 @@ export const getCourseContent = CatchAsyncError(async (req: Request, res: Respon
 
         const course = await CourseModel.findById(courseId);
         const content = course?.courseData;
-        
         res.status(200).json({
             success:true,
             content,

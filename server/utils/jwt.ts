@@ -35,7 +35,7 @@ export const sendToken = (user: IUser, statusCode: number, res: Response) => {
     const refreshToken = user.SignRefreshToken();
 
     // upload session to redis. user._id  need to be string type
-    redis.set(user.id, JSON.stringify(user) as any) //I change 'user._id' into 'user.id' . So maybe it can error in future
+    redis.set(user._id, JSON.stringify(user) as any) //I change 'user._id' into 'user.id' . So maybe it can error in future
         .catch((err) => {
             console.error('Redis SET Error:', err);
             // Bạn có thể xử lý lỗi Redis tại đây nếu cần
