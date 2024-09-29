@@ -33,22 +33,25 @@ export const createOrder = CatchAsyncError(async (req: Request, res: Response, n
 
         const data: any = {
             courseId: course._id,
-            userId: user?.id
+            userId: user?.id,
+            payment_info,
         };
-
-        newOrder(data, res, next);
 
         //create mailData to fetch data to the email user after success purchasing
         const mailData = {
+            // user: {
+            //     name: user?.name,
+            // },
             //order object 
             order: {
-                _id: course._id.slice(0, 6), //error   _id: course._id.slice(0, 6),
+                _id: course._id.toString().slice(0, 6), //error   _id: course._id.slice(0, 6),
                 name: course.name,
                 price: course.price,
                 //order Date: type===> 2014 September 29
                 date: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
-            }
-        }
+            },
+            // ORIGIN: process.env.ORIGIN,
+        };
 
         //fetch emailData to user mail
 
@@ -83,10 +86,16 @@ export const createOrder = CatchAsyncError(async (req: Request, res: Response, n
             message: `You have new order: ${course.name}`,
         });
 
-        res.status(201).json({
-            success: true,
-            order:course,
-        });
+        //update user.purchase
+        course.purchased = (course.purchased ?? 0) + 1;
+
+        console.log(course.purchased);
+
+        await course.save();
+
+        //create new order
+        newOrder(data, res, next);
+
 
 
     } catch (err: any) {
