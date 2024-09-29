@@ -9,7 +9,7 @@ import { Redis } from "ioredis";
 import cloudinary from "cloudinary";
 import { CreateCourse } from "../services/course.service";
 import CourseModel from "../models/course.model";
-import redis from "../utils/redis";
+import {redis} from "../utils/redis";
 
 export const uploadCourse = CatchAsyncError(async (req: Request, res: Response, next: NextFunction)=>{
     try{
@@ -63,9 +63,6 @@ export const getSingleCourse = CatchAsyncError(async (req: Request, res: Respons
 
         const courseId = req.params.id;
         const isCacheExists = await redis.get(courseId);
-
-        
-        
         if(isCacheExists){
             const course = JSON.parse(isCacheExists)
             res.status(200).json({
@@ -75,8 +72,8 @@ export const getSingleCourse = CatchAsyncError(async (req: Request, res: Respons
         }
         else{
             const course = await CourseModel.findById(req.params.id).select(
-                "-courseData.videoUrl -courseData.suggestion - courseData.question -courseData.links"
-            );
+                "-courseData.videoUrl -courseData.suggestion -courseData.question -courseData.links"
+            ).select("courseData");
             await redis.set(courseId,JSON.stringify(course))
             res.status(200).json({
                 success:true,
@@ -92,7 +89,6 @@ export const getSingleCourse = CatchAsyncError(async (req: Request, res: Respons
 
 export const getAllCourse = CatchAsyncError(async (req: Request, res: Response, next: NextFunction)=>{
     try{
-
         const isCacheExists = await redis.get("allCourses");
         if (isCacheExists){
             const course = JSON.parse(isCacheExists)
@@ -102,11 +98,10 @@ export const getAllCourse = CatchAsyncError(async (req: Request, res: Response, 
             });
         } else{
             const courses = await CourseModel.find().select(
-                "-courseData.videoUrl -courseData.suggestion - courseData.question -courseData.links"
-            );
+                "-courseData.videoUrl -courseData.suggestion -courseData.question -courseData.links"
+            ).select("courseData");
 
             await redis.set("allCourses",JSON.stringify(courses));
-
             res.status(200).json({
                 success:true,
                 courses,
@@ -119,3 +114,25 @@ export const getAllCourse = CatchAsyncError(async (req: Request, res: Response, 
     }
 });
 
+export const getCourseContent = CatchAsyncError(async (req: Request, res: Response, next: NextFunction)=>{
+    try{
+        const userCourseList = req.user?.courses;
+        const courseId = req.params.id;
+        
+        const courseExists = userCourseList?.find((course:any)=>course._id.toString()===courseId);
+
+        if(!courseExists){
+            return next(new ErrorHandler("You have not paid for full content of the course",404));
+        }
+
+        const course = await CourseModel.findById(courseId);
+        const content = course?.courseData;
+        
+        res.status(200).json({
+            success:true,
+            content,
+        });
+    }catch(error:any){
+        return next(new ErrorHandler(error.message,500));
+    }
+});
