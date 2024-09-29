@@ -63,9 +63,6 @@ export const getSingleCourse = CatchAsyncError(async (req: Request, res: Respons
 
         const courseId = req.params.id;
         const isCacheExists = await redis.get(courseId);
-
-        
-        
         if(isCacheExists){
             const course = JSON.parse(isCacheExists)
             res.status(200).json({
@@ -92,7 +89,6 @@ export const getSingleCourse = CatchAsyncError(async (req: Request, res: Respons
 
 export const getAllCourse = CatchAsyncError(async (req: Request, res: Response, next: NextFunction)=>{
     try{
-
         const isCacheExists = await redis.get("allCourses");
         if (isCacheExists){
             const course = JSON.parse(isCacheExists)
@@ -106,7 +102,6 @@ export const getAllCourse = CatchAsyncError(async (req: Request, res: Response, 
             ).select("courseData");
 
             await redis.set("allCourses",JSON.stringify(courses));
-
             res.status(200).json({
                 success:true,
                 courses,
@@ -119,3 +114,25 @@ export const getAllCourse = CatchAsyncError(async (req: Request, res: Response, 
     }
 });
 
+export const getCourseContent = CatchAsyncError(async (req: Request, res: Response, next: NextFunction)=>{
+    try{
+        const userCourseList = req.user?.courses;
+        const courseId = req.params.id;
+        
+        const courseExists = userCourseList?.find((course:any)=>course._id.toString()===courseId);
+
+        if(!courseExists){
+            return next(new ErrorHandler("You have not paid for full content of the course",404));
+        }
+
+        const course = await CourseModel.findById(courseId);
+        const content = course?.courseData;
+        
+        res.status(200).json({
+            success:true,
+            content,
+        });
+    }catch(error:any){
+        return next(new ErrorHandler(error.message,500));
+    }
+});
