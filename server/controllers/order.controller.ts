@@ -88,9 +88,6 @@ export const createOrder = CatchAsyncError(async (req: Request, res: Response, n
 
         //update user.purchase
         course.purchased = (course.purchased ?? 0) + 1;
-
-        console.log(course.purchased);
-
         await course.save();
 
         //create new order
