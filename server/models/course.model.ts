@@ -1,9 +1,9 @@
 import mongoose,{Document,Model,Schema} from "mongoose";
 
-interface IComment extends Document{
+export interface IComment extends Document{
     user:object,
-    comment:String;
-    commentReplies?:IComment[];
+    question:String;
+    questionReplies:IComment[];
 }
 
 
@@ -29,7 +29,7 @@ interface ICourseData extends Document{
     videoPlayer:string;
     links:ILink[];
     suggestion:string;
-    questions:IComment;
+    questions:IComment[];
 
 }
 
@@ -66,12 +66,12 @@ const linkSchema = new Schema<ILink>({
 
 const commentSchema = new Schema<IComment>({
     user:Object,
-    comment:String,
-    commentReplies:[Object],
+    question:String,
+    questionReplies:[Object],
 });
 
 const courseDataSchema = new Schema<ICourseData>({
-    videoUrl:String,
+    videoUrl:String, 
     videoThumbnail:Object,
     title:String,
     videoSection:String,
@@ -134,6 +134,8 @@ const courseSchema = new Schema<ICourse>({
     }
 });
 
+
 const CourseModel: Model<ICourse>= mongoose.model("course",courseSchema);
+
 
 export default CourseModel;

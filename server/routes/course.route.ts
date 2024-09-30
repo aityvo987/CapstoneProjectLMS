@@ -1,5 +1,5 @@
 import express from "express";
-import { editCourse, getAllCourse, getCourseContent, getSingleCourse, uploadCourse } from "../controllers/course.contronller";
+import { addQuestion, editCourse, getAllCourse, getCourseContent, getSingleCourse, uploadCourse } from "../controllers/course.contronller";
 import { authorizeRoles, isAutheticated } from "../middleware/auth";
 
 const courseRouter = express.Router();
@@ -13,4 +13,6 @@ courseRouter.get("/get-course/:id", getSingleCourse);
 courseRouter.get("/get-courses/", getAllCourse);
 
 courseRouter.get("/get-course-content/:id",isAutheticated,getCourseContent);
+
+courseRouter.post("/add-question",isAutheticated,addQuestion);
 export default courseRouter;
