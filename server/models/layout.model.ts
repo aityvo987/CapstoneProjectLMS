@@ -52,6 +52,6 @@ const layoutSchema = new Schema<Layout>({
 
 })
 
-const layoutModel = model<Layout>('layout',layoutSchema);
+const LayoutModel = model<Layout>('layout',layoutSchema);
 
-export default layoutModel;
+export default LayoutModel;
