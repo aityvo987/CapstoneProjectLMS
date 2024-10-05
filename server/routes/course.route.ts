@@ -1,5 +1,12 @@
 import express from "express";
-import { editCourse, getAllCourse, getCourseContent, getSingleCourse, uploadCourse } from "../controllers/course.contronller";
+import {
+    deleteCourse,
+    editCourse,
+    getAllCourse,
+    getCourseContent,
+    getSingleCourse,
+    uploadCourse
+} from "../controllers/course.controller";
 import { authorizeRoles, isAutheticated } from "../middleware/auth";
 
 const courseRouter = express.Router();
@@ -15,6 +22,9 @@ courseRouter.get("/get-courses/", getAllCourse);
 courseRouter.get("/get-course-content/:id", isAutheticated, getCourseContent);
 
 courseRouter.get("/get-courses", isAutheticated, authorizeRoles("admin"), getAllCourse);
+
+courseRouter.delete('/delete-course/:id', isAutheticated, authorizeRoles("admin"), deleteCourse);
+
 
 
 export default courseRouter;

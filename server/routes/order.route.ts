@@ -1,5 +1,8 @@
 import express from "express";
-import { createOrder, getAllOrders } from "../controllers/order.controller";
+import {
+    createOrder,
+    getAllOrders
+} from "../controllers/order.controller";
 import { authorizeRoles, isAutheticated } from "../middleware/auth";
 
 const orderRouter = express.Router();

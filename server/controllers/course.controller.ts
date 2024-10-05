@@ -134,7 +134,7 @@ export const getCourseContent = CatchAsyncError(async (req: Request, res: Respon
         return next(new ErrorHandler(error.message,500));
     }
 });
-
+//Only for user
 //get all Courses
 export const getAllCourses =CatchAsyncError(
     async(req:Request, res:Response,next:NextFunction) => {
@@ -145,3 +145,30 @@ export const getAllCourses =CatchAsyncError(
         }
     }
 );
+
+//Delete course 
+export const deleteCourse =CatchAsyncError(async(req:Request, res:Response, next:NextFunction)=>{
+    try{
+        const {id}=req.params;
+
+        const course = await CourseModel.findById(id);
+
+        //wrong user id
+        if(!course){
+            return next(new ErrorHandler("Course not found",404));
+        }
+
+        await course.deleteOne({id});
+
+        //delete id from redis
+        await redis.del(id);
+
+        res.status(200).json({
+            success: true,
+            message: "Course deleted successfully",
+        });
+        
+    }catch(error:any){
+        return next(new ErrorHandler(error.message,400));
+    }
+});
