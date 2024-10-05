@@ -119,3 +119,16 @@ export const editLayout = CatchAsyncError(async(req:Request,res:Response,next:Ne
         return next(new ErrorHandler(error.message,500));
     }
 })
+
+export const getLayoutByType = CatchAsyncError(async(req:Request,res:Response,next:NextFunction)=>{
+    try{
+        const {type}= req.body;
+        const layout = await LayoutModel.findOne({type});
+        res.status(201).json({
+            success:true,
+            layout
+        });
+    }catch (error:any){
+        return next(new ErrorHandler(error.message,500));
+    }
+})
