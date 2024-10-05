@@ -7,7 +7,7 @@ import ErrorHandler from "../utils/ErrorHandler";
 import { Redis } from "ioredis";
 
 import cloudinary from "cloudinary";
-import { CreateCourse } from "../services/course.service";
+import { CreateCourse, getAllcoursesService } from "../services/course.service";
 import CourseModel from "../models/course.model";
 import {redis} from "../utils/redis";
 
@@ -134,3 +134,14 @@ export const getCourseContent = CatchAsyncError(async (req: Request, res: Respon
         return next(new ErrorHandler(error.message,500));
     }
 });
+
+//get all Courses
+export const getAllCourses =CatchAsyncError(
+    async(req:Request, res:Response,next:NextFunction) => {
+        try{
+            getAllcoursesService(res);
+        }catch(error:any){
+            return next(new ErrorHandler(error.message,400));
+        }
+    }
+);
