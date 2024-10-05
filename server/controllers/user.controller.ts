@@ -10,7 +10,7 @@ import sendMail from "../utils/sendMail";
 import userModel from "../models/user.model";
 import { accessTokenOptions, refreshTokenOptions, sendToken } from "../utils/jwt";
 import { redis } from "../utils/redis";
-import { getAllUsersService, getUserById } from "../services/user.service";
+import { getAllUsersService, getUserById, updateUserRoleService } from "../services/user.service";
 
 import cloudinary from "cloudinary"
 
@@ -446,6 +446,7 @@ export const updateAvatar = CatchAsyncError(async (req: Request, res: Response, 
     }
 });
 
+//Only admin role
 //get all users
 export const getAllUsers =CatchAsyncError(
     async(req:Request, res:Response,next:NextFunction) => {
@@ -456,3 +457,13 @@ export const getAllUsers =CatchAsyncError(
         }
     }
 );
+
+//update user role
+export const updateUserRole =CatchAsyncError(async(req:Request, res:Response, next:NextFunction)=>{
+    try{
+        const {id,role}=req.body;
+        updateUserRoleService(res,id,role);
+    }catch(error:any){
+        return next(new ErrorHandler(error.message,400));
+    }
+});
