@@ -3,6 +3,8 @@
 import React, { FC, useState } from "react"
 import Heading from "./utils/Heading";
 import Header from "./components/Header";
+import HeroSection from "./components/Hero";  // Import the new HeroSection
+
 interface Props { }
 
 const Page: FC<Props> = (props) => {
@@ -19,8 +21,8 @@ const Page: FC<Props> = (props) => {
         setOpen={setOpen}
         activeItem={activeItem}
       />
+      <HeroSection /> {/* Add the HeroSection */}
     </div>
-
   )
 };
 
