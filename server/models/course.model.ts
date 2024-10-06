@@ -1,17 +1,18 @@
-import mongoose, { Document, Model, Schema } from "mongoose";
+import mongoose,{Document,Model,Schema} from "mongoose";
+import { IUser } from "./user.model";
 
-interface IComment extends Document {
-    user: object,
-    comment: String;
-    commentReplies?: IComment[];
+export interface IComment extends Document{
+    user:IUser,
+    question:String;
+    questionReplies:IComment[];
 }
 
 
-interface IReview extends Document {
-    user: object,
-    rating: number,
-    comment: string,
-    commentReplies: IComment[];
+interface IReview extends Document{
+    user:IUser,
+    rating:number,
+    comment:string,
+    commentReplies?:IComment[];
 }
 
 interface ILink extends Document {
@@ -19,17 +20,17 @@ interface ILink extends Document {
     url: string;
 }
 
-interface ICourseData extends Document {
-    title: string;
-    description: string;
-    videoUrl: string;
-    videoThumbnail: object;
-    videoSection: string;
-    videoLength: number;
-    videoPlayer: string;
-    links: ILink[];
-    suggestion: string;
-    questions: IComment;
+interface ICourseData extends Document{
+    title:string;
+    description:string;
+    videoUrl:string;
+    videoThumbnail:object;
+    videoSection:string;
+    videoLength:number;
+    videoPlayer:string;
+    links:ILink[];
+    suggestion:string;
+    questions:IComment[];
 
 }
 
@@ -56,7 +57,8 @@ const reviewSchema = new Schema<IReview>({
         type: Number,
         default: 0,
     },
-    comment: String,
+    comment:String,
+    commentReplies:[Object],
 });
 
 const linkSchema = new Schema<ILink>({
@@ -65,22 +67,22 @@ const linkSchema = new Schema<ILink>({
 });
 
 const commentSchema = new Schema<IComment>({
-    user: Object,
-    comment: String,
-    commentReplies: [Object],
+    user:Object,
+    question:String,
+    questionReplies:[Object],
 });
 
 const courseDataSchema = new Schema<ICourseData>({
-    videoUrl: String,
-    videoThumbnail: Object,
-    title: String,
-    videoSection: String,
-    description: String,
-    videoLength: Number,
-    videoPlayer: String,
-    links: [linkSchema],
-    suggestion: String,
-    questions: [commentSchema],
+    videoUrl:String, 
+    videoThumbnail:Object,
+    title:String,
+    videoSection:String,
+    description:String,
+    videoLength:Number,
+    videoPlayer:String,
+    links:[linkSchema],
+    suggestion:String,
+    questions:[commentSchema],
 });
 
 const courseSchema = new Schema<ICourse>({
@@ -134,6 +136,8 @@ const courseSchema = new Schema<ICourse>({
     }
 },{ timestamps: true });
 
-const CourseModel: Model<ICourse> = mongoose.model("course", courseSchema);
+
+const CourseModel: Model<ICourse>= mongoose.model("course",courseSchema);
+
 
 export default CourseModel;
