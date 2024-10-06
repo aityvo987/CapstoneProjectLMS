@@ -7,7 +7,7 @@ import ErrorHandler from "../utils/ErrorHandler";
 import { Redis } from "ioredis";
 
 import cloudinary from "cloudinary";
-import { CreateCourse } from "../services/course.service";
+import { CreateCourse, getAllcoursesService } from "../services/course.service";
 import CourseModel from "../models/course.model";
 import {redis} from "../utils/redis";
 
@@ -132,5 +132,43 @@ export const getCourseContent = CatchAsyncError(async (req: Request, res: Respon
         });
     }catch(error:any){
         return next(new ErrorHandler(error.message,500));
+    }
+});
+//Only for user
+//get all Courses
+export const getAllCourses =CatchAsyncError(
+    async(req:Request, res:Response,next:NextFunction) => {
+        try{
+            getAllcoursesService(res);
+        }catch(error:any){
+            return next(new ErrorHandler(error.message,400));
+        }
+    }
+);
+
+//Delete course 
+export const deleteCourse =CatchAsyncError(async(req:Request, res:Response, next:NextFunction)=>{
+    try{
+        const {id}=req.params;
+
+        const course = await CourseModel.findById(id);
+
+        //wrong user id
+        if(!course){
+            return next(new ErrorHandler("Course not found",404));
+        }
+
+        await course.deleteOne({id});
+
+        //delete id from redis
+        await redis.del(id);
+
+        res.status(200).json({
+            success: true,
+            message: "Course deleted successfully",
+        });
+        
+    }catch(error:any){
+        return next(new ErrorHandler(error.message,400));
     }
 });
