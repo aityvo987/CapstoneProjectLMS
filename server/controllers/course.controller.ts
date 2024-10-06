@@ -6,7 +6,7 @@ import ErrorHandler from "../utils/ErrorHandler";
 
 
 import cloudinary from "cloudinary";
-import { CreateCourse } from "../services/course.service";
+import { CreateCourse, getAllcoursesService } from "../services/course.service";
 import CourseModel from "../models/course.model";
 import {redis} from "../utils/redis";
 import mongoose from "mongoose";
@@ -353,11 +353,12 @@ export const deleteCourse =CatchAsyncError(async(req:Request, res:Response, next
         return next(new ErrorHandler(error.message,400));
     }
 });
-export const getAllCourses =CatchAsyncError(
+export const getAdminAllCourses = CatchAsyncError(
     async(req:Request, res:Response,next:NextFunction) => {
         try{
-        }catch(error:any){
             getAllcoursesService(res);
+        }catch(error:any){
+            
             return next(new ErrorHandler(error.message,400));
         }
     }
