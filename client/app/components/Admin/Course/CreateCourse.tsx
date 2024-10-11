@@ -4,6 +4,7 @@ import React, { useState } from 'react'
 import CourseInformation from './CourseInformation'
 import CourseOptions from './CourseOptions'
 import CourseDataComp from './CourseDataComp'
+import CourseContent from './CourseContent'
 
 type Props = {}
 
@@ -38,7 +39,9 @@ const CreateCourse = (props: Props) => {
         },
     ]);
     const [courseData, setCourseData] = useState({});
+    const handleSubmit = async () =>{
 
+    };
     return (
         <div className="w-full flex min-h-screen">
             <div className="w-[80%]">
@@ -59,6 +62,17 @@ const CreateCourse = (props: Props) => {
                             setBenefits={setBenefits}
                             prerequisites={prerequisites}
                             setPrerequisites={setPrerequisites}
+                            active={active}
+                            setActive={setActive}
+                        />
+                    )
+                }
+                {
+                    active === 2 && (
+                        <CourseContent
+                            courseContentData={courseContentData}
+                            setCourseContentData={setCourseContentData}
+                            handleSubmit={handleSubmit}
                             active={active}
                             setActive={setActive}
                         />
