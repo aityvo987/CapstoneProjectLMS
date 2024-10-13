@@ -4,15 +4,15 @@ import Link from "next/link";
 import Image from "next/image";
 import React, { FC } from "react";
 import { BiSearch } from "react-icons/bi";
-import hero_banner from "../../../public/assets/hero_banner.png";
-import avatar from "../../../public/assets/avatar.png";
+import hero_banner from "../../../../public/assets/hero_banner.png";
+import avatar from "../../../../public/assets/avatar.png";
 
 type Props = {};
 
 const Hero: FC<Props> = () => {
   return (
     <div className="w-full 1000px:flex gap-4 items-center">
-      <div className="absolute top-[-100px] 1000px:top-[unset] 1500px:h-[700px] 1500px:w-[700px] "></div>
+      <div className="absolute top-[100px] 1000px:top-[unset] 1500px:h-[700px] 1500px:w-[700px] 1100px:h-[600px] 1100px:w-[600px] h-[60px] w-[60px] hero_animation "></div>
       <div className="1000px:w-[40%] flex 1000px:min-h-screen items-center justify-end pt-[70px] 1000px:pt-[0] z-10">
         <Image
           src={hero_banner}
@@ -36,7 +36,7 @@ const Hero: FC<Props> = () => {
           <input
             type="search"
             placeholder="Search Courses...."
-            className="bg-transparent border dark:border-none dark:bg-[#575757] dark:placeholder:text-[#fffffdd] rounded-[5px] p-2 w-full h-full outline-none"
+            className="bg-transparent border dark:border-none dark:bg-[#575757] dark:placeholder:text-[#fffffdd] rounded-[5px] p-2 w-full h-full outline-none text-[#000] dark:text-[#fff] font-[500] font-Josefin"
           />
           <div className="absolute flex items-center justify-center w-[50px] cursor-pointer h-[50px] right-0 top-0 bg-[#39c1f3] rounded-r-[5px]">
             <BiSearch className="text-white" size={30} />
@@ -67,11 +67,13 @@ const Hero: FC<Props> = () => {
             className="rounded-full ml-[-20px]"
           />
           <p className="font-Josefin dark:text-[#edfff4] text-[#000] 1000px:pl-3 text-[18px] font-[600]">
-            Trust me bro
+            500K+ People Trust me Bro.{" "}
             <Link
               href="/courses"
               className="dark:text-[#46e256] text-[crimson]"
-            ></Link>
+            >
+              View Courses
+            </Link>{""}
           </p>
         </div>
       </div>
