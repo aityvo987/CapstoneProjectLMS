@@ -77,13 +77,13 @@ const Login: Fc<Props> = (props: Props) => {
         />
         {!show ? (
           <AiOutlineEyeInvisible
-            className="absolute bottom-6 right-5 z-1 cursor-pointer text-white"
+            className="absolute bottom-6 right-5   z-1 cursor-pointer text-black dark:text-white bg-transparent"
             size={20}
             onClick={() => setShow(true)}
           />
         ) : (
           <AiOutlineEye
-            className="absolute bottom-6 right-5 z-1 cursor-pointer text-white"
+            className="absolute bottom-6 right-5   z-1 cursor-pointer text-black dark:text-white bg-transparent"
             size={20}
             onClick={() => setShow(false)}
       
