@@ -1,6 +1,7 @@
 import express from "express";
 import { authorizeRoles, isAutheticated } from "../middleware/auth";
 import { createLayout, editLayout, getLayoutByType } from "../controllers/layout.controller";
+import { updateAccessToken } from "../controllers/user.controller";
 
 const layoutRouter = express.Router();
 

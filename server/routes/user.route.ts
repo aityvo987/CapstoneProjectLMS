@@ -4,7 +4,7 @@ import {
     registrationUser,
     loginUser,
     logoutUser,
-    updateAccessToken,
+    
     getUserInfo,
     socialAuth,
     upateUserInfo,
@@ -13,6 +13,7 @@ import {
     getAllUsers,
     updateUserRole,
     deleteUser,
+    updateAccessToken,
 } from '../controllers/user.controller';
 
 import { authorizeRoles, isAutheticated } from '../middleware/auth';

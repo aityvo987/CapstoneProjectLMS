@@ -4,6 +4,7 @@ import {
     getAllOrders
 } from "../controllers/order.controller";
 import { authorizeRoles, isAutheticated } from "../middleware/auth";
+import { updateAccessToken } from "../controllers/user.controller";
 
 const orderRouter = express.Router();
 

@@ -3,6 +3,7 @@ import { CatchAsyncError } from "./catchAsyncErrors";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { redis } from "../utils/redis";
 import ErrorHandler from "../utils/ErrorHandler";
+import { updateAccessToken } from "../controllers/user.controller";
 
 
 
@@ -22,15 +23,26 @@ export const isAutheticated = CatchAsyncError(async (req: Request, res: Response
     if (!decoded) {
         return next(new ErrorHandler("Access token is invalid!", 400));
     }
-    const user = await redis.get(decoded.id);
+    //check if access token is expired
 
-    if (!user) {
-        return next(new ErrorHandler("Please login to access this resources", 400));
+    if(decoded.exp && decoded.exp <= Date.now()/1000){
+        try{
+            await updateAccessToken(req,res,next);
+        }catch(error){
+            return next(error);
+        }
+    }else{
+        const user = await redis.get(decoded.id);
+
+        if (!user) {
+            return next(new ErrorHandler("Please login to access this resources", 400));
+        }
+    
+        req.user = JSON.parse(user);
+    
+        next();
     }
-
-    req.user = JSON.parse(user);
-
-    next();
+    
 });
 
 //authorized user: validate user role
