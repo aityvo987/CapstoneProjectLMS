@@ -1,9 +1,10 @@
 'use client'
-import React, { FC, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import { DataGrid } from "@mui/x-data-grid";
 import { Box, Button, Modal } from "@mui/material";
 import { AiOutlineDelete, AiOutlineMail } from "react-icons/ai";
 import { useTheme } from "next-themes";
+import toast from 'react-hot-toast';
 type Props = {
     isTeam: boolean;
 }
@@ -13,8 +14,35 @@ const AllUsers: FC<Props> = ({ isTeam }) => {
     const [active, setActive] = useState(false);
     const [email, setEmail] = useState('');
     const [role, setRole] = useState('admin');
+    const [open, setOpen] = useState(false);
+    const [userId, setUserId] = useState('');
     const { isLoading, data, error } = useGetAllUsersQuery({});
-    const [updateUserRole,{error:updateError,isSuccess}] = useUpdateUserRoleMutation();
+    const [updateUserRole, { error: updateError, isSuccess }] = useUpdateUserRoleMutation();
+    const [deleteUser, {isSuccess:deleteSuccess, error:deleteError}] = useDeleteUserMutation({});
+
+
+    useEffect(() => {
+        if (updateError) {
+            if ("data" in updateError) {
+                const errorMessage = updateError as any;
+                toast.error(errorMessage.data.message);
+            }
+        }
+        if (isSuccess) {
+            toast.success("User role updated successfullt");
+            setActive(false);
+        }
+        if(deleteSuccess){
+            toast.success("Delete user successfully")
+            setOpen(false);
+        }
+        if (deleteError) {
+            if ("data" in deleteError) {
+                const errorMessage = deleteError as any;
+                toast.error(errorMessage.data.message);
+            }
+        }
+    }, [updateError, isSuccess,deleteSuccess,deleteError])
 
     const columns = [
         { field: "id", headerName: "ID", flex: 0.3 },
@@ -30,7 +58,11 @@ const AllUsers: FC<Props> = ({ isTeam }) => {
             renderCell: (params: any) => {
                 return (
                     <>
-                        <Button>
+                        <Button
+                            onClick={() => {
+                                setOpen(!open) ; 
+                                setUserId(params.row.id)}}
+                        >
                             <AiOutlineDelete
                                 className="dark:text-white text-black"
                                 size={20}
@@ -87,10 +119,14 @@ const AllUsers: FC<Props> = ({ isTeam }) => {
         });
     }
 
-    const handleSubmit =  async ()=>{
-        await updateUserRole({id,role})
+    const handleSubmit = async () => {
+        await updateUserRole({ id, role })
 
-    }
+    };
+    const handleDelete = async () =>{
+        const id=userId;
+        await deleteUser(id);
+    };
 
     return (
         <div className="mt-[120px]">
@@ -188,8 +224,35 @@ const AllUsers: FC<Props> = ({ isTeam }) => {
                                             </select>
                                             <br></br>
                                             <div className={`${styles.button} my-6 !h-[30px]`}
-                                            onClick={handleSubmit}>
+                                                onClick={handleSubmit}>
                                                 Submit
+                                            </div>
+                                        </div>
+                                    </Box>
+                                </Modal>
+                            )
+                        }
+                        {/* For deleting users */}
+                        {
+                            open && (
+                                <Modal
+                                    open={open}
+                                    onClose={() => setOpen(!open)}
+                                    aria-labelledby="modal-modal-title"
+                                    aria-describedby="modal-modal-description"
+                                >
+                                    <Box className="absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 w-[450px] bg-white dark:bg-slate-900 rounded-[8px] shadow p-4 outline-none">
+                                        <h1 className={`nameTitle`}>
+                                            Are you sure you want to delete this user?
+                                        </h1>
+                                        <div className="flex w-full items-center justify-between mb-6 mt-4">
+                                            <div className={`${styles.button} !w-[120px] h-[30px] bg-[#57c7a3]`}
+                                            onClick={()=>setOpen(!open)}>
+                                                Cancel
+                                            </div>
+                                            <div className={`${styles.button} !w-[120px] h-[30px] bg-[#d63f3f]`}
+                                            onClick={handleDelete}>
+                                                Delete
                                             </div>
                                         </div>
                                     </Box>

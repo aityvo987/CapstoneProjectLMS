@@ -17,7 +17,7 @@ export const isAutheticated = CatchAsyncError(async (req: Request, res: Response
         return next(new ErrorHandler("Please login to access this page!", 400));
     }
 
-    const decoded = jwt.verify(access_token, process.env.ACCESS_TOKEN as string) as JwtPayload;
+    const decoded = jwt.decode(access_token) as JwtPayload;
 
     //access token validation
     if (!decoded) {

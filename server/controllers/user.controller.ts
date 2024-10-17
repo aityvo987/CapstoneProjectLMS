@@ -248,7 +248,7 @@ export const updateAccessToken = CatchAsyncError(async (req: Request, res: Respo
 
         await redis.set(user._id,JSON.stringify(user),'EX',604800);// expired after 7 days
 
-        next();
+        return next();
 
     } catch (error: any) {
         return next(new ErrorHandler(error.message, 400));
@@ -463,6 +463,7 @@ export const updateUserRole =CatchAsyncError(async(req:Request, res:Response, ne
         const {id,email,role}=req.body;
         const isUserExist = await userModel.findOne({email});
         if(isUserExist){
+            const id = isUserExist._id;
             updateUserRoleService(res,id,role);
         }
         else{
