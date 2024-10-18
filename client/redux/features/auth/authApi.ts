@@ -1,7 +1,7 @@
 import { apiSlice } from "../api/apiSlice";
 import { userRegistration } from "./authSlice";
 
-type RegistratoinResponse = {
+type RegistrationResponse = {
     message: string,
     activationToken: string,
 };
@@ -16,7 +16,7 @@ export const authApi = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
         // endpoints here
         //mutation use for other http methods except GET
-        register: builder.mutation<RegistratoinResponse, RegistrationData>(
+        register: builder.mutation<RegistrationResponse, RegistrationData>(
             {
                 query: (data) => ({
                     url: "registration",

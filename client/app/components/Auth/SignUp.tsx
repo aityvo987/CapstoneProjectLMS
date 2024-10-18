@@ -1,3 +1,4 @@
+"use client";
 import React, { FC, useEffect, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -25,7 +26,7 @@ const schema = Yup.object().shape({
 
 const Signup: FC<Props> = ({ setRoute }) => {
   const [show, setShow] = useState(false);
-  const [register,{isError,data,error,isSuccess}] = useRegisterMutation();
+  const [register,{data,error,isSuccess}] = useRegisterMutation();
 
   useEffect(()=>{
     if (isSuccess){
@@ -49,7 +50,7 @@ const Signup: FC<Props> = ({ setRoute }) => {
       password: "",
     },
     validationSchema: schema,
-    onSubmit: async ({ email, password }) => {
+    onSubmit: async ({ name,email, password }) => {
       const data ={
         name,email,password
       };
