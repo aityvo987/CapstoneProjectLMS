@@ -62,7 +62,7 @@ const Verification: FC<Props> = ({ setRoute }) => {
       <div className="flex items-center justify-around m-auto">
         {Object.keys(verifyNumber).map((key, index) => (
           <input
-            type="text"
+            type="number"
             key={key}
             ref={inputRefs[index]}
             className={`w-[65px] h-[65px] bg-transparent border-[3px] rounded-[10px] flex items-center text-black dark:text-white font-Poppins outline-none text-center
@@ -87,7 +87,7 @@ const Verification: FC<Props> = ({ setRoute }) => {
       </div>
       <br />
       <h5 className="text-center pt-4 font-Poppins text-[14px] text-black dark:text-white">
-        Go back to signin?{""}
+        Go back to sign in?{""}
         <span
           className="text-[#2190ff] pl-1 cursor-pointer"
           onClick={() => setRoute("Login")}
