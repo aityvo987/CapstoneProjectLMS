@@ -6,7 +6,7 @@ import CourseOptions from './CourseOptions'
 import CourseDataComp from './CourseDataComp'
 import CourseContent from './CourseContent'
 import CoursePreview from './CoursePreview'
-import { useCreateCourseMutation, useGetAllCoursesQuery } from '@/app/redux/features/courses/coursesApi'
+import { useEditCourseMutation, useGetAllCoursesQuery } from '@/app/redux/features/courses/coursesApi'
 import toast from 'react-hot-toast'
 import { redirect, useParams } from 'next/navigation'
 
@@ -15,22 +15,23 @@ type Props = {
 };
 
 const EditCourse: FC<Props> = ({ id }) => {
+    const [editCourse, { isSuccess, error }] = useEditCourseMutation({}, { refetchOnMounthOrArgChange: true });
     const { isLoading, data, refetch } = useGetAllCoursesQuery({}, { refetchOnMounthOrArgChange: true });
 
     const editCourseData = data && data.courses.find((i: any) => i._id === id)
-    // useEffect(() => {
-    //     if (isSuccess) {
-    //         toast.success("Course created successfully");
-    //         redirect("/admin/all-courses");
-    //     }
-    //     if (error) {
-    //         if ("data" in error) {
-    //             const errorMessage = error as any;
-    //             toast.error(errorMessage.data.message);
-    //         }
-    //     }
+    useEffect(() => {
+        if (isSuccess) {
+            toast.success("Course edited successfully");
+            redirect("/admin/courses");
+        }
+        if (error) {
+            if ("data" in error) {
+                const errorMessage = error as any;
+                toast.error(errorMessage.data.message);
+            }
+        }
 
-    // }, [isLoading,isSuccess,error])
+    }, [isLoading,isSuccess,error])
 
     const [active, setActive] = useState(0);
     useEffect(() => {
@@ -111,9 +112,9 @@ const EditCourse: FC<Props> = ({ id }) => {
         setCourseData(data);
     };
     console.log(courseData);
-    const handleCourseCreate = async (e: any) => {
+    const handleCourseEdit = async (e: any) => {
         const data = courseData;
-
+        await editCourse({id:editCourseData?._id,data});
 
 
     }
@@ -158,9 +159,10 @@ const EditCourse: FC<Props> = ({ id }) => {
                     active === 3 && (
                         <CoursePreview
                             courseData={courseData}
-                            handleCourseCreate={handleCourseCreate}
+                            handleCourseCreate={handleCourseEdit}
                             active={active}
                             setActive={setActive}
+                            isEdit={true}
                         />
                     )
                 }
