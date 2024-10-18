@@ -16,7 +16,7 @@ const AllUsers: FC<Props> = ({ isTeam }) => {
     const [role, setRole] = useState('admin');
     const [open, setOpen] = useState(false);
     const [userId, setUserId] = useState('');
-    const { isLoading, data, error } = useGetAllUsersQuery({});
+    const { isLoading, data, refetch } = useGetAllUsersQuery({},{refetchOnMounthOrArgChange:true});
     const [updateUserRole, { error: updateError, isSuccess }] = useUpdateUserRoleMutation();
     const [deleteUser, {isSuccess:deleteSuccess, error:deleteError}] = useDeleteUserMutation({});
 
@@ -29,10 +29,12 @@ const AllUsers: FC<Props> = ({ isTeam }) => {
             }
         }
         if (isSuccess) {
+            refetch();
             toast.success("User role updated successfullt");
             setActive(false);
         }
         if(deleteSuccess){
+            refetch();
             toast.success("Delete user successfully")
             setOpen(false);
         }

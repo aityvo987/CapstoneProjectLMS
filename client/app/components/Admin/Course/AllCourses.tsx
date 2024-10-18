@@ -1,20 +1,23 @@
 'use client'
-import React, { FC } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import { DataGrid } from "@mui/x-data-grid";
-import { Box, Button } from "@mui/material";
+import { Box, Button, Modal } from "@mui/material";
 import { AiOutlineDelete } from "react-icons/ai";
 import { useTheme } from "next-themes";
 import { FiEdit2 } from 'react-icons/fi';
-import { useGetAllCoursesQuery } from '@/app/redux/features/courses/coursesApi';
+import { useDeleteCourseMutation, useGetAllCoursesQuery } from '@/app/redux/features/courses/coursesApi';
 import { format } from "timeago.js";
+import toast from 'react-hot-toast';
+import Link from 'next/link';
 type Props = {
 }
 
 const AllCourses = (props: Props) => {
     const { theme, setTheme } = useTheme();
-
-    const { isLoading, data, error } = useGetAllCoursesQuery({});
-
+    const [open, setOpen] = useState(false);
+    const [courseId, setCourseId] = useState('');
+    const { isLoading, data, refetch } = useGetAllCoursesQuery({}, { refetchOnMounthOrArgChange: true });
+    const [deleteCourse, { isSuccess: deleteSuccess, error: deleteError }] = useDeleteCourseMutation({})
     const columns = [
         { field: "id", headerName: "ID", flex: 0.5 },
         { field: "title", headerName: "Course Title", flex: 1 },
@@ -28,12 +31,13 @@ const AllCourses = (props: Props) => {
             renderCell: (params: any) => {
                 return (
                     <>
-                        <Button>
+                        <Link href={`/admin/edit-course/${params.row.id}`}
+                        >
                             <FiEdit2
                                 className="dark:text-white text-black"
                                 size={20}
                             />
-                        </Button>
+                        </Link>
                     </>
                 );
             },
@@ -45,7 +49,11 @@ const AllCourses = (props: Props) => {
             renderCell: (params: any) => {
                 return (
                     <>
-                        <Button>
+                        <Button
+                            onClick={() => {
+                                setOpen(!open);
+                                setCourseId(params.row.id)
+                            }}>
                             <AiOutlineDelete
                                 className="dark:text-white text-black"
                                 size={20}
@@ -56,7 +64,7 @@ const AllCourses = (props: Props) => {
             },
         },
     ];
-    const rows:any = [
+    const rows: any = [
 
     ];
     {
@@ -70,6 +78,37 @@ const AllCourses = (props: Props) => {
             })
         });
     }
+
+    useEffect(() => {
+        if (updateError) {
+            if ("data" in updateError) {
+                const errorMessage = updateError as any;
+                toast.error(errorMessage.data.message);
+            }
+        }
+        if (updateSuccess) {
+            refetch();
+            toast.success("User role updated successfullt");
+            setActive(false);
+        }
+        if (deleteSuccess) {
+            refetch();
+            toast.success("Delete user successfully")
+            setOpen(false);
+        }
+        if (deleteError) {
+            if ("data" in deleteError) {
+                const errorMessage = deleteError as any;
+                toast.error(errorMessage.data.message);
+            }
+        }
+    }, [updateSuccess, updateError, deleteSuccess, deleteError])
+
+    const handleDelete = async () => {
+        const id = courseId;
+        await deleteCourse(id);
+    };
+
 
 
     return (
@@ -133,6 +172,34 @@ const AllCourses = (props: Props) => {
                         >
                             <DataGrid checkboxSelection rows={rows} columns={columns} />
                         </Box>
+
+                        {/* Delete Course Modal*/}
+                        {
+                            open && (
+                                <Modal
+                                    open={open}
+                                    onClose={() => setOpen(!open)}
+                                    aria-labelledby="modal-modal-title"
+                                    aria-describedby="modal-modal-description"
+                                >
+                                    <Box className="absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 w-[450px] bg-white dark:bg-slate-900 rounded-[8px] shadow p-4 outline-none">
+                                        <h1 className={`nameTitle`}>
+                                            Are you sure you want to delete this course?
+                                        </h1>
+                                        <div className="flex w-full items-center justify-between mb-6 mt-4">
+                                            <div className={`${styles.button} !w-[120px] h-[30px] bg-[#57c7a3]`}
+                                                onClick={() => setOpen(!open)}>
+                                                Cancel
+                                            </div>
+                                            <div className={`${styles.button} !w-[120px] h-[30px] bg-[#d63f3f]`}
+                                                onClick={handleDelete}>
+                                                Delete
+                                            </div>
+                                        </div>
+                                    </Box>
+                                </Modal>
+                            )
+                        }
                     </Box>
                 )
             }
