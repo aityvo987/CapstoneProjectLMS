@@ -43,6 +43,7 @@ const Login: FC<Props> = ({ setRoute,setOpen }) => {
     if(isSuccess){
         toast.success("Login successfully!");
         setOpen(false); //close login modal
+        return;
     }
 
     if(error){
