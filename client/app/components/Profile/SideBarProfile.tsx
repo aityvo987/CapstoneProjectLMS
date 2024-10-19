@@ -22,7 +22,7 @@ const SideBarProfile: FC<Props> = ({
 }) => {
   return (
     <div>
-      <div className="w-full">
+      <div className="w-full ">
         {/* avatar */}
         <div
           className={`w-full flex items-center px-3 py-4 cursor-pointer ${

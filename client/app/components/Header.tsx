@@ -54,10 +54,10 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
       if (!isSuccess) {
         setLogout(true); //log out
 
-        // if (logout === false) {
-        //   toast.success("Logout successfully!");
-        //   return;
-        // }
+          // if (logout === false) {
+          //   toast.success("Logout successfully!");
+          //   return;
+          // }
       } else {
         toast.success("Login successfully!");
       }
