@@ -4,8 +4,8 @@ import Link from "next/link";
 import Image from "next/image";
 import React, { FC } from "react";
 import { BiSearch } from "react-icons/bi";
-import hero_banner from "../../../../public/assets/hero_banner.png";
-import avatar from "../../../../public/assets/avatar.png";
+import hero_banner from "../../../public/assets/hero_banner.png";
+import avatar from "../../../public/assets/avatar.png";
 
 type Props = {};
 

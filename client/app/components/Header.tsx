@@ -10,7 +10,7 @@ import SignUp from "../components/Auth/SignUp";
 import Verification from "../components/Auth/Verification";
 import { useSelector } from "react-redux";
 import Image from "next/image";
-import avatar from "../../../public/assets/avatar.png";
+import avatar from "../../public/assets/avatar.png";
 import { styles } from "../styles/styles";
 import { useSession } from "next-auth/react";
 import { useSocialAuthMutation } from "@/redux/features/auth/authApi";
