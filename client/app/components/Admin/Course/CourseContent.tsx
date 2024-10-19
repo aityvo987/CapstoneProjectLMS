@@ -219,6 +219,23 @@ const CourseContent: FC<Props> = ({
                                                         }}
                                                     />
                                                 </div>
+                                                {/* Video Length */}
+                                                <div className="mb-3">
+                                                    <label className={`nameLabel`}>
+                                                        Video Length (in minutes)
+                                                    </label>
+                                                    <input
+                                                        type="number"
+                                                        placeholder="1 minutes"
+                                                        className={`nameInput`}
+                                                        value={item.videoLength}
+                                                        onChange={(e) => {
+                                                            const updatedData = [...courseContentData];
+                                                            updatedData[index].videoLength = e.target.value;
+                                                            setCourseContentData(updatedData);
+                                                        }}
+                                                    />
+                                                </div>
                                                 {/* Description */}
                                                 <div className="mb-3">
                                                     <label className={`nameLabel`}>

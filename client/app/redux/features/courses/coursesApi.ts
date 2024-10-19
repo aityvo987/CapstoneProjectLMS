@@ -1,7 +1,5 @@
 
 
-
-
 export const courseApi = apiSlice.injectEndpoints({
     endpoints:(builder) =>({
         createCourse:builder.mutation({
