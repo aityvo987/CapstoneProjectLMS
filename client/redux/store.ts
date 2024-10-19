@@ -14,3 +14,13 @@ export const store = configureStore({
     devTools:false, //avoid hacker use Redux dev tool to unauthorized modifications
     middleware:(getDefaultMiddleware) => getDefaultMiddleware().concat(apiSlice.middleware)
 })
+
+//call the refresh token function on every time page load
+const initializeApp = async()=>{
+    //comment this line
+    await store.dispatch(apiSlice.endpoints.refreshToken.initiate({},{forceRefetch:true}));
+
+    await store.dispatch(apiSlice.endpoints.loadUser.initiate({},{forceRefetch:true}));
+};
+
+initializeApp();
