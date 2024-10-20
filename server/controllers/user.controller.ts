@@ -302,18 +302,19 @@ interface IUpdateUserInfo {
 
 export const upateUserInfo = CatchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const { name, email } = req.body as IUpdateUserInfo;
+        // const { name, email } = req.body as IUpdateUserInfo;
+        const { name } = req.body as IUpdateUserInfo;
         const userId = req.user?._id;
         const user = await userModel.findById(userId);
 
         //check entered email is exist
-        if (email && user) {
-            const isEmailExist = await userModel.findOne({ email });
-            if (isEmailExist) {
-                return next(new ErrorHandler("Email already exists", 400));
-            }
-            user.email = email;
-        }
+        // if (email && user) {
+        //     const isEmailExist = await userModel.findOne({ email });
+        //     if (isEmailExist) {
+        //         return next(new ErrorHandler("Email already exists", 400));
+        //     }
+        //     user.email = email;
+        // }
 
         //check entered email is exist
         if (name && user) {

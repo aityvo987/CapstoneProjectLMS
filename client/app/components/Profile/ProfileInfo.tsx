@@ -3,9 +3,13 @@ import Image from "next/image";
 import avatarDefault from "../../../public/assets/avatar.png";
 import { AiOutlineCamera } from "react-icons/ai";
 import { styles } from "@/app/styles/styles";
-import { useUpdateAvatarMutation } from "@/redux/features/user/userApi";
+import {
+  useEditProfileMutation,
+  useUpdateAvatarMutation,
+} from "@/redux/features/user/userApi";
 import { useLoadUserQuery } from "@/redux/features/api/apiSlice";
-
+import Email from "next-auth/providers/email";
+import toast from "react-hot-toast";
 
 type Props = {
   avatar: string | null;
@@ -17,6 +21,8 @@ const ProfileInfo: FC<Props> = ({ avatar, user }) => {
   const [updateAvatar, { isSuccess, error }] = useUpdateAvatarMutation();
   const [loadUser, setLoadUser] = useState(false);
   const {} = useLoadUserQuery(undefined, { skip: loadUser ? false : true });
+  const [editProfile, { isSuccess: success, error: updateError }] =
+    useEditProfileMutation();
 
   const imageHandler = async (e: any) => {
     // const fileReader = new FileReader();
@@ -31,23 +37,37 @@ const ProfileInfo: FC<Props> = ({ avatar, user }) => {
 
     const file = e.target.files[0];
     const formData = new FormData();
-    formData.append('avatar', file); // 'avatar' là tên tham số bạn cần gửi
-  
+    formData.append("avatar", file); // 'avatar' là tên tham số bạn cần gửi
+
     // Gọi API để upload ảnh
     updateAvatar(formData);
   };
 
   useEffect(() => {
-    if (isSuccess) {
+    //Update avatar
+    if (isSuccess || success) {
       setLoadUser(true);
+    }
+
+    //Edit profile
+    if(success){
+      toast.success("Profile updated successfully!")
     }
 
     if (error) {
       console.log("An error occurred", error);
     }
-  }, [isSuccess, error]);
+  }, [isSuccess, error, success, updateError]);
 
-  const handleSubmit = async (e: any) => {};
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+    if (name !== "") {
+      await editProfile({
+        name: name,
+        // email: user.email,
+      });
+    }
+  };
   return (
     <>
       <div className="w-full flex flex-col justify-center px-4 800px:mt-4">

@@ -14,12 +14,13 @@ export const useApi = apiSlice.injectEndpoints({
 
         }),
         EditProfile: builder.mutation({
-            query: ({name,email}) => ({
+            // query: ({name,email}) => ({
+            query: ({ name }) => ({
                 url: "update-user-info",
                 method: "PUT",
                 body: {
                     name,
-                    email
+                    // email
                 },
                 credentials: "include" as const,
             }),
