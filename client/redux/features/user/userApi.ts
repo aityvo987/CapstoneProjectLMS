@@ -1,18 +1,30 @@
 import { apiSlice } from "../api/apiSlice"
 
 
-export  const useApi = apiSlice.injectEndpoints({
-    overrideExisting: true,  
+export const useApi = apiSlice.injectEndpoints({
+    overrideExisting: true,
     endpoints: (builder) => ({
         updateAvatar: builder.mutation({
             query: (avatar) => ({
                 url: "update-user-avatar",
                 method: "PUT",
-                body:avatar,
+                body: avatar,
                 credentials: "include" as const,
-            }),            
-        })
-    })
- });
+            }),
 
- export const {useUpdateAvatarMutation} = useApi;
+        }),
+        EditProfile: builder.mutation({
+            query: ({name,email}) => ({
+                url: "update-user-info",
+                method: "PUT",
+                body: {
+                    name,
+                    email
+                },
+                credentials: "include" as const,
+            }),
+        }),
+    }),
+});
+
+export const { useUpdateAvatarMutation, useEditProfileMutation } = useApi;

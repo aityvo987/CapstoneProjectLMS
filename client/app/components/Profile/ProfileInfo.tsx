@@ -6,6 +6,7 @@ import { styles } from "@/app/styles/styles";
 import { useUpdateAvatarMutation } from "@/redux/features/user/userApi";
 import { useLoadUserQuery } from "@/redux/features/api/apiSlice";
 
+
 type Props = {
   avatar: string | null;
   user: any;
@@ -17,17 +18,23 @@ const ProfileInfo: FC<Props> = ({ avatar, user }) => {
   const [loadUser, setLoadUser] = useState(false);
   const {} = useLoadUserQuery(undefined, { skip: loadUser ? false : true });
 
-  const imageHandler = async (e: any) => { 
+  const imageHandler = async (e: any) => {
+    // const fileReader = new FileReader();
 
-    const fileReader = new FileReader();
+    // fileReader.onload = () => {
+    //   if (fileReader.readyState === 2) {
+    //     const avatar = fileReader.result;
+    //     updateAvatar(avatar);
+    //   }
+    // };
+    // fileReader.readAsDataURL(e.target.files[0]);
 
-    fileReader.onload = () => {
-      if (fileReader.readyState === 2) {
-        const avatar = fileReader.result;
-        updateAvatar(avatar);
-      }
-    };
-    fileReader.readAsDataURL(e.target.files[0]);
+    const file = e.target.files[0];
+    const formData = new FormData();
+    formData.append('avatar', file); // 'avatar' là tên tham số bạn cần gửi
+  
+    // Gọi API để upload ảnh
+    updateAvatar(formData);
   };
 
   useEffect(() => {
@@ -48,8 +55,9 @@ const ProfileInfo: FC<Props> = ({ avatar, user }) => {
           <div className="relative">
             <Image
               src={
-                user.avatar ||
-                (avatar ? user.avatar.url || avatar : avatarDefault)
+                user.avatar || avatar
+                  ? user.avatar.url || avatar
+                  : avatarDefault
               }
               width={120}
               height={120}
@@ -106,6 +114,7 @@ const ProfileInfo: FC<Props> = ({ avatar, user }) => {
                 id="email"
                 readOnly
                 value={user?.email}
+                required
                 className={`${styles.input} w-[95%] mb-1 800px:mb-0`}
               />
             </div>

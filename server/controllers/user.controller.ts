@@ -12,7 +12,7 @@ import { accessTokenOptions, refreshTokenOptions, sendToken } from "../utils/jwt
 import { redis } from "../utils/redis";
 import { getAllUsersService, getUserById, updateUserRoleService } from "../services/user.service";
 
-import cloudinary from "cloudinary"
+import { v2 as cloudinary } from 'cloudinary';
 
 //register user
 interface IRegistrationBody {
@@ -406,10 +406,10 @@ export const updateAvatar = CatchAsyncError(async (req: Request, res: Response, 
         if (avatar && user) {
             //destroy old avatar from cloudinary
             if (user?.avatar?.public_id) {
-                await cloudinary.v2.uploader.destroy(user?.avatar?.public_id);
+                await cloudinary.uploader.destroy(user?.avatar?.public_id);
 
                 //update avatar to cloudinary
-                const myCloud = await cloudinary.v2.uploader.upload(avatar, {
+                const myCloud = await cloudinary.uploader.upload(avatar, {
                     folder: "avatars", //save in avatar folder
                     width: 150,
                 });
@@ -421,7 +421,7 @@ export const updateAvatar = CatchAsyncError(async (req: Request, res: Response, 
                 };
 
             } else {
-                const myCloud = await cloudinary.v2.uploader.upload(avatar, {
+                const myCloud = await cloudinary.uploader.upload(avatar, {
                     folder: "avatars",
                     width: 150,
                 });

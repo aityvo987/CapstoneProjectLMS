@@ -32,8 +32,10 @@ const SideBarProfile: FC<Props> = ({
         >
           <Image
             src={
-              user.avatar || (avatar ? user.avatar || avatar : avatarDefault)
+              user.avatar || avatar ? user.avatar.url || avatar : avatarDefault
             }
+            width={30}
+            height={30}
             alt=""
             className="w-[30px] h-[30px] 800px:w-[30px] 800px:-[30px] cursor-pointer rounded-full "
           ></Image>

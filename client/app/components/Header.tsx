@@ -54,10 +54,10 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
       if (!isSuccess) {
         setLogout(true); //log out
 
-          // if (logout === false) {
-          //   toast.success("Logout successfully!");
-          //   return;
-          // }
+        // if (logout === false) {
+        //   toast.success("Logout successfully!");
+        //   return;
+        // }
       } else {
         toast.success("Login successfully!");
       }
@@ -115,9 +115,14 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
               {user ? (
                 <Link href={"/profile"}>
                   <Image
-                    src={user.avatar ? user.avatar : avatar}
+                    src={user.avatar ? user.avatar.url : avatar}
+                    width={30}
+                    height={30}
                     alt="avatar"
                     className={`${styles.avatar}`}
+                    style={{
+                      border: activeItem == 5 ? "2px solid #37a39a" : "none"
+                    }}
                   ></Image>
                 </Link>
               ) : (
