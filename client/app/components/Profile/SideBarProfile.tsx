@@ -4,6 +4,8 @@ import avatarDefault from "../../../public/assets/avatar.png";
 import { RiLockPasswordLine } from "react-icons/ri";
 import { SiCoursera } from "react-icons/si";
 import { AiOutlineLogout } from "react-icons/ai";
+import Link from "next/link";
+import { MdOutlineAdminPanelSettings } from "react-icons/md";
 
 type Props = {
   user: any;
@@ -39,7 +41,9 @@ const SideBarProfile: FC<Props> = ({
             alt=""
             className="w-[30px] h-[30px] 800px:w-[30px] 800px:-[30px] cursor-pointer rounded-full "
           ></Image>
-          <h5 className="pl-2 800px:block hidden font-Poppins dark:text-white text-black">My Account</h5>
+          <h5 className="pl-2 800px:block hidden font-Poppins dark:text-white text-black">
+            My Account
+          </h5>
         </div>
         {/* password */}
         <div
@@ -48,9 +52,11 @@ const SideBarProfile: FC<Props> = ({
           }`}
           onClick={() => setActive(2)}
         >
-            <RiLockPasswordLine size={30} fill="#fff" ></RiLockPasswordLine>
+          <RiLockPasswordLine size={30} fill="#fff"></RiLockPasswordLine>
 
-          <h5 className="pl-2 800px:block hidden font-Poppins dark:text-white text-black">Change Password</h5>
+          <h5 className="pl-2 800px:block hidden font-Poppins dark:text-white text-black">
+            Change Password
+          </h5>
         </div>
         {/* Enrolled Class */}
         <div
@@ -59,20 +65,39 @@ const SideBarProfile: FC<Props> = ({
           }`}
           onClick={() => setActive(3)}
         >
-            <SiCoursera size={30} fill="#fff" ></SiCoursera>
+          <SiCoursera size={30} fill="#fff"></SiCoursera>
 
-          <h5 className="pl-2 800px:block hidden font-Poppins dark:text-white text-black">Enrolled Course</h5>
+          <h5 className="pl-2 800px:block hidden font-Poppins dark:text-white text-black">
+            Enrolled Course
+          </h5>
         </div>
+        {/* Admin dashboard */}
+        {user.role === "admin" && (
+          <Link
+            className={`w-full flex gap-2 items-center py-3 px-4 cursor-pointer${
+              active === 6 ? "dark:bg-slate-800 bg-white" : "bg-transparent"
+            }`}
+            href={"/admin"}
+          >
+            <MdOutlineAdminPanelSettings
+              size={30}
+              fill="#fff"
+            ></MdOutlineAdminPanelSettings>
+            <h5 className="dark:text-white text-black">Admin Dashboard</h5>
+          </Link>
+        )}
         {/* LogOut */}
         <div
           className={`w-full flex items-center px-3 py-4 cursor-pointer ${
             active === 4 ? "dark:bg-slate-800 bg-white" : "bg-transparent"
           }`}
-          onClick={()=>logOutHandler()}
+          onClick={() => logOutHandler()}
         >
-            <AiOutlineLogout size={30} fill="#fff" ></AiOutlineLogout>
+          <AiOutlineLogout size={30} fill="#fff"></AiOutlineLogout>
 
-          <h5 className="pl-2 800px:block hidden font-Poppins dark:text-white text-black">Log out</h5>
+          <h5 className="pl-2 800px:block hidden font-Poppins dark:text-white text-black">
+            Log out
+          </h5>
         </div>
       </div>
     </div>
