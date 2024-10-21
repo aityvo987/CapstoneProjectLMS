@@ -4,6 +4,7 @@ import { PiUsersFourLight } from 'react-icons/pi';
 import UsersAnalytics from '../Analytics/UsersAnalytics';
 import { Box, CircularProgress } from '@mui/material';
 import OrdersAnalytics from '../Analytics/OrdersAnalytics';
+import AllInvoices from '../Order/AllInvoices';
 type Props = {
     open?: boolean;
     value?: number;

@@ -1,3 +1,4 @@
+import { styles } from '@/app/styles/styles';
 import CoursePlayer from '@/app/utils/CoursePlayer';
 import Ratings from '@/app/utils/Rating';
 import React, { FC } from 'react'
@@ -44,7 +45,7 @@ const CoursePreview: FC<Props> = ({ courseData, handleCourseCreate, active, setA
                 <div className="flex items-center">
                     <div
 
-                        className={`nameButton !w-[180px] my-3 font-Poppins!bg-[crimson] cursor-not-allowed`}
+                        className={`${styles.button} !w-[180px] my-3 font-Poppins!bg-[crimson] cursor-not-allowed`}
                     >
                         Buy Now {courseData?.price}$
                     </div>
@@ -56,10 +57,10 @@ const CoursePreview: FC<Props> = ({ courseData, handleCourseCreate, active, setA
                         name=""
                         id=""
                         placeholder="Discount code..."
-                        className={`nameInput 1500px:!w-[50%]  1100px:!w-[60%] ml-3 !mt-0`}
+                        className={`${styles.input} 1500px:!w-[50%]  1100px:!w-[60%] ml-3 !mt-0`}
                     />
                     <div
-                        className={`nameButton !w-[120px] my-3 ml-4 font-Poppins cursor-pointer`}
+                        className={`${styles.button} !w-[120px] my-3 ml-4 font-Poppins cursor-pointer`}
                     >
                         Apply
                     </div>

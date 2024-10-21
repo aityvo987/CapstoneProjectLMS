@@ -1,5 +1,5 @@
 
-import { useGetCoursesAnalyticsQuery } from '@/app/redux/features/analytics/analyticsApi';
+import { useGetCoursesAnalyticsQuery } from '@/redux/features/analytics/analyticsApi';
 import React, { FC, useEffect, useState } from 'react'
 import {
     BarChart,

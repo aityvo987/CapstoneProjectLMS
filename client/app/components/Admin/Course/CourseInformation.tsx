@@ -1,5 +1,6 @@
 
-import { useGetHeroDataQuery } from '@/app/redux/features/layout/layoutApi';
+import { styles } from '@/app/styles/styles';
+import { useGetHeroDataQuery } from '@/redux/features/layout/layoutApi';
 import React, { FC, useEffect, useState } from 'react'
 
 type Props = {
@@ -66,7 +67,7 @@ const CourseInformation: FC<Props> = ({ courseInfo, setCourseInfo, active, setAc
 
     return (
         <div className="w-[80%] m-auto mt-24">
-            <form onSubmit={handleSubmit} className={`nameLabel`}>
+            <form onSubmit={handleSubmit} className={`${styles.label}`}>
                 {/*Course Name */}
                 <div>
                     <label htmlFor="">
@@ -82,17 +83,17 @@ const CourseInformation: FC<Props> = ({ courseInfo, setCourseInfo, active, setAc
                         }
                         id="name"
                         placeholder="MERN stack LMS platform"
-                        className={`nameInput`}
+                        className={`${styles.input}`}
                     />
                 </div>
                 <br>
                 </br>
                 {/*Course Description */}
                 <div className="mb-5">
-                    <label className={`nameLabel`}>Course Description</label>
+                    <label className={`${styles.label}`}>Course Description</label>
                     <textarea name="" id="" cols={30} rows={8}
                         placeholder='Write something to help student understand the meaning of the course'
-                        className={`nameInput !h-min !py-2`}
+                        className={`${styles.input} !h-min !py-2`}
                         value={courseInfo.description}
                         onChange={(e: any) =>
                             setCourseInfo({ ...courseInfo, description: e.target.value })
@@ -103,7 +104,7 @@ const CourseInformation: FC<Props> = ({ courseInfo, setCourseInfo, active, setAc
                 {/*Course Price */}
                 <div className="w-full flex justify-between">
                     <div className="w-[45%]">
-                        <label className={`nameLabel`}>
+                        <label className={`${styles.label}`}>
                             Course Price
                         </label>
                         <input
@@ -116,11 +117,11 @@ const CourseInformation: FC<Props> = ({ courseInfo, setCourseInfo, active, setAc
                             }
                             id="price"
                             placeholder="29"
-                            className={`nameInput`}
+                            className={`${styles.input}`}
                         />
                     </div>
                     <div className="w-[45%]">
-                        <label className={`nameLabel`}>
+                        <label className={`${styles.label}`}>
                             Estimated Price (optional)
                         </label>
                         <input
@@ -132,7 +133,7 @@ const CourseInformation: FC<Props> = ({ courseInfo, setCourseInfo, active, setAc
                             }
                             id="price"
                             placeholder="79"
-                            className={`nameInput`}
+                            className={`${styles.input}`}
                         />
                     </div>
                 </div>
@@ -140,7 +141,7 @@ const CourseInformation: FC<Props> = ({ courseInfo, setCourseInfo, active, setAc
                 {/*Course Tags */}
                 <div className="w-full flex justify-between">
                     <div className="w-[45%]">
-                        <label className={`nameLabel`} htmlFor="email">
+                        <label className={`${styles.label}`} htmlFor="email">
                             Course Tags
                         </label>
                         <input
@@ -153,12 +154,12 @@ const CourseInformation: FC<Props> = ({ courseInfo, setCourseInfo, active, setAc
                             }
                             id="tags"
                             placeholder="MERN,Next,tailwind,LMS"
-                            className={`nameInput`}
+                            className={`${styles.input}`}
                         />
                     </div>
                     {/*Course Level */}
                     <div className="w-[50%]">
-                        <label className={`nameLabel w-[50%]`} >
+                        <label className={`${styles.label} w-[50%]`} >
                             course Categories
                         </label>
                         <select 
@@ -183,7 +184,7 @@ const CourseInformation: FC<Props> = ({ courseInfo, setCourseInfo, active, setAc
                 {/*Course Level */}
                 <div className="w-full flex justify-between">
                     <div className="w-[45%]">
-                        <label className={`nameLabel`} htmlFor="email">
+                        <label className={`${styles.label}`} htmlFor="email">
                             Course Level
                         </label>
                         <input
@@ -196,12 +197,12 @@ const CourseInformation: FC<Props> = ({ courseInfo, setCourseInfo, active, setAc
                             }
                             id="level"
                             placeholder="Beginner/Intermediate/Expert"
-                            className={`nameInput`}
+                            className={`${styles.input}`}
                         />
                     </div>
                     {/*Course Level */}
                     <div className="w-[50%]">
-                        <label className={`nameLabel w-[50%]`} >
+                        <label className={`${styles.label} w-[50%]`} >
                             Demo URl
                         </label>
                         <input
@@ -214,7 +215,7 @@ const CourseInformation: FC<Props> = ({ courseInfo, setCourseInfo, active, setAc
                             }
                             id="demoUrl"
                             placeholder="eer74fd"
-                            className={`nameInput`}
+                            className={`${styles.input}`}
                         />
                     </div>
                 </div>
@@ -222,7 +223,7 @@ const CourseInformation: FC<Props> = ({ courseInfo, setCourseInfo, active, setAc
                 <div className="w-full">
                     <input
                         type="file"
-                        accept="iamge/*"
+                        accept="image/*"
                         id="file"
                         className="hidden"
                         onChange={handleFileChange}

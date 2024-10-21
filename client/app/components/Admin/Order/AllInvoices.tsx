@@ -1,11 +1,13 @@
-import { useGetAllCoursesQuery } from "@/app/redux/features/courses/coursesApi";
-import { useGetAllOrdersQuery } from "@/app/redux/features/orders/ordersApi";
+import { useGetAllCoursesQuery } from "@/redux/features/courses/coursesApi";
+import { useGetAllOrdersQuery } from "@/redux/features/orders/ordersApi";
 import { Box } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { useTheme } from "next-themes";
 import { format } from "path";
 import { useEffect, useState } from "react";
 import { AiOutlineMail } from "react-icons/ai";
+import Loader from "../../Loader/Loader";
+import { useGetAllUsersQuery } from "@/redux/features/user/userApi";
 
 type Props = {
     isDashboard?: boolean;
@@ -13,7 +15,7 @@ type Props = {
 const AllInvoices = ({ isDashboard }: Props) => {
     const { theme, setTheme } = useTheme();
     const { isLoading, data } = useGetAllOrdersQuery({});
-    const { data: usersData } = useGetAllUsersQuery(());
+    const { data: usersData } = useGetAllUsersQuery({});
     const { data: coursesData } = useGetAllCoursesQuery({});
     const [orderData, setOrderData] = useState<any>([]);
 
@@ -178,7 +180,7 @@ const AllInvoices = ({ isDashboard }: Props) => {
                         checkboxSelection={isDashboard ? false : true}
                         rows={rows}
                         columns={columns}
-                        components={isDashboard ? {} : { Toolbar: GridToolbar }}
+                        // components={isDashboard ? {} : { Toolbar: GridToolbar } as any}
                     />
                 </Box>
             </Box>

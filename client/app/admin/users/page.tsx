@@ -1,6 +1,9 @@
 'use client'
 import AllCourses from '@/app/components/Admin/Course/AllCourses';
+import DashboardHeader from '@/app/components/Admin/DashboardHeader';
+import AdminSidebar from '@/app/components/Admin/sidebar/AdminSidebar';
 import AllUsers from '@/app/components/Admin/Users/AllUsers';
+import AdminProtected from '@/app/hooks/adminProtected';
 import Heading from '@/app/utils/Heading';
 import React, { FC } from 'react'
 type Props = {
@@ -17,11 +20,12 @@ const page = (props: Props) => {
                     keywords="Progamming,MERN,Machine Learning" />
                 <div className="flex h-screen">
                     <div className="1500px:w-[16%] w-1/5">
-                        {/* <AdminSideBar/> */}
+                        <AdminSidebar/>
                     </div>
                     <div className="w-[85%]">
-                        {/* <Dashboardheader/> */}
-                        <AllUsers />
+                        <DashboardHeader/>
+                        <AllUsers
+                        isTeam ={false} />
                     </div>
                 </div>
             </AdminProtected>

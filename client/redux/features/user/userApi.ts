@@ -31,13 +31,37 @@ export const useApi = apiSlice.injectEndpoints({
                 url: "update-user-password",
                 method: "PUT",
                 body: {
-                    oldPassword, 
+                    oldPassword,
                     newPassword,
                 },
                 credentials: "include" as const,
             }),
         }),
+        getAllUsers: builder.query({
+            query: () => ({
+                url: "get-users",
+                method: "GET",
+                credentials: "include" as const,
+            })
+        }),
+        updateUserRole: builder.mutation({
+            query: ({id,email,role}) => ({
+                url: "update-user-role",    
+                method: "PUT",
+                body:{id,email,role},
+                credentials: "include" as const,
+            })
+        }),
+        deleteUser: builder.mutation({
+            query: (id) => ({
+            url: `delete-user/${id}`,
+            method: "DELETE",
+            credentials: "include" as const,
+            }),
+        }),
     }),
+
+    
 });
 
-export const { useUpdateAvatarMutation, useEditProfileMutation,useUpdatePasswordMutation} = useApi;
+export const { useUpdateAvatarMutation, useEditProfileMutation, useUpdatePasswordMutation,useGetAllUsersQuery,useUpdateUserRoleMutation,useDeleteUserMutation  } = useApi;
