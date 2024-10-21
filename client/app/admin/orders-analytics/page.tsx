@@ -1,8 +1,7 @@
 'use client'
-import AllCourses from '@/app/components/Admin/Course/AllCourses';
+import OrdersAnalytics from '@/app/components/Admin/Analytics/OrdersAnalytics';
 import Heading from '@/app/utils/Heading';
 import React, { FC } from 'react'
-import { IoMdCheckmark } from 'react-icons/io'
 type Props = {
 }
 
@@ -21,7 +20,7 @@ const page = (props: Props) => {
                     </div>
                     <div className="w-[85%]">
                         {/* <Dashboardheader/> */}
-                        <DashboardHero isDashboard={true} />
+                        <OrdersAnalytics />
                     </div>
                 </div>
             </AdminProtected>

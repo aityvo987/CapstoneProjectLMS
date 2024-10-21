@@ -21,7 +21,7 @@ const page = (props: Props) => {
                     </div>
                     <div className="w-[85%]">
                         {/* <Dashboardheader/> */}
-                        <DashboardHero isDashboard={true} />
+                        <AllCourses />
                     </div>
                 </div>
             </AdminProtected>

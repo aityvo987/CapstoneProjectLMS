@@ -32,6 +32,7 @@ app.use("/api/v1",
     orderRouter,
     notificationRouter,
     analyticsRouter,
+    layoutRouter,
 );
 app.get("/test", (req: Request, res: Response, next: NextFunction) => {
     res.status(200).json({

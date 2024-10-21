@@ -1,8 +1,9 @@
 'use client'
 import AllCourses from '@/app/components/Admin/Course/AllCourses';
+import EditHero from '@/app/components/Admin/Customization/EditHero';
+import AllUsers from '@/app/components/Admin/Users/AllUsers';
 import Heading from '@/app/utils/Heading';
 import React, { FC } from 'react'
-import { IoMdCheckmark } from 'react-icons/io'
 type Props = {
 }
 
@@ -21,7 +22,7 @@ const page = (props: Props) => {
                     </div>
                     <div className="w-[85%]">
                         {/* <Dashboardheader/> */}
-                        <DashboardHero isDashboard={true} />
+                        <EditHero />
                     </div>
                 </div>
             </AdminProtected>

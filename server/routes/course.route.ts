@@ -2,6 +2,7 @@ import express from "express";
 import { addAnswer, addQuestion, addReview, addReviewReply, editCourse, getAdminAllCourses, getAllCourse, getCourseContent, getSingleCourse, uploadCourse } from "../controllers/course.controller";
 import { authorizeRoles, isAutheticated } from "../middleware/auth";
 import { deleteCourse } from "../controllers/course.controller";
+import { updateAccessToken } from "../controllers/user.controller";
 
 const courseRouter = express.Router();
 

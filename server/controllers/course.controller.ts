@@ -42,15 +42,22 @@ export const editCourse = CatchAsyncError(async (req: Request, res: Response, ne
         const data = req.body;
         const thumbnail = data.thumbnail;
         const courseId = req.params.id;
-        if (thumbnail) {
-            await cloudinary.v2.uploader.destroy(thumbnail.public_id)
+        const courseData = await CourseModel.findById(courseId) as any;
+        if (thumbnail && !thumbnail.startsWith("https")) {
+            await cloudinary.v2.uploader.destroy(courseData.thumbnail.public_id);
             const myCloud = await cloudinary.v2.uploader.upload(thumbnail, {
-                folder: "courses"
+                folder: "courses",
             });
             data.thumbnail = {
                 public_id: myCloud.public_id,
-                url: myCloud.secure_url
-            }
+                url: myCloud.secure_url,
+            };
+        }
+        if (thumbnail.startsWith("https")) {
+            data.thumbnail = {
+                public_id: courseData?.thumbnail.public_id,
+                url: courseData?.thumbnail.url,
+            };
         }
         const course = await CourseModel.findByIdAndUpdate(courseId, {
             $set: data
@@ -97,23 +104,23 @@ export const getSingleCourse = CatchAsyncError(async (req: Request, res: Respons
 export const getAllCourse = CatchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
     try {
         const isCacheExists = await redis.get("allCourses");
-        if (isCacheExists) {
-            const course = JSON.parse(isCacheExists)
-            res.status(200).json({
-                success: true,
-                course,
-            });
-        } else {
-            const courses = await CourseModel.find().select(
-                "-courseData.videoUrl -courseData.suggestion -courseData.question -courseData.links"
-            ).select("courseData");
+        // if (isCacheExists) {
+        //     const course = JSON.parse(isCacheExists)
+        //     res.status(200).json({
+        //         success: true,
+        //         course,
+        //     });
+        // } else {
+        const courses = await CourseModel.find().select(
+            "-courseData.videoUrl -courseData.suggestion -courseData.question -courseData.links"
+        ).select("courseData");
 
-            await redis.set("allCourses", JSON.stringify(courses));
-            res.status(200).json({
-                success: true,
-                courses,
-            });
-        }
+        // await redis.set("allCourses", JSON.stringify(courses));
+        res.status(200).json({
+            success: true,
+            courses,
+        });
+        // }
 
 
     } catch (error: any) {
@@ -230,7 +237,7 @@ export const addAnswer = CatchAsyncError(async (req: Request, res: Response, nex
                 title: "New Question Reply",
                 message: `You have a new question reply in ${courseContent.title}`,
             });
-    
+
         } else {
             const data = {
                 name: question.user.name,

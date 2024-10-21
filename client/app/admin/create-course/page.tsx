@@ -1,13 +1,10 @@
 'use client'
-import AllCourses from '@/app/components/Admin/Course/AllCourses';
-import Heading from '@/app/utils/Heading';
-import React, { FC } from 'react'
-import { IoMdCheckmark } from 'react-icons/io'
-type Props = {
-}
+import React from 'react'
+import Heading from '@/app/utils/Heading'
+import CreateCourse from '@/app/components/Admin/Course/CreateCourse'
+type Props = {}
 
 const page = (props: Props) => {
-
     return (
         <div>
             <AdminProtected>
@@ -15,13 +12,13 @@ const page = (props: Props) => {
                     title="ELearning - admin"
                     description="ELearning is a platform for students to learn get help from lecturers"
                     keywords="Progamming,MERN,Machine Learning" />
-                <div className="flex h-screen">
+                <div className="flex">
                     <div className="1500px:w-[16%] w-1/5">
                         {/* <AdminSideBar/> */}
                     </div>
                     <div className="w-[85%]">
                         {/* <Dashboardheader/> */}
-                        <DashboardHero isDashboard={true} />
+                        <CreateCourse />
                     </div>
                 </div>
             </AdminProtected>

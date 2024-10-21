@@ -1,5 +1,6 @@
 'use client'
 import AllCourses from '@/app/components/Admin/Course/AllCourses';
+import AllInvoices from '@/app/components/Admin/Order/AllInvoices';
 import Heading from '@/app/utils/Heading';
 import React, { FC } from 'react'
 import { IoMdCheckmark } from 'react-icons/io'
@@ -21,7 +22,7 @@ const page = (props: Props) => {
                     </div>
                     <div className="w-[85%]">
                         {/* <Dashboardheader/> */}
-                        <DashboardHero isDashboard={true} />
+                        <AllInvoices />
                     </div>
                 </div>
             </AdminProtected>
