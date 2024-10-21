@@ -1,3 +1,4 @@
+import { styles } from '@/app/styles/styles';
 import React, { FC, useState } from 'react'
 import toast from 'react-hot-toast';
 import { AiOutlineDelete, AiOutlinePlusCircle } from 'react-icons/ai';
@@ -187,13 +188,13 @@ const CourseContent: FC<Props> = ({
                                         !isCollapsed[index] && (
                                             <>
                                                 <div className="my-3">
-                                                    <label className={`nameLabel`}>
+                                                    <label className={`${styles.label}`}>
                                                         Video Title
                                                     </label>
                                                     <input
                                                         type="text"
                                                         placeholder="Project Plan..."
-                                                        className={`nameInput`}
+                                                        className={`${styles.input}`}
                                                         value={item.title}
                                                         onChange={(e) => {
                                                             const updatedData = [...courseContentData];
@@ -204,13 +205,13 @@ const CourseContent: FC<Props> = ({
                                                 </div>
                                                 {/* URL */}
                                                 <div className="mb-3">
-                                                    <label className={`nameLabel`}>
+                                                    <label className={`${styles.label}`}>
                                                         Video URL
                                                     </label>
                                                     <input
                                                         type="text"
                                                         placeholder="sdder"
-                                                        className={`nameInput`}
+                                                        className={`${styles.input}`}
                                                         value={item.videoUrl}
                                                         onChange={(e) => {
                                                             const updatedData = [...courseContentData];
@@ -221,13 +222,13 @@ const CourseContent: FC<Props> = ({
                                                 </div>
                                                 {/* Video Length */}
                                                 <div className="mb-3">
-                                                    <label className={`nameLabel`}>
+                                                    <label className={`${styles.label}`}>
                                                         Video Length (in minutes)
                                                     </label>
                                                     <input
                                                         type="number"
                                                         placeholder="1 minutes"
-                                                        className={`nameInput`}
+                                                        className={`${styles.input}`}
                                                         value={item.videoLength}
                                                         onChange={(e) => {
                                                             const updatedData = [...courseContentData];
@@ -238,14 +239,14 @@ const CourseContent: FC<Props> = ({
                                                 </div>
                                                 {/* Description */}
                                                 <div className="mb-3">
-                                                    <label className={`nameLabel`}>
+                                                    <label className={`${styles.label}`}>
                                                         Video Description
                                                     </label>
                                                     <textarea
                                                         rows={8}
                                                         cols={30}
                                                         placeholder="Description"
-                                                        className={`nameInput !h-min py-2`}
+                                                        className={`${styles.input} !h-min py-2`}
                                                         value={item.description}
                                                         onChange={(e) => {
                                                             const updatedData = [...courseContentData];
@@ -259,7 +260,7 @@ const CourseContent: FC<Props> = ({
                                                     item?.links.map((link: any, linkIndex: number) => (
                                                         <div className="mb-3 block">
                                                             <div className="w-full flex items-center justify-between">
-                                                                <label className={`nameLabel`}>
+                                                                <label className={`${styles.label}`}>
                                                                     Link {linkIndex + 1}
                                                                 </label>
                                                                 <AiOutlineDelete
@@ -277,7 +278,7 @@ const CourseContent: FC<Props> = ({
                                                             <input
                                                                 type="text"
                                                                 placeholder="Source Code ... {Link Title}"
-                                                                className={`nameInput`}
+                                                                className={`${styles.input}`}
                                                                 value={link.title}
                                                                 onChange={(e) => {
                                                                     const updatedData = [...courseContentData];
@@ -289,7 +290,7 @@ const CourseContent: FC<Props> = ({
                                                             <input
                                                                 type="text"
                                                                 placeholder="Source Code URL ... {Link URL}"
-                                                                className={`nameInput mt-6`}
+                                                                className={`${styles.input} mt-6`}
                                                                 value={link.url}
                                                                 onChange={(e) => {
                                                                     const updatedData = [...courseContentData];

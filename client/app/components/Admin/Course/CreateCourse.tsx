@@ -6,7 +6,7 @@ import CourseOptions from './CourseOptions'
 import CourseDataComp from './CourseDataComp'
 import CourseContent from './CourseContent'
 import CoursePreview from './CoursePreview'
-import { useCreateCourseMutation } from '@/app/redux/features/courses/coursesApi'
+import { useCreateCourseMutation } from '@/redux/features/courses/coursesApi'
 import toast from 'react-hot-toast'
 import { redirect } from 'next/navigation'
 

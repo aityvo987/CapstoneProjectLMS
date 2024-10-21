@@ -5,6 +5,9 @@ import { Box, Button, Modal } from "@mui/material";
 import { AiOutlineDelete, AiOutlineMail } from "react-icons/ai";
 import { useTheme } from "next-themes";
 import toast from 'react-hot-toast';
+import { styles } from '@/app/styles/styles';
+import Loader from '../../Loader/Loader';
+import { useDeleteUserMutation, useGetAllUsersQuery, useUpdateUserRoleMutation } from '@/redux/features/user/userApi';
 type Props = {
     isTeam: boolean;
 }
@@ -16,7 +19,7 @@ const AllUsers: FC<Props> = ({ isTeam }) => {
     const [role, setRole] = useState('admin');
     const [open, setOpen] = useState(false);
     const [userId, setUserId] = useState('');
-    const { isLoading, data, refetch } = useGetAllUsersQuery({},{refetchOnMounthOrArgChange:true});
+    const { isLoading, data, refetch } = useGetAllUsersQuery({},{refetchOnMountOrArgChange:true});
     const [updateUserRole, { error: updateError, isSuccess }] = useUpdateUserRoleMutation();
     const [deleteUser, {isSuccess:deleteSuccess, error:deleteError}] = useDeleteUserMutation({});
 
@@ -122,7 +125,7 @@ const AllUsers: FC<Props> = ({ isTeam }) => {
     }
 
     const handleSubmit = async () => {
-        await updateUserRole({ id, role })
+        await updateUserRole({ userId,email, role })
 
     };
     const handleDelete = async () =>{
@@ -139,7 +142,7 @@ const AllUsers: FC<Props> = ({ isTeam }) => {
                     <Box m="20px">
                         {isTeam && (
                             <div className="w-full flex justify-end">
-                                <div className={`nameButton !w-[230px] dark:bg-[#57c7a3] h-[35px] dark: border dark:border-[#ffffff6c]`}
+                                <div className={`${styles.button} !w-[230px] dark:bg-[#57c7a3] h-[35px] dark: border dark:border-[#ffffff6c]`}
                                     onClick={() => setActive(!active)}>
                                     Add New Member
                                 </div>
@@ -217,7 +220,7 @@ const AllUsers: FC<Props> = ({ isTeam }) => {
                                                 value={email}
                                                 onChange={(e) => setEmail(e.target.value)}
                                                 placeholder="Enter email..."
-                                                className={`nameInput`}
+                                                className={`${styles.input}`}
                                             />
                                             <select name="" id="" className={`${styles.input} !mt-6`}>
                                                 <option value="admin">Admin</option>

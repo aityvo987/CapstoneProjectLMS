@@ -1,12 +1,14 @@
 
 import AllCourses from '@/app/components/Admin/Course/AllCourses';
 import AllUsers from '@/app/components/Admin/Users/AllUsers';
-import { useEditLayoutMutation, useGetHeroDataQuery } from '@/app/redux/features/layout/layoutApi';
+import { useEditLayoutMutation, useGetHeroDataQuery } from '@/redux/features/layout/layoutApi';
 import Heading from '@/app/utils/Heading';
 import React, { FC, useEffect, useState } from 'react'
 import toast from 'react-hot-toast';
 import { AiOutlineCamera, AiOutlineDelete } from 'react-icons/ai';
 import { IoMdAddCircleOutline } from 'react-icons/io';
+import Loader from '../../Loader/Loader';
+import { styles } from '@/app/styles/styles';
 
 type Props = {
 }

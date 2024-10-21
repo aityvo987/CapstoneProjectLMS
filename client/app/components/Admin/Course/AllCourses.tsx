@@ -5,10 +5,12 @@ import { Box, Button, Modal } from "@mui/material";
 import { AiOutlineDelete } from "react-icons/ai";
 import { useTheme } from "next-themes";
 import { FiEdit2 } from 'react-icons/fi';
-import { useDeleteCourseMutation, useGetAllCoursesQuery } from '@/app/redux/features/courses/coursesApi';
+import { useDeleteCourseMutation, useGetAllCoursesQuery } from '@/redux/features/courses/coursesApi';
 import { format } from "timeago.js";
 import toast from 'react-hot-toast';
 import Link from 'next/link';
+import { styles } from '@/app/styles/styles';
+import Loader from '../../Loader/Loader';
 type Props = {
 }
 
@@ -16,7 +18,7 @@ const AllCourses = (props: Props) => {
     const { theme, setTheme } = useTheme();
     const [open, setOpen] = useState(false);
     const [courseId, setCourseId] = useState('');
-    const { isLoading, data, refetch } = useGetAllCoursesQuery({}, { refetchOnMounthOrArgChange: true });
+    const { isLoading, data, refetch } = useGetAllCoursesQuery({}, { refetchOnMountOrArgChange: true });
     const [deleteCourse, { isSuccess: deleteSuccess, error: deleteError }] = useDeleteCourseMutation({})
     const columns = [
         { field: "id", headerName: "ID", flex: 0.5 },
@@ -80,17 +82,6 @@ const AllCourses = (props: Props) => {
     }
 
     useEffect(() => {
-        if (updateError) {
-            if ("data" in updateError) {
-                const errorMessage = updateError as any;
-                toast.error(errorMessage.data.message);
-            }
-        }
-        if (updateSuccess) {
-            refetch();
-            toast.success("User role updated successfullt");
-            setActive(false);
-        }
         if (deleteSuccess) {
             refetch();
             toast.success("Delete user successfully")
@@ -102,7 +93,7 @@ const AllCourses = (props: Props) => {
                 toast.error(errorMessage.data.message);
             }
         }
-    }, [updateSuccess, updateError, deleteSuccess, deleteError])
+    }, [deleteSuccess, deleteError])
 
     const handleDelete = async () => {
         const id = courseId;
@@ -183,7 +174,7 @@ const AllCourses = (props: Props) => {
                                     aria-describedby="modal-modal-description"
                                 >
                                     <Box className="absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 w-[450px] bg-white dark:bg-slate-900 rounded-[8px] shadow p-4 outline-none">
-                                        <h1 className={`nameTitle`}>
+                                        <h1 className={`${styles.title}`}>
                                             Are you sure you want to delete this course?
                                         </h1>
                                         <div className="flex w-full items-center justify-between mb-6 mt-4">

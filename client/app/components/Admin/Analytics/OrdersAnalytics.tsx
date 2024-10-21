@@ -1,5 +1,5 @@
 
-import { useGetCoursesAnalyticsQuery, useGetOrdersAnalyticsQuery } from '@/app/redux/features/analytics/analyticsApi';
+import { useGetCoursesAnalyticsQuery, useGetOrdersAnalyticsQuery } from '@/redux/features/analytics/analyticsApi';
 import React, { FC, useEffect, useState } from 'react'
 import {
     ResponsiveContainer,

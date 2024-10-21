@@ -1,6 +1,9 @@
 'use client'
 import AllCourses from '@/app/components/Admin/Course/AllCourses';
+import DashboardHeader from '@/app/components/Admin/DashboardHeader';
 import AllInvoices from '@/app/components/Admin/Order/AllInvoices';
+import AdminSidebar from '@/app/components/Admin/sidebar/AdminSidebar';
+import AdminProtected from '@/app/hooks/adminProtected';
 import Heading from '@/app/utils/Heading';
 import React, { FC } from 'react'
 import { IoMdCheckmark } from 'react-icons/io'
@@ -18,10 +21,10 @@ const page = (props: Props) => {
                     keywords="Progamming,MERN,Machine Learning" />
                 <div className="flex h-screen">
                     <div className="1500px:w-[16%] w-1/5">
-                        {/* <AdminSideBar/> */}
+                        <AdminSidebar/>
                     </div>
                     <div className="w-[85%]">
-                        {/* <Dashboardheader/> */}
+                        <DashboardHeader/>
                         <AllInvoices />
                     </div>
                 </div>

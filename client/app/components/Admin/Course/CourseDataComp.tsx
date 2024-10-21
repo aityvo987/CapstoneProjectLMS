@@ -1,6 +1,7 @@
 import React, { FC } from 'react'
 import { IoIosAddCircle } from 'react-icons/io'
 import toase, { toast } from 'react-hot-toast'
+import { styles } from '@/app/styles/styles';
 type Props = {
     benefits: { title: string }[];
     setBenefits: (benefits: { title: string }[]) => void;
@@ -48,7 +49,7 @@ const CourseDataComp: FC<Props> = ({
     return (
         <div className="w-[80%] m-auto mt-24 block">
             <div>
-                <label className={`nameLabel text-[20px]`} htmlFor="email">
+                <label className={`${styles.label} text-[20px]`} htmlFor="email">
                     What are the benefits to have this course?
                 </label>
                 <br>
@@ -60,7 +61,7 @@ const CourseDataComp: FC<Props> = ({
                             name="Benefit"
                             placeholder="Helps you develop yourself"
                             required
-                            className={`nameInput my-2`}
+                            className={`${styles.input} my-2`}
                             value={benefit.title}
                             onChange={(e) => handleBenefitsChange(index, e.target.value)}
 
@@ -74,7 +75,7 @@ const CourseDataComp: FC<Props> = ({
             </div>
             {/*Add prerequisites */}
             <div>
-                <label className={`nameLabel text-[20px]`} htmlFor="email">
+                <label className={`${styles.label} text-[20px]`} htmlFor="email">
                     What are the prerequisites you need to have before starting this course?
                 </label>
                 <br>
@@ -86,7 +87,7 @@ const CourseDataComp: FC<Props> = ({
                             name="Prerequisites"
                             placeholder="Have passion in Information Technology"
                             required
-                            className={`nameInput my-2`}
+                            className={`${styles.input} my-2`}
                             value={prerequisite.title}
                             onChange={(e) => handlePrerequisitesChange(index, e.target.value)}
 
