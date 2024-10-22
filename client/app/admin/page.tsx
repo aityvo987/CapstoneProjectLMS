@@ -4,9 +4,15 @@ import Heading from '@/app/utils/Heading';
 import React, { FC } from 'react'
 import { IoMdCheckmark } from 'react-icons/io'
 import AdminProtected from '../hooks/adminProtected';
+<<<<<<< HEAD
 import AdminSidebar from '../components/Admin/sidebar/AdminSidebar';
 import DashboardHeader from '../components/Admin/DashboardHeader';
 import DashboardHero from '../components/Admin/DashboardHero';
+=======
+import DashboardHero from '../components/Admin/DashboardHero';
+import AdminSidebar from '../components/Admin/sidebar/AdminSidebar';
+import DashboardHeader from '../components/Admin/DashboardHeader';
+>>>>>>> origin/fix_bug_FE
 type Props = {
 }
 

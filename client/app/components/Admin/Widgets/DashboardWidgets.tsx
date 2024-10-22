@@ -88,7 +88,7 @@ const DashboardWidgets: FC<Props> = ({ open, value }) => {
                     <OrdersAnalytics isDashboard={true} />
                 </div>
                 <div className="p-5">
-                    <h5 className="dark: text-[#fff] text-black text-[20px] font-[400] font-Poppins pb-3">
+                    <h5 className="dark:text-[#fff] text-black text-[20px] font-[400] font-Poppins pb-3">
                         Recent Transactions
                     </h5>
                     <AllInvoices isDashboard={true} />
