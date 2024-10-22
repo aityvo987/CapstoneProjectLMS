@@ -4,6 +4,7 @@ import { PiUsersFourLight } from 'react-icons/pi';
 import UsersAnalytics from '../Analytics/UsersAnalytics';
 import { Box, CircularProgress } from '@mui/material';
 import OrdersAnalytics from '../Analytics/OrdersAnalytics';
+import AllInvoices from '../Order/AllInvoices';
 type Props = {
     open?: boolean;
     value?: number;
@@ -87,7 +88,7 @@ const DashboardWidgets: FC<Props> = ({ open, value }) => {
                     <OrdersAnalytics isDashboard={true} />
                 </div>
                 <div className="p-5">
-                    <h5 className="dark: text-[#fff] text-black text-[20px] font-[400] font-Poppins pb-3">
+                    <h5 className="dark:text-[#fff] text-black text-[20px] font-[400] font-Poppins pb-3">
                         Recent Transactions
                     </h5>
                     <AllInvoices isDashboard={true} />

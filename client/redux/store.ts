@@ -17,13 +17,13 @@ export const store = configureStore({
 
 //call the refresh token function on every time page load
 const initializeApp = async() => {
-    // try {
-    //     // Attempt to refresh token
-    //     await store.dispatch(apiSlice.endpoints.refreshToken.initiate({}, {forceRefetch: true}));
-    // } catch (error) {
-    //     console.error("Failed to refresh token:", error);
-    //     // Handle the error (e.g., redirect to login)
-    // }
+    try {
+        // Attempt to refresh token
+        await store.dispatch(apiSlice.endpoints.refreshToken.initiate({}, {forceRefetch: true}));
+    } catch (error) {
+        console.error("Failed to refresh token:", error);
+        // Handle the error (e.g., redirect to login)
+    }
 
     try {
         // Load user data after refreshing token
