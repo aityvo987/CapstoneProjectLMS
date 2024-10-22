@@ -7,6 +7,7 @@ import { useTheme } from "next-themes";
 import toast from 'react-hot-toast';
 import { styles } from '@/app/styles/styles';
 import Loader from '../../Loader/Loader';
+import { format } from "timeago.js";
 import { useDeleteUserMutation, useGetAllUsersQuery, useUpdateUserRoleMutation } from '@/redux/features/user/userApi';
 type Props = {
     isTeam: boolean;
@@ -56,6 +57,28 @@ const AllUsers: FC<Props> = ({ isTeam }) => {
         { field: "role", headerName: "Role", flex: .5 },
         { field: "courses", headerName: "Purchased Courses", flex: 0.5 },
         { field: "created_at", headerName: "Created At", flex: 0.5 },
+        
+        {
+            field: " ",
+            headerName: "Email",
+            flex: 0.2,
+            renderCell: (params: any) => {
+                return (
+                    <>
+                        <Button>
+                            <a href={`mailto:${params.row.email}`} className="flex items-center">
+                                <AiOutlineMail
+
+                                    className="dark:text-white text-black"
+                                    size={20}
+                                />
+                            </a>
+                        </Button>
+
+                    </>
+                );
+            },
+        },
         {
             field: "  ",
             headerName: "Delete",
@@ -78,24 +101,6 @@ const AllUsers: FC<Props> = ({ isTeam }) => {
                 );
             },
         },
-        {
-            field: " ",
-            headerName: "Email",
-            flex: 0.2,
-            renderCell: (params: any) => {
-                return (
-                    <>
-                        <a href={`mailto:${params.row.email}`} className="flex items-center">
-                            <AiOutlineMail
-                                
-                                className="dark:text-white text-black"
-                                size={20}
-                            />
-                        </a>
-                    </>
-                );
-            },
-        },
     ];
     const rows: any = [
 
@@ -110,18 +115,19 @@ const AllUsers: FC<Props> = ({ isTeam }) => {
                 email: item.email,
                 role: item.role,
                 courses: item.courses.length,
-                created_at: item.createdAt,
+                created_at: format(item.createdAt),
             })
         });
     } else {
         data && data.users.forEach((item: any) => {
+            console.log(data)
             rows.push({
                 id: item._id,
                 name: item.name,
                 email: item.email,
                 role: item.role,
                 courses: item.courses.length,
-                created_at: item.createdAt,
+                created_at: format(item.createdAt),
             })
         });
     }
@@ -185,7 +191,7 @@ const AllUsers: FC<Props> = ({ isTeam }) => {
                                     backgroundColor: theme == "dark" ? "#1F2A40" : "#",
                                 },
                                 "& .MuiDataGrid-columnHeaders": {
-                                    color: theme === "dark" ? "#fff" : "#000",
+                                    // color: theme === "dark" ? "#fff" : "#000",
                                     borderBottom: "none",
                                     backgroundColor: theme === "dark" ? "#3e4396" : "#A4A9FC",
                                 },

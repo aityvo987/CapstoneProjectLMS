@@ -96,11 +96,11 @@ const AdminSidebar = () => {
           <Item title="Create course" to="/admin/create-course" icon={<WebIcon />} selected={selected} setSelected={setSelected} />
           <Item title="Invoices" to="/admin/invoices" icon={<ReceiptOutlinedIcon />} selected={selected} setSelected={setSelected} />
           <SubMenu title="Analytics" icon={<BarChartOutlinedIcon />} placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
-            <Item title="Courses" to="/admin/courses" icon={<WysiwygIcon />} selected={selected} setSelected={setSelected} />
-            <Item title="Users" to="/admin/users" icon={<PeopleOutlinedIcon />} selected={selected} setSelected={setSelected} />
-            <Item title="Invoices" to="/admin/invoices" icon={<ReceiptOutlinedIcon />} selected={selected} setSelected={setSelected} />
+            <Item title="Courses" to="/admin/courses-analytics" icon={<WysiwygIcon />} selected={selected} setSelected={setSelected} />
+            <Item title="Users" to="/admin/users-analytics" icon={<PeopleOutlinedIcon />} selected={selected} setSelected={setSelected} />
+            <Item title="Orders" to="/admin/orders-analytics" icon={<ReceiptOutlinedIcon />} selected={selected} setSelected={setSelected} />
           </SubMenu>
-          <Item title="Change Roles" to="/admin/team" icon={<GroupsIcon />} selected={selected} setSelected={setSelected} />
+          <Item title="Team" to="/admin/team" icon={<GroupsIcon />} selected={selected} setSelected={setSelected} />
           <Item title="FAQ" to="/admin/faq" icon={<QuizIcon />} selected={selected} setSelected={setSelected} />
           <Item title="Categories" to="/admin/categories" icon={<IoMdList />} selected={selected} setSelected={setSelected} />
           <Item title="Hero" to="/admin/hero" icon={<SettingsIcon />} selected={selected} setSelected={setSelected} />
