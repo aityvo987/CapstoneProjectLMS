@@ -4,8 +4,8 @@ import AllUsers from '@/app/components/Admin/Users/AllUsers';
 import AdminProtected from '@/app/hooks/adminProtected';
 import Heading from '@/app/utils/Heading';
 import React, { FC } from 'react'
-import DashboardHeader from '../DashboardHeader';
-import AdminSidebar from '../sidebar/AdminSidebar';
+import DashboardHeader from '../../components/Admin/DashboardHeader';
+import AdminSidebar from '../../components/Admin/sidebar/AdminSidebar';
 type Props = {
 }
 

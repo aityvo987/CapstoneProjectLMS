@@ -35,10 +35,13 @@ const AllCourses = (props: Props) => {
                     <>
                         <Link href={`/admin/edit-course/${params.row.id}`}
                         >
-                            <FiEdit2
-                                className="dark:text-white text-black"
-                                size={20}
+                            <Button>
+                                <FiEdit2
+                                    className="dark:text-white text-black"
+                                    size={20}
                             />
+                            </Button>
+                            
                         </Link>
                     </>
                 );
@@ -71,6 +74,7 @@ const AllCourses = (props: Props) => {
     ];
     {
         data && data.courses.forEach((item: any) => {
+            console.log(data)
             rows.push({
                 id: item._id,
                 title: item.name,
@@ -134,7 +138,7 @@ const AllCourses = (props: Props) => {
                                     color: theme === "dark" ? "#fff" : "#000",
                                 },
                                 "& .MuiDataGrid-cell": {
-                                    borderBottom: "none",
+                                    borderBottom: "none!important",
                                 },
                                 "& .name-column--cell": {
                                     color: theme === "dark" ? "#fff" : "#000",
@@ -142,7 +146,7 @@ const AllCourses = (props: Props) => {
                                 "& .MuiDataGrid-columnHeaders": {
                                     backgroundColor: theme === "dark" ? "#3e4396" : "#A4A9FC",
                                     borderBottom: "none",
-                                    color: theme === "dark" ? "#fff" : "#000",
+                                    // color: theme === "dark" ? "#fff" : "#000",
                                 },
                                 "& .MuiDataGrid-virtualScroller": {
                                     backgroundColor: theme == "dark" ? "#1F2A40" : "#F2F0F0",
@@ -150,7 +154,7 @@ const AllCourses = (props: Props) => {
                                 "& .MuiDataGrid-footerContainer": {
                                     color: theme === "dark" ? "#fff" : "#000",
                                     borderTop: "none",
-                                    backgroundColor: theme === "dark" ? "#3e4396" : "#A4A9FC",
+                                    backgroundColor: theme === "dark" ? "#1F2A40" : "#F2F0F0",
                                 },
                                 "& .MuiCheckbox-root": {
                                     color:

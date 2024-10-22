@@ -7,6 +7,7 @@ import { useTheme } from "next-themes";
 import toast from 'react-hot-toast';
 import { styles } from '@/app/styles/styles';
 import Loader from '../../Loader/Loader';
+import { format } from "timeago.js";
 import { useDeleteUserMutation, useGetAllUsersQuery, useUpdateUserRoleMutation } from '@/redux/features/user/userApi';
 type Props = {
     isTeam: boolean;
@@ -19,9 +20,9 @@ const AllUsers: FC<Props> = ({ isTeam }) => {
     const [role, setRole] = useState('admin');
     const [open, setOpen] = useState(false);
     const [userId, setUserId] = useState('');
-    const { isLoading, data, refetch } = useGetAllUsersQuery({},{refetchOnMountOrArgChange:true});
+    const { isLoading, data, refetch } = useGetAllUsersQuery({}, { refetchOnMountOrArgChange: true });
     const [updateUserRole, { error: updateError, isSuccess }] = useUpdateUserRoleMutation();
-    const [deleteUser, {isSuccess:deleteSuccess, error:deleteError}] = useDeleteUserMutation({});
+    const [deleteUser, { isSuccess: deleteSuccess, error: deleteError }] = useDeleteUserMutation({});
 
 
     useEffect(() => {
@@ -36,7 +37,7 @@ const AllUsers: FC<Props> = ({ isTeam }) => {
             toast.success("User role updated successfullt");
             setActive(false);
         }
-        if(deleteSuccess){
+        if (deleteSuccess) {
             refetch();
             toast.success("Delete user successfully")
             setOpen(false);
@@ -47,7 +48,7 @@ const AllUsers: FC<Props> = ({ isTeam }) => {
                 toast.error(errorMessage.data.message);
             }
         }
-    }, [updateError, isSuccess,deleteSuccess,deleteError])
+    }, [updateError, isSuccess, deleteSuccess, deleteError])
 
     const columns = [
         { field: "id", headerName: "ID", flex: 0.3 },
@@ -56,6 +57,28 @@ const AllUsers: FC<Props> = ({ isTeam }) => {
         { field: "role", headerName: "Role", flex: .5 },
         { field: "courses", headerName: "Purchased Courses", flex: 0.5 },
         { field: "created_at", headerName: "Created At", flex: 0.5 },
+        
+        {
+            field: " ",
+            headerName: "Email",
+            flex: 0.2,
+            renderCell: (params: any) => {
+                return (
+                    <>
+                        <Button>
+                            <a href={`mailto:${params.row.email}`} className="flex items-center">
+                                <AiOutlineMail
+
+                                    className="dark:text-white text-black"
+                                    size={20}
+                                />
+                            </a>
+                        </Button>
+
+                    </>
+                );
+            },
+        },
         {
             field: "  ",
             headerName: "Delete",
@@ -65,31 +88,15 @@ const AllUsers: FC<Props> = ({ isTeam }) => {
                     <>
                         <Button
                             onClick={() => {
-                                setOpen(!open) ; 
-                                setUserId(params.row.id)}}
+                                setOpen(!open);
+                                setUserId(params.row.id)
+                            }}
                         >
                             <AiOutlineDelete
                                 className="dark:text-white text-black"
                                 size={20}
                             />
                         </Button>
-                    </>
-                );
-            },
-        },
-        {
-            field: "  ",
-            headerName: "Email",
-            flex: 0.2,
-            renderCell: (params: any) => {
-                return (
-                    <>
-                        <a href={`mailto:${params.row.email}`}>
-                            <AiOutlineMail
-                                className="dark:text-white text-black"
-                                size={20}
-                            />
-                        </a>
                     </>
                 );
             },
@@ -108,28 +115,29 @@ const AllUsers: FC<Props> = ({ isTeam }) => {
                 email: item.email,
                 role: item.role,
                 courses: item.courses.length,
-                created_at: item.createdAt,
+                created_at: format(item.createdAt),
             })
         });
     } else {
         data && data.users.forEach((item: any) => {
+            console.log(data)
             rows.push({
                 id: item._id,
                 name: item.name,
                 email: item.email,
                 role: item.role,
                 courses: item.courses.length,
-                created_at: item.createdAt,
+                created_at: format(item.createdAt),
             })
         });
     }
 
     const handleSubmit = async () => {
-        await updateUserRole({ userId,email, role })
+        await updateUserRole({ userId, email, role })
 
     };
-    const handleDelete = async () =>{
-        const id=userId;
+    const handleDelete = async () => {
+        const id = userId;
         await deleteUser(id);
     };
 
@@ -178,13 +186,14 @@ const AllUsers: FC<Props> = ({ isTeam }) => {
                                 "& .name-column--cell": {
                                     color: theme === "dark" ? "#fff" : "#000",
                                 },
-                                "& .MuiDataGrid-columnHeaders": {
-                                    backgroundColor: theme === "dark" ? "#3e4396" : "#A4A9FC",
-                                    borderBottom: "none",
-                                    color: theme === "dark" ? "#fff" : "#000",
-                                },
+
                                 "& .MuiDataGrid-virtualScroller": {
-                                    backgroundColor: theme == "dark" ? "#1F2A40" : "#F2F0F0",
+                                    backgroundColor: theme == "dark" ? "#1F2A40" : "#",
+                                },
+                                "& .MuiDataGrid-columnHeaders": {
+                                    // color: theme === "dark" ? "#fff" : "#000",
+                                    borderBottom: "none",
+                                    backgroundColor: theme === "dark" ? "#3e4396" : "#A4A9FC",
                                 },
                                 "& .MuiDataGrid-footerContainer": {
                                     color: theme === "dark" ? "#fff" : "#000",
@@ -252,11 +261,11 @@ const AllUsers: FC<Props> = ({ isTeam }) => {
                                         </h1>
                                         <div className="flex w-full items-center justify-between mb-6 mt-4">
                                             <div className={`${styles.button} !w-[120px] h-[30px] bg-[#57c7a3]`}
-                                            onClick={()=>setOpen(!open)}>
+                                                onClick={() => setOpen(!open)}>
                                                 Cancel
                                             </div>
                                             <div className={`${styles.button} !w-[120px] h-[30px] bg-[#d63f3f]`}
-                                            onClick={handleDelete}>
+                                                onClick={handleDelete}>
                                                 Delete
                                             </div>
                                         </div>

@@ -1,6 +1,6 @@
 "use client";
 import { FC, useEffect, useState } from "react";
-import { ProSidebar, Menu, MenuItem } from "react-pro-sidebar";
+import { ProSidebar, Menu, MenuItem, SubMenu } from "react-pro-sidebar";
 import { Box, IconButton, Typography } from "@mui/material";
 import "react-pro-sidebar/dist/css/styles.css";
 import {
@@ -26,6 +26,7 @@ import { useSelector } from "react-redux";
 import Link from "next/link";
 import Image from "next/image";
 import { useTheme } from "next-themes";
+import { IoMdList } from "react-icons/io";
 
 interface ItemProps {
   title: string;
@@ -89,18 +90,20 @@ const AdminSidebar = () => {
           </Box>
 
           {/* Menu Items */}
-          <Item title="Dashboard" to="/admin/dashboard" icon={<HomeOutlinedIcon />} selected={selected} setSelected={setSelected} />
+          <Item title="Dashboard" to="/admin/" icon={<HomeOutlinedIcon />} selected={selected} setSelected={setSelected} />
           <Item title="Users" to="/admin/users" icon={<PeopleOutlinedIcon />} selected={selected} setSelected={setSelected} />
-          <Item title="Reports" to="/admin/reports" icon={<ReceiptOutlinedIcon />} selected={selected} setSelected={setSelected} />
-          <Item title="Analytics" to="/admin/analytics" icon={<BarChartOutlinedIcon />} selected={selected} setSelected={setSelected} />
-          <Item title="Map" to="/admin/map" icon={<MapOutlinedIcon />} selected={selected} setSelected={setSelected} />
-          <Item title="Groups" to="/admin/groups" icon={<GroupsIcon />} selected={selected} setSelected={setSelected} />
-          <Item title="Videos" to="/admin/videos" icon={<OndemandVideoIcon />} selected={selected} setSelected={setSelected} />
-          <Item title="Web" to="/admin/web" icon={<WebIcon />} selected={selected} setSelected={setSelected} />
-          <Item title="Quizzes" to="/admin/quizzes" icon={<QuizIcon />} selected={selected} setSelected={setSelected} />
-          <Item title="Articles" to="/admin/articles" icon={<WysiwygIcon />} selected={selected} setSelected={setSelected} />
-          <Item title="History" to="/admin/history" icon={<ManageHistoryIcon />} selected={selected} setSelected={setSelected} />
-          <Item title="Settings" to="/admin/settings" icon={<SettingsIcon />} selected={selected} setSelected={setSelected} />
+          <Item title="Courses" to="/admin/courses" icon={<WysiwygIcon />} selected={selected} setSelected={setSelected} />
+          <Item title="Create course" to="/admin/create-course" icon={<WebIcon />} selected={selected} setSelected={setSelected} />
+          <Item title="Invoices" to="/admin/invoices" icon={<ReceiptOutlinedIcon />} selected={selected} setSelected={setSelected} />
+          <SubMenu title="Analytics" icon={<BarChartOutlinedIcon />} placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
+            <Item title="Courses" to="/admin/courses-analytics" icon={<WysiwygIcon />} selected={selected} setSelected={setSelected} />
+            <Item title="Users" to="/admin/users-analytics" icon={<PeopleOutlinedIcon />} selected={selected} setSelected={setSelected} />
+            <Item title="Orders" to="/admin/orders-analytics" icon={<ReceiptOutlinedIcon />} selected={selected} setSelected={setSelected} />
+          </SubMenu>
+          <Item title="Team" to="/admin/team" icon={<GroupsIcon />} selected={selected} setSelected={setSelected} />
+          <Item title="FAQ" to="/admin/faq" icon={<QuizIcon />} selected={selected} setSelected={setSelected} />
+          <Item title="Categories" to="/admin/categories" icon={<IoMdList />} selected={selected} setSelected={setSelected} />
+          <Item title="Hero" to="/admin/hero" icon={<SettingsIcon />} selected={selected} setSelected={setSelected} />
           <Item title="Logout" to="/logout" icon={<ExitToAppIcon />} selected={selected} setSelected={setSelected} />
         </Menu>
       </ProSidebar>

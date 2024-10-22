@@ -6,21 +6,22 @@ import CourseOptions from './CourseOptions'
 import CourseDataComp from './CourseDataComp'
 import CourseContent from './CourseContent'
 import CoursePreview from './CoursePreview'
-import { useEditCourseMutation, useGetAllCoursesQuery } from '@/redux/features/courses/coursesApi'
 import toast from 'react-hot-toast'
 import { redirect, useParams } from 'next/navigation'
+import { useEditCourseMutation, useGetAllCoursesQuery } from '@/redux/features/courses/coursesApi'
 
 type Props = {
     id: string;
 };
 
 const EditCourse: FC<Props> = ({ id }) => {
-    const [editCourse, { isSuccess, error }] = useEditCourseMutation({}, { refetchOnMounthOrArgChange: true });
-    const { isLoading, data, refetch } = useGetAllCoursesQuery({}, { refetchOnMounthOrArgChange: true });
+    const [editCourse, { isSuccess, error }] = useEditCourseMutation({});
+    const { isLoading, data, refetch } = useGetAllCoursesQuery({}, { refetchOnMountOrArgChange: true });
 
     const editCourseData = data && data.courses.find((i: any) => i._id === id)
     useEffect(() => {
         if (isSuccess) {
+            refetch();
             toast.success("Course edited successfully");
             redirect("/admin/courses");
         }

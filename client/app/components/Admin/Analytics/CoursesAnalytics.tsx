@@ -10,6 +10,8 @@ import {
     YAxis,
     LabelList,
 } from "recharts";
+import Loader from '../../Loader/Loader';
+import { styles } from '@/app/styles/styles';
 type Props = {
 }
 
@@ -38,19 +40,19 @@ const CoursesAnalytics: FC<Props> = (props: Props) => {
                 isLoading ? (
                     <Loader />
                 ) : (
-                    <div className="h-">
+                    <div className="h-[100%]">
                         <div className="mt-[50px]">
                             <h1 className={`${styles.title} px-5 !text-start`}>
                                 Courses Analytics
                             </h1>
                             <p className={`${styles.label} px-5`}>
-                                Last 12 months analytics data{""}
+                                Last 12 months analytics data
                             </p>
                         </div>
 
-                        <div className="w-full h-[90%] flex items-center justify-center">
+                        <div className="w-full h-[80%] flex items-center justify-center">
                             <ResponsiveContainer width="90%" height="50%">
-                                <BarChart width={150} height={300} data={analyticsData}>
+                                <BarChart data={analyticsData}>
                                     <XAxis dataKey="name">
                                         <Label offset={0} position="insideBottom" />
                                     </XAxis>
@@ -62,7 +64,6 @@ const CoursesAnalytics: FC<Props> = (props: Props) => {
                             </ResponsiveContainer>
                         </div>
                     </div>
-
                 )
             }
         </>

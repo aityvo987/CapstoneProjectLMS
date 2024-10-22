@@ -11,6 +11,8 @@ import {
     Tooltip,
     Legend,
 } from "recharts";
+import Loader from '../../Loader/Loader';
+import { styles } from '@/app/styles/styles';
 type Props = {
     isDashboard?:boolean;
 }
