@@ -1,23 +1,19 @@
 'use client'
 import AllCourses from '@/app/components/Admin/Course/AllCourses';
 import Heading from '@/app/utils/Heading';
-import React, { FC } from 'react'
+import React, { FC, useState } from 'react'
 import { IoMdCheckmark } from 'react-icons/io'
 import AdminProtected from '../hooks/adminProtected';
-<<<<<<< HEAD
+
 import AdminSidebar from '../components/Admin/sidebar/AdminSidebar';
 import DashboardHeader from '../components/Admin/DashboardHeader';
 import DashboardHero from '../components/Admin/DashboardHero';
-=======
-import DashboardHero from '../components/Admin/DashboardHero';
-import AdminSidebar from '../components/Admin/sidebar/AdminSidebar';
-import DashboardHeader from '../components/Admin/DashboardHeader';
->>>>>>> origin/fix_bug_FE
+
 type Props = {
 }
 
 const page = (props: Props) => {
-
+    const [open, setOpen] = useState(false);
     return (
         <div>
             <AdminProtected>
@@ -30,7 +26,7 @@ const page = (props: Props) => {
                         <AdminSidebar/>
                     </div>
                     <div className="w-[85%]">
-                        <DashboardHeader/>
+                        <DashboardHeader open={open} setOpen={setOpen}/>
                         <DashboardHero isDashboard={true} />
                     </div>
                 </div>

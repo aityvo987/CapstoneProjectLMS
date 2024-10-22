@@ -1,8 +1,6 @@
-<<<<<<< HEAD:client/redux/features/analytics/analyticsApi.ts
-import { apiSlice } from "../api/apiSlice";
-=======
+
 import { apiSlice } from "@/redux/features/api/apiSlice";
->>>>>>> origin/fix_bug_FE:client/app/redux/features/analytics/analyticsApi.ts
+
 
 
 
