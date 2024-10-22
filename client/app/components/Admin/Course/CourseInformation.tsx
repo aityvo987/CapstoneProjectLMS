@@ -13,7 +13,7 @@ type Props = {
 const CourseInformation: FC<Props> = ({ courseInfo, setCourseInfo, active, setActive }) => {
     const [dragging, setDragging] = useState(false);
     const { data } = useGetHeroDataQuery("Categories", {
-        refetchOnMounthOrArgChange: true,
+        refetchOnMountOrArgChange: true,
     });
     const [categories,setCategories] = useState([]);
 

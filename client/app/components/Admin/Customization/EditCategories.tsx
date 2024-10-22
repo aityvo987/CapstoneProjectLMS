@@ -1,7 +1,7 @@
 
 import AllCourses from '@/app/components/Admin/Course/AllCourses';
 import AllUsers from '@/app/components/Admin/Users/AllUsers';
-import { useEditLayoutMutation, useGetHeroDataQuery } from '@/redux/features/layout/layoutApi';
+import { useEditHeroDataMutation, useGetHeroDataQuery } from '@/redux/features/layout/layoutApi';
 import Heading from '@/app/utils/Heading';
 import React, { FC, useEffect, useState } from 'react'
 import toast from 'react-hot-toast';
@@ -16,9 +16,9 @@ type Props = {
 const EditCategories: FC<Props> = (props: Props) => {
     const [categories, setCategories] = useState<any[]>([]);
     const { data, refetch } = useGetHeroDataQuery("Categories", {
-        refetchOnMounthOrArgChange: true,
+        refetchOnMountOrArgChange: true,
     });
-    const [editLayout, { isLoading, isSuccess, error }] = useEditLayoutMutation();
+    const [editLayout, { isLoading, isSuccess, error }] = useEditHeroDataMutation();
 
     useEffect(() => {
         if (data) {
@@ -45,7 +45,7 @@ const EditCategories: FC<Props> = (props: Props) => {
 
 
     const newCategoriesHandler = async () => {
-        if (categories[categories.length - 1].title === "") {
+        if (categories[categories.length - 1]?.title === "") {
             toast.error("Category title cannot be empty");
         } else {
             setCategories((prevCategory: any) => [...prevCategory, { title: "" }]);
@@ -64,10 +64,10 @@ const EditCategories: FC<Props> = (props: Props) => {
     };
 
     const editCategoriesHandler = async () => {
-        if (!areCategoriesUnchanged(data.layout.categories, categories) && !isAnyCategoryEmpty(categories)) {
+        if (!areCategoriesUnchanged(data?.layout?.categories, categories) && !isAnyCategoryEmpty(categories)) {
             await editLayout({
                 type: "Categories",
-                faq: categories,
+                categories: categories,
             });
         }
     }
@@ -121,14 +121,14 @@ const EditCategories: FC<Props> = (props: Props) => {
                         <div
                             className={`${styles.button} !w-[100px] !min-h-[40px] !h-[40px] dark:text-white text-black bg-[#cccccc34]
                         
-                            ${areCategoriesUnchanged(data.layout.categories, categories) ||
+                            ${areCategoriesUnchanged(data?.layout?.categories, categories) ||
                                     isAnyCategoryEmpty(categories)
                                     ? "!cursor-not-allowed"
                                     : "cursor-pointer bg-[#42d383]"
                                 }
                             !rounded absolute bottom-12 right-12`}
                             onClick={
-                                areCategoriesUnchanged(data.layout.categories, categories) ||
+                                areCategoriesUnchanged(data?.layout?.categories, categories) ||
                                     isAnyCategoryEmpty(categories)
                                     ? () => null
                                     : editCategoriesHandler

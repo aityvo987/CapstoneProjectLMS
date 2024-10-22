@@ -1,3 +1,4 @@
+import { apiSlice } from "../api/apiSlice";
 
 
 
@@ -8,13 +9,12 @@ export const layoutApi = apiSlice.injectEndpoints({
             query:(type)=>({
                 url:`get-layout/${type}`,
                 method:"GET",
-                body:type,
                 credentials:"include" as const,
             }),
         }),
         editHeroData:builder.mutation({
             query:({type,image,title,subTitle,faq,categories})=>({
-                url:`edit-layout/${type}`,
+                url:`edit-layout/`,
                 method:"PUT",
                 body:{
                     type,
@@ -30,4 +30,4 @@ export const layoutApi = apiSlice.injectEndpoints({
     })
 })
 
-export const {useGetHeroDataQuery,useEditLayoutMutation} = layoutApi;
+export const {useGetHeroDataQuery,useEditHeroDataMutation} = layoutApi;

@@ -1,11 +1,12 @@
 
 import AllCourses from '@/app/components/Admin/Course/AllCourses';
 import AllUsers from '@/app/components/Admin/Users/AllUsers';
-import { useEditLayoutMutation, useGetHeroDataQuery } from '@/redux/features/layout/layoutApi';
+import { useEditHeroDataMutation, useGetHeroDataQuery } from '@/redux/features/layout/layoutApi';
 import Heading from '@/app/utils/Heading';
 import React, { FC, useEffect, useState } from 'react'
 import toast from 'react-hot-toast';
 import { AiOutlineCamera } from 'react-icons/ai';
+import { styles } from '@/app/styles/styles';
 
 type Props = {
 }
@@ -15,9 +16,9 @@ const EditHero: FC<Props> = (props: Props) => {
     const [title, setTitle] = useState("");
     const [subTitle, setSubTitle] = useState("");
     const { data,refetch } = useGetHeroDataQuery("Banner", {
-        refetchOnMounthOrArgChange: true,
+        refetchOnMountOrArgChange: true,
     });
-    const [editLayout, { isLoading, isSuccess, error }] = useEditLayoutMutation();
+    const [editLayout, { isLoading, isSuccess, error }] = useEditHeroDataMutation();
 
     useEffect(() => {
         if (data) {
@@ -61,7 +62,7 @@ const EditHero: FC<Props> = (props: Props) => {
         <>
             <div className="w-full 1000px:flex items-center">
                 <div className="absolute top-[100px] 1000px:top-[unset] 1500px:h-[700px] 1500px:w-[700px] 1100px:h-[500px] 1100px:w-[500px] h-[50vh] w-[50vh] hero_animation rounded-[50%] 1100px:left-[18rem] 1500px:left-[21rem]"></div>
-                I<div className="1000px:w-[40%] flex 1000px:min-h-screen items-center justify-end pt-[78px] 1000px:pt-[0] z-10">
+                <div className="1000px:w-[40%] flex 1000px:min-h-screen items-center justify-end pt-[78px] 1000px:pt-[0] z-10">
                     <div className="relative flex items-center justify-end">
                         <img
                             src={image}

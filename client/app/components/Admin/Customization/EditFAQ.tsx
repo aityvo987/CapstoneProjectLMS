@@ -1,13 +1,15 @@
 
 import AllCourses from '@/app/components/Admin/Course/AllCourses';
 import AllUsers from '@/app/components/Admin/Users/AllUsers';
-import { useEditLayoutMutation, useGetHeroDataQuery } from '@/redux/features/layout/layoutApi';
+import { useEditHeroDataMutation, useGetHeroDataQuery } from '@/redux/features/layout/layoutApi';
 import Heading from '@/app/utils/Heading';
 import React, { FC, useEffect, useState } from 'react'
 import toast from 'react-hot-toast';
 import { AiOutlineCamera, AiOutlineDelete } from 'react-icons/ai';
 import { HiMinus, HiPlus } from 'react-icons/hi';
 import { IoMdAddCircleOutline } from 'react-icons/io';
+import Loader from '../../Loader/Loader';
+import { styles } from '@/app/styles/styles';
 
 type Props = {
 }
@@ -15,11 +17,12 @@ type Props = {
 const EditFAQ = (props: Props) => {
     const [questions, setQuestions] = useState<any[]>([]);
     const { data, isLoading, refetch } = useGetHeroDataQuery("FAQ", {
-        refetchOnMounthOrArgChange: true,
+        refetchOnMountOrArgChange: true,
     });
-    const [editLayout, { isSuccess: layoutSuccess, error }] = useEditLayoutMutation();
+    const [editLayout, { isSuccess: layoutSuccess, error }] = useEditHeroDataMutation();
 
     useEffect(() => {
+        console.log(data)
         if (data) {
             setQuestions(data.layout.faq)
         }
@@ -152,14 +155,14 @@ const EditFAQ = (props: Props) => {
                     <div
                         className={`${styles.button
                             }!w-[100px] !min-h-[40px] !h-[40px] dark:text-white text-black bg-[#cccccc34]
-                ${areQuestionsUnchanged(data.layout.faq, questions) ||
+                ${areQuestionsUnchanged(data?.layout?.faq, questions) ||
                                 isAnyQuestionEmpty(questions)
                                 ? "!cursor-not-allowed"
                                 : "!cursor-pointer !bg-[#42d383]"
                             }
                     !rounded absolute bottom-12 right-12`}
                         onClick={
-                            areQuestionsUnchanged(data.layout.faq, questions) ||
+                            areQuestionsUnchanged(data?.layout?.faq, questions) ||
                                 isAnyQuestionEmpty(questions)
                                 ? () => null
                                 : handleEdit
