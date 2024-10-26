@@ -8,7 +8,7 @@ type Props = {
 const CourseOptions: FC<Props> = ({ active, setActive }) => {
     const options = [
         "Course Information",
-        "Course Options",
+        "Course Benefits And Prerequisites",
         "Course Content",
         "Course Preview",
     ];
@@ -34,7 +34,7 @@ const CourseOptions: FC<Props> = ({ active, setActive }) => {
                                     : "dark:text-white text-black"
                                 } text-[20px]`}
                         >
-                            {options}
+                            {option}
                         </h5>
                     </div>
                 ))}

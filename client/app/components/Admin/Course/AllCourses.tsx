@@ -88,7 +88,7 @@ const AllCourses = (props: Props) => {
     useEffect(() => {
         if (deleteSuccess) {
             refetch();
-            toast.success("Delete user successfully")
+            toast.success("Delete course successfully")
             setOpen(false);
         }
         if (deleteError) {

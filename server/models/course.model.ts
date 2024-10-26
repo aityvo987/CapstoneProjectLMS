@@ -45,7 +45,7 @@ interface ICourse extends Document {
     level: string;
     demoUrl: string;
     benefits: { title: string }[];
-    prerequisties: { title: string }[];
+    prerequisites: { title: string }[];
     reviews: IReview[];
     courseData: ICourseData[];
     ratings?: number;
@@ -128,7 +128,7 @@ const courseSchema = new Schema<ICourse>({
         required: true,
     },
     benefits: [{ title: String }],
-    prerequisties: [{ title: String }],
+    prerequisites: [{ title: String }],
     reviews: [reviewSchema],
     courseData: [courseDataSchema],
     ratings: {
