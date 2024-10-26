@@ -10,6 +10,7 @@ import {
 import { useLoadUserQuery } from "@/redux/features/api/apiSlice";
 import Email from "next-auth/providers/email";
 import toast from "react-hot-toast";
+import { setNestedObjectValues } from "formik";
 
 type Props = {
   avatar: string | null;
@@ -18,42 +19,44 @@ type Props = {
 
 const ProfileInfo: FC<Props> = ({ avatar, user }) => {
   const [name, setName] = useState(user && user.name);
+  const [image, setImage] = useState("");
   const [updateAvatar, { isSuccess, error }] = useUpdateAvatarMutation();
   const [loadUser, setLoadUser] = useState(false);
-  const {} = useLoadUserQuery(undefined, { skip: loadUser ? false : true });
+  const { } = useLoadUserQuery(undefined, { skip: loadUser ? false : true });
   const [editProfile, { isSuccess: success, error: updateError }] =
     useEditProfileMutation();
 
-  const imageHandler = async (e: any) => {
-    // const fileReader = new FileReader();
+ 
 
-    // fileReader.onload = () => {
-    //   if (fileReader.readyState === 2) {
-    //     const avatar = fileReader.result;
-    //     updateAvatar(avatar);
-    //   }
-    // };
-    // fileReader.readAsDataURL(e.target.files[0]);
-
-    const file = e.target.files[0];
-    const formData = new FormData();
-    formData.append("avatar", file); // 'avatar' là tên tham số bạn cần gửi
-
-    // Gọi API để upload ảnh
-    updateAvatar(formData);
+  const imageHandler = (e: any) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        if (reader.readyState === 2) {
+          setImage(e.target.result as string);
+        }
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   useEffect(() => {
     //Update avatar
     if (isSuccess || success) {
       setLoadUser(true);
+      if (user.avatar){
+        setImage(user.avatar.url);
+      }
     }
 
     //Edit profile
-    if(success){
+    if (success) {
       toast.success("Profile updated successfully!")
     }
-
+    if (isSuccess) {
+      toast.success("Avatar updated successfully!")
+    }
     if (error) {
       console.log("An error occurred", error);
     }
@@ -61,11 +64,16 @@ const ProfileInfo: FC<Props> = ({ avatar, user }) => {
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-    if (name !== "") {
+    if (name !== "" && name!==user?.name) {
       await editProfile({
         name: name,
         // email: user.email,
       });
+      
+    }
+    if (image !== "") {
+      console.log(image);
+      updateAvatar(image);
     }
   };
   return (
@@ -75,9 +83,9 @@ const ProfileInfo: FC<Props> = ({ avatar, user }) => {
           <div className="relative">
             <Image
               src={
-                user.avatar || avatar
+                image ? image :(user.avatar || avatar
                   ? user.avatar.url || avatar
-                  : avatarDefault
+                  : avatarDefault)
               }
               width={120}
               height={120}
@@ -93,6 +101,7 @@ const ProfileInfo: FC<Props> = ({ avatar, user }) => {
               onChange={imageHandler}
               accept="image/png, image/jpg, image/jpeg, image/webp"
             />
+            
             <label htmlFor="avatar">
               <div className="w-[30px] h-[30px] bg-slate-900 rounded-full absolute bottom-2 right-2 flex items-center justify-center cursor-pointer ">
                 <AiOutlineCamera size={20} className="z-1" fill="white" />
