@@ -1,6 +1,6 @@
 import { useGetAllCoursesQuery } from "@/redux/features/courses/coursesApi";
 import { useGetAllOrdersQuery } from "@/redux/features/orders/ordersApi";
-import { Box } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { useTheme } from "next-themes";
 import { format } from "path";
@@ -64,11 +64,13 @@ const AllInvoices = ({ isDashboard }: Props) => {
                     flex: 0.2,
                     renderCell: (params: any) => {
                         return (
-                            <a href={`mailto:${params.row.userEmail}`} >
-                                <AiOutlineMail className="dark: text-white ☐ text-black"
-                                    size={20}
-                                />
-                            </a >
+                            <Button>
+                                <a href={`mailto:${params.row.userEmail}`} >
+                                    <AiOutlineMail className="dark: text-white ☐ text-black"
+                                        size={20}
+                                    />
+                                </a >
+                            </Button>
                         );
                     },
                 },
@@ -123,55 +125,50 @@ const AllInvoices = ({ isDashboard }: Props) => {
                 <Box
                     m={isDashboard ? "0" : "40px 0 0 0"} height={isDashboard ? "35vh" : "90vh"} overflow={"hidden"}
                     sx={{
-                        "&.MuiDataGrid-root": {
+                        "& MuiDataGrid-root": {
+                            border: "none",
+                            outline: "none",
                         },
-                        border: "none",
-                        outline: "none",
                         "&.css-pqjvzy-MuiSvgIcon-root-MuiSelect-icon": {
                             color: theme === "dark" ? "#fff" : "#000",
                         },
-
-                        "&.MuiDataGrid-sortIcon": {
+                        "& MuiDataGrid-sortIcon": {
                             color: theme === "dark" ? "#fff" : "#000",
                         },
-
-                        "&.MuiDataGrid-row": {
+                        "& .MuiDataGrid-row": {
                             color: theme === "dark" ? "#fff" : "#000",
                             borderBottom:
                                 theme === "dark"
-
-                                    ? "1px solid #ffffff30!important" : "1px solid #ccc!important",
+                                    ? "1px solid #ffffff30!important"
+                                    : "1px solid #ccc!important",
                         },
-
-
-                        "&.MuiTablePagination-root": {
+                        "& .MuiTablePagination-root": {
                             color: theme === "dark" ? "#fff" : "#000",
                         },
-
-                        "& MuiDataGrid-cell": {
+                        "& .MuiDataGrid-cell": {
                             borderBottom: "none!important",
                         },
-                        "&.name-column--cell": {
-                            color: theme == "dark" ? "#fff" : "#000",
+                        "& .name-column--cell": {
+                            color: theme === "dark" ? "#fff" : "#000",
                         },
-                        "& MuiDataGrid-columnHeaders": {
+                        "& .MuiDataGrid-columnHeaders": {
                             backgroundColor: theme === "dark" ? "#3e4396" : "#A4A9FC",
                             borderBottom: "none",
-                            color: theme === "dark" ? "#fff" : "#000",
+                            // color: theme === "dark" ? "#fff" : "#000",
                         },
-                        "& MuiDataGrid-virtualScroller": {
-                            backgroundColor: theme === "dark" ? "#1F2A40" : "#F2F0F0",
+                        "& .MuiDataGrid-virtualScroller": {
+                            backgroundColor: theme == "dark" ? "#1F2A40" : "#F2F0F0",
                         },
-                        "&.MuiDataGrid-footerContainer": {
+                        "& .MuiDataGrid-footerContainer": {
                             color: theme === "dark" ? "#fff" : "#000",
                             borderTop: "none",
-                            backgroundColor: theme === "dark" ? "#3e4396" : "#A4A9FC",
+                            backgroundColor: theme === "dark" ? "#1F2A40" : "#F2F0F0",
                         },
-                        "&.MuiCheckbox-root": {
+                        "& .MuiCheckbox-root": {
                             color:
                                 theme === "dark" ? `#b7ebde !important` : `#000 !important`,
                         },
-                        "&.MuiDataGrid-toolbarContainer. MuiButton-text": {
+                        "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
                             color: `#fff !important`,
                         },
                     }}
@@ -180,7 +177,7 @@ const AllInvoices = ({ isDashboard }: Props) => {
                         checkboxSelection={isDashboard ? false : true}
                         rows={rows}
                         columns={columns}
-                        // components={isDashboard ? {} : { Toolbar: GridToolbar } as any}
+                    // components={isDashboard ? {} : { Toolbar: GridToolbar } as any}
                     />
                 </Box>
             </Box>

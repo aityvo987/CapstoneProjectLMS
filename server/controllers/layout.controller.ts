@@ -68,11 +68,12 @@ export const createLayout = CatchAsyncError(async (req: Request, res: Response, 
 export const editLayout = CatchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { type } = req.body;
+        
         if (type === "Banner") {
             const existedBannerData: any = await LayoutModel.findOne({ type: "Banner" });
             const { image, title, subTitle } = req.body;
             if (existedBannerData) {
-                await cloudinary.v2.uploader.destroy(existedBannerData?.image.public_id);
+                await cloudinary.v2.uploader.destroy(existedBannerData?.banner.image.public_id);
             }
             const data = image.startsWith("https")
                 ? existedBannerData
