@@ -6,16 +6,22 @@ import React, { FC } from "react";
 import { BiSearch } from "react-icons/bi";
 import hero_banner from "../../../public/assets/hero_banner.png";
 import avatar from "../../../public/assets/avatar.png";
+import { useGetHeroDataQuery } from "@/redux/features/layout/layoutApi";
 
 type Props = {};
 
 const Hero: FC<Props> = () => {
+  const { data, refetch } = useGetHeroDataQuery("Banner", {
+    refetchOnMountOrArgChange: true,
+});
   return (
     <div className="w-full 1000px:flex gap-4 items-center">
       <div className="absolute top-[140px] left-[25px] 1000px:top-[unset] 1500px:h-[700px] 1500px:w-[700px] 1100px:h-[600px] 1100px:w-[600px] h-[320px] w-[320px] hero_animation rounded-full "></div>
       <div className="1000px:w-[40%] flex 1000px:min-h-screen items-center justify-end pt-[70px] 1000px:pt-[0] z-10">
         <Image
-          src={hero_banner}
+          src={data?.layout?.banner?.image?.url}
+          width={400}
+          height={400}
           alt="Banner Image"
           className="object-contain 1100px:max-w-[90%] w-[90%] 1500px:max-w-[85%] h-[auto] z-[10]"
         />
@@ -23,12 +29,11 @@ const Hero: FC<Props> = () => {
 
       <div className="1000px:w-[60%] flex flex-col place-items-center 1000px:mt-[0px] text-center 1000px:text-center mt-[150px]">
         <h2 className="dark:text-white text-[#000000c7] text-[30px] px-3 w-full 1000px:text-[70px] font-[600] font-Josefin py-2 1000px:leading-[75px]">
-          Improve Your Online Learning Experience Better Instantly
+        {data?.layout?.banner?.title}
         </h2>
         <br />
         <p className="dark:text-[#edfff4] text-[#000000ac] font-Josefin font-[600] text-[18px] 1500px:w-[55%] 1100px:!w-[78%]">
-          We have 40k+ Online courses & 500k+ Online registered students. Find
-          your desired courses from them.
+        {data?.layout?.banner?.subTitle}
         </p>
         <br />
         <br />
