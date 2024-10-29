@@ -1,13 +1,13 @@
 "use client";
 
 import React, { FC, useEffect, useState } from "react";
-import { useGetAllCoursesQuery } from "@/redux/features/courses/coursesApi";
+import { useGetAllUsersCoursesQuery } from "@/redux/features/courses/coursesApi";
 import CourseCard from "../Admin/Course/Front/CourseCard";
 
 type Props = {};
 
 const Courses: FC<Props> = () => {
-    const { data, isLoading } = useGetAllCoursesQuery({}, {
+    const { data, isLoading } = useGetAllUsersCoursesQuery({}, {
         refetchOnMountOrArgChange: true,
     });
     const [courses, setCourses] = useState<any[]>([]);
