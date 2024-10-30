@@ -2,10 +2,10 @@
 
 import React, { FC, useEffect, useState } from "react";
 import { useGetAllCoursesQuery } from "@/redux/features/courses/coursesApi";
-import CourseCard from "../Admin/Course/Front/CourseCard";
+import CourseCard from "../Course/CourseCard";
 import Image from "next/image";
 import { styles } from "@/app/styles/styles";
-import ReviewCard from "../Admin/Course/Front/ReviewCard";
+import ReviewCard from "../Course/ReviewCard";
 
 type Props = {};
 
@@ -46,7 +46,7 @@ const Reviews: FC<Props> = () => {
     return (
         <div className="w-[90%] 800px:w-[85%] m-auto">
             <div className="w-full 800px:flex items-center">
-                <div className="800px:w-[50%] w-full">
+                <div className="800px:w-[50%] w-full flex justify-center">
                     <Image
                         src="https://res.cloudinary.com/dkpcwsg6z/image/upload/v1729653998/awwh5a8iax0tgtl19oz5.png"
                         alt="business"
@@ -56,12 +56,12 @@ const Reviews: FC<Props> = () => {
                 </div>
                 <div className="800px:w-[50%] w-full">
                     <h3 className={`${styles.title} 800px:!text-[40px]`}>
-                        Our Students Are <span className="text-gradient">Our Strength</span>{" "}
+                        Our Students Are <span className="text-[#37a39a]">Our Strength</span>{" "}
                         <br /> See What They Say About Us
                     </h3>
                     <br />
-                    <p className={styles.label}>
-                        Hehehehehehehehehehehehehehehehehehehe
+                    <p className={`${styles.label} flex justify-center`}>
+                    Love and appreciate your work, you're part of those that shaped me to be a better web developer, with the type of big, detailed projects you build.  I saw some beautiful beautiful websites with really cool designs and I just wonder where the images, logos where sourced from, the combination of colours, color gradients to give beautiful looks, and the whole website having that lovely 3D feel, and i just know if you build something like that, you always go into extreme details and it would make me personally a much better frontend developer, thank you.
                     </p>
                 </div>
                 <br></br>
