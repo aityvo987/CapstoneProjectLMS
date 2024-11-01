@@ -12,6 +12,7 @@ import { format } from 'timeago.js';
 import CoursePlayer from '@/app/utils/CoursePlayer';
 import { styles } from '@/app/styles/styles';
 import Link from 'next/link';
+import CourseContentList from './CourseContentList';
 
 type Props = {
     data: any;
@@ -82,7 +83,11 @@ const CourseDetail = ({ data }: Props) => {
                             <h1 className="text-[25px] font-Poppins font-[600] text-black dark:text-white">
                                 Course Overview
                             </h1>
-                            {/* Course Content */}
+                            <CourseContentList 
+                            data={data.courseData}
+                            isDemo={true}
+                            />
+                            
                         </div>
 
                         <br></br>
