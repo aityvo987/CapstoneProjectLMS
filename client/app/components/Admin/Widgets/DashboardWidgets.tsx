@@ -58,7 +58,7 @@ const DashboardWidgets: FC<Props> = ({ open, value }) => {
 
                             <div>
                                 <CircularProgressWithLabel value={100} open={open} />
-                                <h5 className="text-center pt-4">+120%</h5>
+                                <h5 className="text-center pt-4 dark:text-[#fff] text-black ">+120%</h5>
                             </div>
                         </div>
                     </div>
@@ -76,7 +76,7 @@ const DashboardWidgets: FC<Props> = ({ open, value }) => {
                             </div>
                             <div>
                                 <CircularProgressWithLabel value={100} open={open} />
-                                <h5 className="text-center pt-4">+150%</h5>
+                                <h5 className="text-center pt-4 dark:text-[#fff] text-black ">+150%</h5>
                             </div>
                         </div>
                     </div>

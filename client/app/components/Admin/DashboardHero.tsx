@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import DashboardWidgets from "./Widgets/DashboardWidgets";
-import DashboardHeader from "./DashboardHeader open={open} setOpen={setOpen}";
+import DashboardHeader from "./DashboardHeader";
 type Props = {
     isDashboard?: boolean;
 };
