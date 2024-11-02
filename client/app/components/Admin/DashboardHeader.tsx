@@ -11,7 +11,7 @@ const DashboardHeader: FC<Props> = (props) => {
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="w-full flex items-center justify-center p-6 fixed top-5 right-0">
+    <div className="w-full flex items-center justify-end p-6 fixed top-5 right-0">
       <ThemeSwitcher></ThemeSwitcher>
       <div
         className="relative cursor-pointer m-2"
@@ -28,15 +28,84 @@ const DashboardHeader: FC<Props> = (props) => {
             {" "}
             Notifications{" "}
           </h5>
-          <div className="dark:bg-[#2d3a4ea1] bg-[#00000013] font-Poppins border-b dark:border-b-[#ffffff47] border-b-[#0000000f]">
-            <div className="w-full flex items-center justify-between p-2">
-              <p className="text-black dark:text-white">New Question Receive</p>
-              <p className="text-black dark:text-white cursor-pointer">Mark as read</p>
+          <li className="relative">
+            <a
+              className="flex items-center justify-center text-black dark:text-white"
+              href="#"
+              id="alertsDropdown"
+              role="button"
+              data-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false"
+            >
+              <i className="fas fa-bell"></i>
+              <span className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 bg-red-500 text-white text-xs font-bold rounded-full px-1.5 py-0.5">
+                3+
+              </span>
+            </a>
+            <div className="hidden group-hover:block absolute right-0 mt-2 w-72 bg-white dark:bg-[#2d3a4ea1] text-gray-800 dark:text-[#fff] shadow-lg rounded-lg overflow-hidden">
+              <h6 className="px-4 py-2 bg-gray-100 dark:bg-[#374151] font-semibold">
+                Alerts Center
+              </h6>
+              <a
+                className="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-[#374151]"
+                href="#"
+              >
+                <div className="mr-3">
+                  <div className="flex items-center justify-center w-8 h-8 bg-blue-500 rounded-full">
+                    <i className="fas fa-file-alt text-white"></i>
+                  </div>
+                </div>
+                <div>
+                  <div className="text-xs text-gray-500 dark:text-gray-400">
+                    December 12, 2019
+                  </div>
+                  <span className="font-semibold">
+                    A new monthly report is ready to download!
+                  </span>
+                </div>
+              </a>
+              <a
+                className="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-[#374151]"
+                href="#"
+              >
+                <div className="mr-3">
+                  <div className="flex items-center justify-center w-8 h-8 bg-green-500 rounded-full">
+                    <i className="fas fa-donate text-white"></i>
+                  </div>
+                </div>
+                <div>
+                  <div className="text-xs text-gray-500 dark:text-gray-400">
+                    December 7, 2019
+                  </div>
+                  $290.29 has been deposited into your account!
+                </div>
+              </a>
+              <a
+                className="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-[#374151]"
+                href="#"
+              >
+                <div className="mr-3">
+                  <div className="flex items-center justify-center w-8 h-8 bg-yellow-500 rounded-full">
+                    <i className="fas fa-exclamation-triangle text-white"></i>
+                  </div>
+                </div>
+                <div>
+                  <div className="text-xs text-gray-500 dark:text-gray-400">
+                    December 2, 2019
+                  </div>
+                  Spending Alert: We've noticed unusually high spending for your
+                  account.
+                </div>
+              </a>
+              <a
+                className="block text-center py-2 text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-white"
+                href="#"
+              >
+                Show All Alerts
+              </a>
             </div>
-            <p className="text-black dark:text-white px-2">Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptate distinctio rem repudiandae sint delectus corrupti culpa ipsa aperiam. Quo numquam veritatis facere dicta molestiae. Sit magni dignissimos reiciendis corrupti nisi!</p>
-            <p className="text-black dark:text-white p-2">5 days ago</p>
-
-          </div>
+          </li>
         </div>
       )}
     </div>
