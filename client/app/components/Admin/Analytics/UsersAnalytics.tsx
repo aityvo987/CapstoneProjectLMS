@@ -35,7 +35,7 @@ const UsersAnalytics: FC<Props> = ({ isDashboard }: Props) => {
                 isLoading ? (
                     <Loader />
                 ) : (
-                    <div className={`${isDashboard ? "mt-[50px]" : "mt-[50px] dark:bg-[#111C43] shadow-sm pb-5 rounded-sm"}`}>
+                    <div className={`${isDashboard ? "mt-[50px]" : "ml-6 mt-[50px] dark:bg-[#101725] shadow-sm pb-5 rounded-sm"}`}>
                         <div className={`$(isDashboard? "!ml-8 mb-5": ''}`}>
                             <h1 className={`${styles.title} ${isDashboard && '!text-[20px] '} px-5 !text-start`}>
                                 Users Analytics
