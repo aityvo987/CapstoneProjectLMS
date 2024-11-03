@@ -84,10 +84,10 @@ const EditCategories: FC<Props> = (props: Props) => {
                         {
                             categories && categories.map((item: any, index: number) => {
                                 return (
-                                    <div className="p-3">
-                                        <div className="flex items-center w-full justify-center">
+                                    <div className="flex justify-center ">
+                                        <div className="flex items-center w-fit justify-center gap-2 dark:bg-[#101725] mt-1 p-3 border border-[#2190ff] rounded ">
                                             <input
-                                                className={`${styles.input} !w-[unset] !border-none ! text-[20px]`}
+                                                className={`${styles.input} !mt-0 !w-[unset] !border-none ! text-[20px]  `}
                                                 value={item.title}
                                                 onChange={(e) =>
                                                     handleCategoriesAdd(item._id, e.target.value)
@@ -109,17 +109,15 @@ const EditCategories: FC<Props> = (props: Props) => {
                                 );
                             })
                         }
-                        <br></br>
-                        <br></br>
                         <br />
-                        <div className="w-full flex justify-center">
+                        <div className="w-full flex justify-center mb-3 ">
                             <IoMdAddCircleOutline
-                                className="dark:text-white text-black text-[25px] cursor-pointer"
+                                className="text-[#2190ff] text-[25px] cursor-pointer"
                                 onClick={newCategoriesHandler}
                             />
                         </div>
                         <div
-                            className={`${styles.button} !w-[100px] !min-h-[40px] !h-[40px] dark:text-white text-black bg-[#cccccc34]
+                            className={`${styles.button} !w-[100px] !min-h-[40px] !h-[40px] dark:text-white text-black save__button
                         
                             ${areCategoriesUnchanged(data?.layout?.categories, categories) ||
                                     isAnyCategoryEmpty(categories)

@@ -220,7 +220,7 @@ const AllUsers: FC<Props> = ({ isTeam }) => {
                                     aria-describedby="modal-modal-description"
                                 >
                                     <Box className="absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 w-[450px] bg-white dark:bg-slate-900 rounded-[8px] shadow p-4 outline-none">
-                                        <h1 className={`nameTitle`}>
+                                        <h1 className={`nameTitle text-black dark:text-[#fff]`}>
                                             Add New Member
                                         </h1>
                                         <div className="mt-4">
@@ -256,7 +256,7 @@ const AllUsers: FC<Props> = ({ isTeam }) => {
                                     aria-describedby="modal-modal-description"
                                 >
                                     <Box className="absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 w-[450px] bg-white dark:bg-slate-900 rounded-[8px] shadow p-4 outline-none">
-                                        <h1 className={`nameTitle`}>
+                                        <h1 className={`nameTitle text-black dark:text-[#fff]`}>
                                             Are you sure you want to delete this user?
                                         </h1>
                                         <div className="flex w-full items-center justify-between mb-6 mt-4">

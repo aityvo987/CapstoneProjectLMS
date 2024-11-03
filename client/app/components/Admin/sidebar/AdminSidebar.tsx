@@ -299,7 +299,7 @@ const AdminSidebar = () => {
                 {/* Logout */}
                 <Item
                   title="Logout"
-                  to="/logout"
+                  to="/profile"
                   icon={<ExitToAppIcon />}
                   selected={selected}
                   setSelected={setSelected}

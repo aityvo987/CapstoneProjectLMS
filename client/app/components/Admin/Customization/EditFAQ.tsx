@@ -115,7 +115,7 @@ const EditFAQ = (props: Props) => {
                         }
                         placeholder={"Add your question..."}
                       />
-                      <span className="ml-6 flex-shrink-0">
+                      <span className="ml-6 flex-shrink-0 self-center">
                         {q.active ? (
                           <HiMinus className="h-6 w-6" />
                         ) : (
@@ -127,16 +127,16 @@ const EditFAQ = (props: Props) => {
                   {q.active && (
                     <dd className="mt-2 pr-12 flex">
                       <input
-                        className={`${styles.input} border-none bg-gray-100 dark:!text-black`}
+                        className={`${styles.input} border-none !bg-gray-100 dark:!text-black`}
                         value={q.answer}
                         onChange={(e: any) =>
                           handleAnswerChange(q._id, e.target.value)
                         }
                         placeholder={"Add your answer..."}
                       />
-                      <span className="ml-6 flex-shrink-0">
+                      <span className="ml-6 flex-shrink-0 self-center">
                         <AiOutlineDelete
-                          className="dark:text-white text-black text-[18px] cursor-pointer self-center"
+                          className="text-red-700 text-[18px] cursor-pointer self-center"
                           onClick={() => {
                             setQuestions((prevQuestions) =>
                               prevQuestions.filter((item) => item._id !== q._id)
