@@ -96,7 +96,7 @@ const EditCategories: FC<Props> = (props: Props) => {
                                             />
 
                                             <AiOutlineDelete
-                                                className="dark:text-white text-black text-[18px] cursor-pointer"
+                                                className="text-red-500 text-[18px] cursor-pointer"
                                                 onClick={() => {
                                                     setCategories((prevCategory: any) =>
                                                         prevCategory.filter((i: any) => i._id !== item._id)
@@ -117,7 +117,7 @@ const EditCategories: FC<Props> = (props: Props) => {
                             />
                         </div>
                         <div
-                            className={`${styles.button} !w-[100px] !min-h-[40px] !h-[40px] dark:text-white text-black save__button
+                            className={`${styles.button} !w-[100px] !min-h-[40px] !h-[40px] dark:text-white text-black 
                         
                             ${areCategoriesUnchanged(data?.layout?.categories, categories) ||
                                     isAnyCategoryEmpty(categories)

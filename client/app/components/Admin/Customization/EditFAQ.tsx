@@ -136,7 +136,7 @@ const EditFAQ = (props: Props) => {
                       />
                       <span className="ml-6 flex-shrink-0 self-center">
                         <AiOutlineDelete
-                          className="text-red-700 text-[18px] cursor-pointer self-center"
+                          className="text-red-500 text-[18px] cursor-pointer self-center"
                           onClick={() => {
                             setQuestions((prevQuestions) =>
                               prevQuestions.filter((item) => item._id !== q._id)
