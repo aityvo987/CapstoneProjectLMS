@@ -13,13 +13,15 @@ import CoursePlayer from '@/app/utils/CoursePlayer';
 import { styles } from '@/app/styles/styles';
 import Link from 'next/link';
 import CourseContentList from './CourseContentList';
+import { useLoadUserQuery } from '@/redux/features/api/apiSlice';
 
 type Props = {
     data: any;
 }
 
 const CourseDetail = ({ data }: Props) => {
-    const { user } = useSelector((state: any) => state.auth);
+    const { data:userData } = useLoadUserQuery(undefined, {});
+    const user = userData?.user;
     const discountPercentage = ((data?.estimatedPrice - data?.price) / data?.estimatedPrice) * 100;
     const discountPercentagePrice = discountPercentage.toFixed(0);
 

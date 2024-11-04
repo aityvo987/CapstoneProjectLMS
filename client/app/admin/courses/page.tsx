@@ -4,12 +4,13 @@ import DashboardHeader from '@/app/components/Admin/DashboardHeader';
 import AdminSidebar from '@/app/components/Admin/sidebar/AdminSidebar';
 import AdminProtected from '@/app/hooks/adminProtected';
 import Heading from '@/app/utils/Heading';
-import React, { FC } from 'react'
+import React, { FC, useState } from 'react'
 import { IoMdCheckmark } from 'react-icons/io'
 type Props = {
 }
 
 const page = (props: Props) => {
+    const [open, setOpen] = useState(false);
 
     return (
         <div>
@@ -23,7 +24,7 @@ const page = (props: Props) => {
                         <AdminSidebar/>
                     </div>
                     <div className="w-[85%]">
-                        <DashboardHeader/>
+                        <DashboardHeader open={open} setOpen={setOpen}/>
                         <AllCourses />
                     </div>
                 </div>

@@ -21,9 +21,13 @@ const page = ({ params }: Props) => {
     useEffect(() => {
         if (data) {
             const isPurchased = data.user.courses.find((item: any) => item._id === id);
+            console.log("courses:",data.user.courses)
             if (!isPurchased || error) {
                 redirect("/");
             }
+        }
+        if(error){
+            redirect("/");
         }
     }, [data, error]);
 
