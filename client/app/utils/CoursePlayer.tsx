@@ -10,7 +10,7 @@ const CoursePlayer: FC<Props> = ({ videoUrl }) => {
 
   return (
     <div>
-      <div style={{ paddingTop: "41%", position: "relative" }}>
+      <div style={{ paddingTop: "56.25%", position: "relative", overflow:"hidden" }}>
         <iframe
           title="YouTube Video Player"
           width="100%"
@@ -19,7 +19,7 @@ const CoursePlayer: FC<Props> = ({ videoUrl }) => {
           frameBorder="0"
           allowFullScreen
           allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-          style={{ position: "absolute", top: 0, left: 0 }}
+          style={{ position: "absolute", top: 0, left: 0 ,border:0}}
         ></iframe>
       </div>
     </div>
