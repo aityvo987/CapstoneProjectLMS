@@ -1,11 +1,13 @@
 import React, { FC, useEffect, useState } from "react";
-import { useGetAllCoursesQuery } from "@/redux/features/courses/coursesApi";
+import { useAddNewQuestionMutation, useGetAllCoursesQuery } from "@/redux/features/courses/coursesApi";
 import Link from "next/link";
 import Image from "next/image";
 import Ratings from "@/app/utils/Rating";
-import { AiOutlineArrowLeft, AiOutlineArrowRight, AiOutlineUnorderedList } from "react-icons/ai";
+import { AiFillStar, AiOutlineArrowLeft, AiOutlineArrowRight, AiOutlineStar, AiOutlineUnorderedList } from "react-icons/ai";
 import CoursePlayer from "@/app/utils/CoursePlayer";
 import { styles } from "@/app/styles/styles";
+import toast from "react-hot-toast";
+import { format } from "timeago.js";
 
 type Props = {
     data: any;
@@ -13,13 +15,52 @@ type Props = {
     activeVideo: number;
     setActiveVideo: (activeVideo: number) => void;
     user: any;
+    refetch: any;
 };
 
-const CourseContentMedia: FC<Props> = ({ data, id, activeVideo, setActiveVideo, user }) => {
+const CourseContentMedia: FC<Props> = ({ data, id, activeVideo, setActiveVideo, user, refetch }) => {
     const [activeBar, setActiveBar] = useState(0);
     const [question, setQuestion] = useState('');
+    const [answer, setAnswer] = useState('');
+    const [answerId, setAnswerId] = useState('');
+    const [rating, setRating] = useState(0);
+    const [review, setReview] = useState('');
+    const [addNewQuestion, { isSuccess, error, isLoading: questionCreateLoading }] = useAddNewQuestionMutation({});
     const isReviewExists = data?.reviews?.find(
-        (item: any) => item.user._id === user._id);
+        (item: any) => item.user._id === user._id
+    );
+    const handleQuestion = () => {
+        if (question.length === 0) {
+            toast.error("Question must not be empty!");
+        } else {
+            console.log("Question:", { question, courseId: id, contentId: data[activeVideo]._id })
+            addNewQuestion({ question, courseId: id, contentId: data[activeVideo]._id });
+        }
+    }
+
+    useEffect(() => {
+        if (isSuccess) {
+            setQuestion("");
+            refetch();
+            toast.success("Write review successfully!");
+        }
+        if (error) {
+            if ("data" in error) {
+                const errorMessage = error as any;
+                toast.error(errorMessage.data.message);
+            }
+        }
+    }, [isSuccess, error])
+
+    const handleAnswerSubmit = () => {
+        if (question.length === 0) {
+            toast.error("Answer must not be empty!");
+        } else {
+            console.log("Question:", { question, courseId: id, contentId: data[activeVideo]._id })
+            addNewQuestion({ question, courseId: id, contentId: data[activeVideo]._id });
+        }
+    }
+
     return (
         <div className="w-[95%] 800px:w-[86%] py-4 m-auto">
             <CoursePlayer
@@ -114,27 +155,32 @@ const CourseContentMedia: FC<Props> = ({ data, id, activeVideo, setActiveVideo, 
                         ></textarea>
                     </div>
                     <div className="w-full flex justify-end">
+
                         <div
                             className={`${styles.button
-                                }!w-[120px] !h-[40px] text-[18px] mt-5 `}
+                                }!w-[120px] !h-[40px] text-[18px] mt-5 ${questionCreateLoading && "cursor-no-drop"
+                                }`}
+                            onClick={questionCreateLoading ? () => { } : handleQuestion}
                         >
                             Submit
                         </div>
-                        {/* <div
-                            className={`${styles.button
-                                }!w-[120px] !h-[40px] text-[18px] mt-5 ${isLoading && "cursor-no-drop"
-                                }`}
-                            onClick={isLoading ? null : handleCommentSubmit}
-                        >
-                            Submit
-                        </div> */}
                     </div>
                     <br></br>
                     <br></br>
                     <div className="w-full h-[1px] bg-[#ffffff3b]">
 
                     </div>
-                    <div></div>
+                    <div>
+                        <QuestionReply
+                            data={data}
+                            activeVideo={activeVideo}
+                            answer={answer}
+                            setAnswer={setAnswer}
+                            handleAnswerSubmit={handleAnswerSubmit}
+                            user={user}
+                            setAnswerId={setAnswerId}
+                        />
+                    </div>
                 </>
             )}
             {
@@ -156,8 +202,51 @@ const CourseContentMedia: FC<Props> = ({ data, id, activeVideo, setActiveVideo, 
                                                 <h5 className="pl-3 text-[20px] font-[500] dark:text-white text-black">
                                                     Give a Rating <span className="text-red-500">*</span>
                                                 </h5>
-                                            </div>
+                                                <div className="flex w-full ml-2 pb-3"> {[1, 2, 3, 4, 5].map((i) => rating >= i ? (
+                                                    <AiFillStar
+                                                        key={i}
+                                                        className="mr-1 cursor-pointer"
+                                                        color="rgb(246,186,0)"
+                                                        size={25}
+                                                        onClick={() => setRating(i)}
+                                                    />
 
+                                                )
+                                                    : (
+                                                        <AiOutlineStar
+                                                            key={i}
+                                                            className="mr-1 cursor-pointer"
+                                                            color="rgb(246,186,0)"
+                                                            size={25}
+                                                            onClick={() => setRating(i)}
+                                                        />
+                                                    )
+                                                )}
+                                                </div>
+                                                <textarea
+                                                    name=""
+                                                    value={review}
+                                                    onChange={(e) => setReview(e.target.value)}
+                                                    id=""
+                                                    cols={40}
+                                                    rows={5}
+                                                    placeholder="Write your comment..."
+                                                    className="outline-none bg-transparent 800px:ml-3 border dark:border-[#ffffff57] border-[#00000080] w-[95%] 800px:w-full p-2 rounded text-[18px] font-Poppins dark:text-white text-black"
+                                                ></textarea>
+                                            </div>
+                                        </div>
+                                        <div className="w-full flex justify-end">
+                                            {/* <div
+                                                className={`${styles.button} !w-[120px] !h-[40px] text-[18px] mt-5 800px:mr-0 mr-2 ${isLoading && 'cursor-no-drop'}`}
+                                                onClick={isLoading ? null : handleReviewSubmit}
+                                            >
+                                                Submit
+                                            </div> */}
+                                            <div
+                                                className={`${styles.button} !w-[120px] !h-[40px] text-[18px] mt-5 800px:mr-0 mr-2}`}
+                                            >
+                                                Submit
+                                            </div>
                                         </div>
                                     </>
                                 )
@@ -170,5 +259,60 @@ const CourseContentMedia: FC<Props> = ({ data, id, activeVideo, setActiveVideo, 
         </div>
     );
 };
+
+
+const QuestionReply = ({ data, activeVideo, answer, setAnswer, handleAnswerSubmit, user, setAnswerId }: any) => {
+    return (
+        <>
+            <div className="w-full my-3">
+                {
+                    data[activeVideo]?.questions?.map((item: any, index: any) => (
+                        <QuestionItem
+                            key={index}
+                            data={data}
+                            activeVideo={activeVideo}
+                            item={item}
+                            index={index}
+                            answer={answer}
+                            setAnswer={setAnswer}
+                            handleAnswerSubmit={handleAnswerSubmit}
+                        />
+                    ))
+                }
+            </div>
+        </>
+    )
+}
+
+const QuestionItem = ({
+    data,
+    activeVideo,
+    item,
+    answer,
+    setAnswer,
+    handleAnswerSubmit
+}: any) => {
+    console.log("item:",item);
+    return (
+        <>
+            <div className="my-4">
+                <div className="flex mb-2">
+                    <div className="w-[50px] h-[50px]">
+                        <div className="w-[50px] h-[50px] bg-slate-600 rounded-[50px] flex items-center justify-center cursor-pointer">
+                            <h1 className="uppercase text-[18px]">
+                                {item?.user.name.slice(0, 2)}
+                            </h1>
+                        </div>
+                    </div>
+                    <div className="pl-3">
+                        <h5 className="text-[20px]">{item?.user.name}</h5>
+                        <p>{item?.question}</p>
+                        <small className="text-[#ffffff83]">{format(item?.createdAt)} </small>
+                    </div>
+                </div>
+            </div>
+        </>
+    )
+}
 
 export default CourseContentMedia;

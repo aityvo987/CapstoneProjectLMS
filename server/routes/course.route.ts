@@ -16,7 +16,7 @@ courseRouter.get("/get-courses/", getAllCourse);
 
 courseRouter.get("/get-course-content/:id",isAutheticated,getCourseContent);
 
-courseRouter.put("/add-question",isAutheticated,addQuestion);
+courseRouter.post("/add-question",isAutheticated,addQuestion);
 
 courseRouter.put("/add-answer",isAutheticated,addAnswer);
 
