@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from "react";
-import { useAddNewQuestionMutation, useGetAllCoursesQuery } from "@/redux/features/courses/coursesApi";
+import { useAddNewAnswerMutation, useAddNewQuestionMutation, useGetAllCoursesQuery } from "@/redux/features/courses/coursesApi";
 import Link from "next/link";
 import Image from "next/image";
 import Ratings from "@/app/utils/Rating";
@@ -8,6 +8,8 @@ import CoursePlayer from "@/app/utils/CoursePlayer";
 import { styles } from "@/app/styles/styles";
 import toast from "react-hot-toast";
 import { format } from "timeago.js";
+import { BiMessage } from "react-icons/bi";
+import { VscVerifiedFilled } from "react-icons/vsc";
 
 type Props = {
     data: any;
@@ -22,10 +24,11 @@ const CourseContentMedia: FC<Props> = ({ data, id, activeVideo, setActiveVideo, 
     const [activeBar, setActiveBar] = useState(0);
     const [question, setQuestion] = useState('');
     const [answer, setAnswer] = useState('');
-    const [answerId, setAnswerId] = useState('');
+    const [questionId, setQuestionId] = useState('');
     const [rating, setRating] = useState(0);
     const [review, setReview] = useState('');
     const [addNewQuestion, { isSuccess, error, isLoading: questionCreateLoading }] = useAddNewQuestionMutation({});
+    const [addNewAnswer, { isSuccess: answerSuccess, error: answerError, isLoading: answerCreateLoading }] = useAddNewAnswerMutation({});
     const isReviewExists = data?.reviews?.find(
         (item: any) => item.user._id === user._id
     );
@@ -42,7 +45,12 @@ const CourseContentMedia: FC<Props> = ({ data, id, activeVideo, setActiveVideo, 
         if (isSuccess) {
             setQuestion("");
             refetch();
-            toast.success("Write review successfully!");
+            toast.success("Write question successfully!");
+        }
+        if (answerSuccess) {
+            setAnswer("");
+            refetch();
+            toast.success("Write reply successfully!");
         }
         if (error) {
             if ("data" in error) {
@@ -50,15 +58,22 @@ const CourseContentMedia: FC<Props> = ({ data, id, activeVideo, setActiveVideo, 
                 toast.error(errorMessage.data.message);
             }
         }
-    }, [isSuccess, error])
+        if (answerError) {
+            if ("data" in answerError) {
+                const errorMessage = error as any;
+                toast.error(errorMessage.data.message);
+            }
+        }
+    }, [isSuccess, error, answerSuccess, answerError])
 
     const handleAnswerSubmit = () => {
-        if (question.length === 0) {
+        if (answer.length === 0) {
             toast.error("Answer must not be empty!");
         } else {
-            console.log("Question:", { question, courseId: id, contentId: data[activeVideo]._id })
-            addNewQuestion({ question, courseId: id, contentId: data[activeVideo]._id });
+            console.log("Answer:", { answer, courseId: id, contentId: data[activeVideo]._id, questionId })
+            addNewAnswer({ answer, courseId: id, contentId: data[activeVideo]._id, questionId });
         }
+        console.log("Answer:", answer);
     }
 
     return (
@@ -178,7 +193,8 @@ const CourseContentMedia: FC<Props> = ({ data, id, activeVideo, setActiveVideo, 
                             setAnswer={setAnswer}
                             handleAnswerSubmit={handleAnswerSubmit}
                             user={user}
-                            setAnswerId={setAnswerId}
+                            setQuestionId={setQuestionId}
+                            answerCreateLoading={answerCreateLoading}
                         />
                     </div>
                 </>
@@ -261,7 +277,7 @@ const CourseContentMedia: FC<Props> = ({ data, id, activeVideo, setActiveVideo, 
 };
 
 
-const QuestionReply = ({ data, activeVideo, answer, setAnswer, handleAnswerSubmit, user, setAnswerId }: any) => {
+const QuestionReply = ({ data, activeVideo, answer, setAnswer, handleAnswerSubmit, user, setQuestionId, answerCreateLoading }: any) => {
     return (
         <>
             <div className="w-full my-3">
@@ -275,7 +291,9 @@ const QuestionReply = ({ data, activeVideo, answer, setAnswer, handleAnswerSubmi
                             index={index}
                             answer={answer}
                             setAnswer={setAnswer}
+                            setQuestionId={setQuestionId}
                             handleAnswerSubmit={handleAnswerSubmit}
+                            answerCreateLoading={answerCreateLoading}
                         />
                     ))
                 }
@@ -290,29 +308,107 @@ const QuestionItem = ({
     item,
     answer,
     setAnswer,
-    handleAnswerSubmit
+    setQuestionId,
+    handleAnswerSubmit,
+    answerCreateLoading
 }: any) => {
-    console.log("item:",item);
+    const [replyActive, setReplyActive] = useState(false);
     return (
         <>
             <div className="my-4">
                 <div className="flex mb-2">
                     <div className="w-[50px] h-[50px]">
                         <div className="w-[50px] h-[50px] bg-slate-600 rounded-[50px] flex items-center justify-center cursor-pointer">
-                            <h1 className="uppercase text-[18px]">
-                                {item?.user.name.slice(0, 2)}
-                            </h1>
+                            <Image
+                                src={item.user?.avatar ? item.user?.avatar.url : ""}
+                                width={50}
+                                height={50}
+                                alt=""
+                                className="w-[50px] h-[50px] rounded-full object-cover"
+                            />
                         </div>
                     </div>
-                    <div className="pl-3">
+                    <div className="pl-3 dark:text-white text-black">
                         <h5 className="text-[20px]">{item?.user.name}</h5>
                         <p>{item?.question}</p>
-                        <small className="text-[#ffffff83]">{format(item?.createdAt)} </small>
+                        <small className="dark:text-[#ffffff83] text-[#000000b0]">{format(item?.createdAt)} </small>
                     </div>
                 </div>
-            </div>
+                <div className="w-full flex">
+                    <span
+                        className="800px:pl-16 dark:text-white text-black  cursor-pointer mr-2"
+                        onClick={() => { setReplyActive(!replyActive), setQuestionId(item._id) }}
+                    >
+                        {!replyActive ? item.questionReplies.length !== 0 ? "All Replies" : "Add Reply " : "Hide Replies"}
+                    </span>
+                    <BiMessage size={20} className="cursor-pointer dark:text-[#ffffff83] text-[#000000b8]" />
+                    <span className="pl-1 mt-[-4px] cursor-pointer dark:text-[#ffffff83] text-[#000000b8]">
+                        {item.questionReplies.length}
+                    </span>
+                </div>
+                {
+                    replyActive && (
+                        <>
+                            {
+                                item.questionReplies.map((item: any, index: any) => (
+                                    <div className="w-full flex 800px:ml-16 my-5 text-black dark:text-white">
+                                        <div>
+                                            <Image
+                                                src={item.user?.avatar ? item.user?.avatar.url : ""}
+                                                width={50}
+                                                height={50}
+                                                alt=""
+                                                className="w-[50px] h-[50px] rounded-full object-cover"
+                                            />
+                                        </div>
+
+
+                                        <div className="pl-2">
+                                            <div className="flex items-center">
+                                                <h5 className="text-[20px]">{item.user.name}</h5>
+                                                <h5 className="text-[#d1001f] ml-2 text-[20px] capitalize italic drop-shadow-2xl">{item.user.role==="user" ? "" :item.user.role}</h5>
+                                            </div>
+                                            <p>{item.answer}</p>
+                                            <small className="text-[#ffffff83]">
+                                                {format(item.createdAt)}.
+                                            </small>
+                                        </div>
+                                    </div>
+
+                                ))
+                            }
+                            <>
+                                <div className="w-full flex relative dark:text-white text-black">
+                                    <input
+                                        type="text"
+                                        placeholder="Enter your reply..."
+                                        value={answer}
+                                        onChange={(e: any) => setAnswer(e.target.value)}
+                                        className={`block 800px:ml-12 mt-2 outline-none bg-transparent border-b border-[#000000027] dark:border-[#fff] text-black dark:text-white  p-[5px] w-[95%] ${answer === "" || answerCreateLoading && 'cursor-not-allowed'}`}
+
+                                    />
+                                    <button
+                                        type="submit"
+                                        className="absolute right-0 bottom-1 text-black dark:text-white"
+                                        onClick={handleAnswerSubmit}
+                                        disabled={answer === "" || answerCreateLoading}
+                                    >
+                                        Submit
+                                    </button>
+                                </div>
+                                <br></br>
+                            </>
+                        </>
+                    )
+                }
+            </div >
         </>
     )
 }
 
 export default CourseContentMedia;
+
+
+{/* <h1 className="uppercase text-[18px]">
+                                {item?.user.name.slice(0, 2)}
+                            </h1> */}
