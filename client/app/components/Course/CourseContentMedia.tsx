@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from "react";
-import { useAddNewAnswerMutation, useAddNewQuestionMutation, useGetAllCoursesQuery } from "@/redux/features/courses/coursesApi";
+import { useAddNewAnswerMutation, useAddNewQuestionMutation, useAddNewReviewMutation, useAddNewReviewReplyMutation, useGetAllCoursesQuery, useGetUserCourseDetailQuery } from "@/redux/features/courses/coursesApi";
 import Link from "next/link";
 import Image from "next/image";
 import Ratings from "@/app/utils/Rating";
@@ -25,18 +25,24 @@ const CourseContentMedia: FC<Props> = ({ data, id, activeVideo, setActiveVideo, 
     const [question, setQuestion] = useState('');
     const [answer, setAnswer] = useState('');
     const [questionId, setQuestionId] = useState('');
-    const [rating, setRating] = useState(0);
+    const [rating, setRating] = useState(0.5);
     const [review, setReview] = useState('');
+    const [reviewReply, setReviewReply] = useState('');
+    const [reviewId, setReviewId] = useState('');
+    const [isReviewReply, setIsReviewReply] = useState(false);
     const [addNewQuestion, { isSuccess, error, isLoading: questionCreateLoading }] = useAddNewQuestionMutation({});
     const [addNewAnswer, { isSuccess: answerSuccess, error: answerError, isLoading: answerCreateLoading }] = useAddNewAnswerMutation({});
-    const isReviewExists = data?.reviews?.find(
+    const [addNewReview, { isSuccess: reviewSuccess, error: reviewError, isLoading: reviewCreateLoading }] = useAddNewReviewMutation({});
+    const [addNewReviewReply, { isSuccess: reviewReplySuccess, error: reviewReplyError, isLoading: reviewReplyCreateLoading }] = useAddNewReviewReplyMutation({});
+    const { data: dataCourse, refetch: courseRefetch } = useGetUserCourseDetailQuery({ id }, { refetchOnMountOrArgChange: true });
+    console.log(dataCourse);
+    const isReviewExists = dataCourse?.course.reviews?.find(
         (item: any) => item.user._id === user._id
     );
     const handleQuestion = () => {
         if (question.length === 0) {
             toast.error("Question must not be empty!");
         } else {
-            console.log("Question:", { question, courseId: id, contentId: data[activeVideo]._id })
             addNewQuestion({ question, courseId: id, contentId: data[activeVideo]._id });
         }
     }
@@ -52,6 +58,17 @@ const CourseContentMedia: FC<Props> = ({ data, id, activeVideo, setActiveVideo, 
             refetch();
             toast.success("Write reply successfully!");
         }
+        if (reviewSuccess) {
+            setReview("");
+            setRating(0.5);
+            courseRefetch();
+            toast.success("Write review successfully!");
+        }
+        if (reviewReplySuccess) {
+            setReviewReply("");
+            courseRefetch();
+            toast.success("Write review reply successfully!");
+        }
         if (error) {
             if ("data" in error) {
                 const errorMessage = error as any;
@@ -64,16 +81,40 @@ const CourseContentMedia: FC<Props> = ({ data, id, activeVideo, setActiveVideo, 
                 toast.error(errorMessage.data.message);
             }
         }
-    }, [isSuccess, error, answerSuccess, answerError])
+        if (reviewError) {
+            if ("data" in reviewError) {
+                const errorMessage = error as any;
+                toast.error(errorMessage.data.message);
+            }
+        }
+        if (reviewReplyError) {
+            if ("data" in reviewReplyError) {
+                const errorMessage = error as any;
+                toast.error(errorMessage.data.message);
+            }
+        }
+    }, [isSuccess, error, answerSuccess, answerError, reviewSuccess, reviewError, reviewReplySuccess, reviewReplyError])
 
     const handleAnswerSubmit = () => {
         if (answer.length === 0) {
             toast.error("Answer must not be empty!");
         } else {
-            console.log("Answer:", { answer, courseId: id, contentId: data[activeVideo]._id, questionId })
             addNewAnswer({ answer, courseId: id, contentId: data[activeVideo]._id, questionId });
         }
-        console.log("Answer:", answer);
+    }
+    const handleReviewSubmit = () => {
+        if (review.length === 0) {
+            toast.error("Review must not be empty!");
+        } else {
+            addNewReview({ review, rating, courseId: id });
+        }
+    }
+    const handleReviewReplySubmit = () => {
+        if (reviewReply.length === 0) {
+            toast.error("Review reply must not be empty!");
+        } else {
+            addNewReviewReply({ comment: reviewReply, courseId: id, reviewId: reviewId });
+        }
     }
 
     return (
@@ -166,7 +207,7 @@ const CourseContentMedia: FC<Props> = ({ data, id, activeVideo, setActiveVideo, 
                             cols={40}
                             rows={5}
                             placeholder="Write your question..."
-                            className="outline-none bg-transparent ml-3 border border-[#ffffff57] 800px:w-full p-2 rounded w-[90%] 800px:text-[18px] font-Poppins"
+                            className="outline-none bg-transparent ml-3 border dark:border-[#ffffff57] border-[#00000080] 800px:w-full p-2 rounded w-[90%] 800px:text-[18px] font-Poppins dark:text-white text-black"
                         ></textarea>
                     </div>
                     <div className="w-full flex justify-end">
@@ -252,27 +293,114 @@ const CourseContentMedia: FC<Props> = ({ data, id, activeVideo, setActiveVideo, 
                                             </div>
                                         </div>
                                         <div className="w-full flex justify-end">
-                                            {/* <div
-                                                className={`${styles.button} !w-[120px] !h-[40px] text-[18px] mt-5 800px:mr-0 mr-2 ${isLoading && 'cursor-no-drop'}`}
-                                                onClick={isLoading ? null : handleReviewSubmit}
-                                            >
-                                                Submit
-                                            </div> */}
                                             <div
-                                                className={`${styles.button} !w-[120px] !h-[40px] text-[18px] mt-5 800px:mr-0 mr-2}`}
+                                                className={`${styles.button} !w-[120px] !h-[40px] text-[18px] mt-5 800px:mr-0 mr-2 ${reviewCreateLoading && 'cursor-no-drop'}`}
+                                                onClick={reviewCreateLoading ? () => { } : handleReviewSubmit}
                                             >
                                                 Submit
                                             </div>
+
                                         </div>
                                     </>
                                 )
                             }
+                            <br></br>
+                            <div className="w-full h-[1px] bg-[#ffffff3b]"></div>
+                            <div className="w-full">
+                                {(dataCourse.course?.reviews && [...dataCourse.course.reviews].reverse()).map((item: any, index: number) => (
+                                    <div className="w-full my-5 dark:text-white text-black">
+                                        <div className="w-full flex">
+                                            <div>
+                                                <Image
+                                                    src={item.user?.avatar ? item.user?.avatar.url : ""}
+                                                    width={50}
+                                                    height={50}
+                                                    alt=""
+                                                    className="w-[50px] h-[50px] rounded-full object-cover"
+                                                />
+                                            </div>
+                                            <div className="ml-2">
+                                                <h1 className="text-[18px]">{item?.user.name}</h1>
+                                                <Ratings rating={item.rating} />
+                                                <p>{item.comment}</p>
+                                                <small className="dark:text-[#ffffff83] text-[#0000009e]">
+                                                    {format(item.createdAt)} .
+                                                </small>
+                                            </div>
+                                        </div>
+                                        {
+                                            user.role === "admin" && (
+                                                <span className={`${styles.label} !ml-10 cursor-pointer`}
+                                                    onClick={() => {
+                                                        setIsReviewReply(true)
+                                                        setReviewId(item._id)
+                                                    }
+                                                    }
+                                                >
+                                                    Add Reply
+                                                </span>
+                                            )
+                                        }
+                                        {
+                                            isReviewReply && (
+                                                <div className="w-full flex relative dark:text-white text-black">
+                                                    <input
+                                                        type="text"
+                                                        placeholder="Enter your reply..."
+                                                        value={reviewReply}
+                                                        onChange={(e: any) => setReviewReply(e.target.value)}
+                                                        className={`block 800px:ml-12 mt-2 outline-none bg-transparent border-b border-[#000000027] dark:border-[#fff] text-black dark:text-white  p-[5px] w-[95%] ${reviewReply === "" || reviewReplyCreateLoading && 'cursor-not-allowed'}`}
+
+                                                    />
+                                                    <button
+                                                        type="submit"
+                                                        className="absolute right-0 bottom-1 text-black dark:text-white"
+                                                        onClick={handleReviewReplySubmit}
+                                                        disabled={reviewReply === "" || reviewReplyCreateLoading}
+                                                    >
+                                                        Submit
+                                                    </button>
+                                                </div>
+                                            )
+                                        }
+                                        {
+                                            item.commentReplies.map((i: any, index: number) => (
+                                                <div className="w-full flex 800px:ml-16 my-5">
+                                                    <div className="w-[50px] h-[50px]">
+                                                        <div className="w-[50px] h-[50px] bg-slate-600 rounded-[50px] flex items-center justify-center cursor-pointer">
+                                                            <Image
+                                                                src={i.user?.avatar ? i.user?.avatar.url : ""}
+                                                                width={50}
+                                                                height={50}
+                                                                alt=""
+                                                                className="w-[50px] h-[50px] rounded-full object-cover"
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                    <div className="pl-2">
+                                                        <div className="flex items-center">
+                                                            <h5 className="text-[20px]">{i.user.name}</h5>
+                                                            <h5 className="text-[#d1001f] ml-2 text-[20px] capitalize italic drop-shadow-2xl">{i.user.role === "user" ? "" : i.user.role}</h5>
+                                                        </div>
+                                                        <p>{i.comment}</p>
+                                                        <small className="text-[#ffffff83]">
+                                                            {format(i.createdAt)}.
+                                                        </small>
+                                                    </div>
+                                                </div>
+                                            ))
+                                        }
+                                    </div>
+
+                                )
+                                )}
+                            </div>
                         </>
                     </div>
                 )
             }
 
-        </div>
+        </div >
     );
 };
 
@@ -329,7 +457,10 @@ const QuestionItem = ({
                         </div>
                     </div>
                     <div className="pl-3 dark:text-white text-black">
-                        <h5 className="text-[20px]">{item?.user.name}</h5>
+                        <div className="flex items-center">
+                            <h5 className="text-[20px]">{item.user.name}</h5>
+                            <h5 className="text-[#d1001f] ml-2 text-[20px] capitalize italic drop-shadow-2xl">{item.user.role === "user" ? "" : item.user.role}</h5>
+                        </div>
                         <p>{item?.question}</p>
                         <small className="dark:text-[#ffffff83] text-[#000000b0]">{format(item?.createdAt)} </small>
                     </div>
@@ -366,7 +497,7 @@ const QuestionItem = ({
                                         <div className="pl-2">
                                             <div className="flex items-center">
                                                 <h5 className="text-[20px]">{item.user.name}</h5>
-                                                <h5 className="text-[#d1001f] ml-2 text-[20px] capitalize italic drop-shadow-2xl">{item.user.role==="user" ? "" :item.user.role}</h5>
+                                                <h5 className="text-[#d1001f] ml-2 text-[20px] capitalize italic drop-shadow-2xl">{item.user.role === "user" ? "" : item.user.role}</h5>
                                             </div>
                                             <p>{item.answer}</p>
                                             <small className="text-[#ffffff83]">

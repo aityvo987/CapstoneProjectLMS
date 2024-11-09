@@ -18,11 +18,11 @@ courseRouter.get("/get-course-content/:id",isAutheticated,getCourseContent);
 
 courseRouter.post("/add-question",isAutheticated,addQuestion);
 
-courseRouter.post("/add-answer",isAutheticated,addAnswer);
+courseRouter.put("/add-answer",isAutheticated,addAnswer);
 
 courseRouter.put("/add-review/:id",isAutheticated,addReview);
 
-courseRouter.put("/add-review-reply/:id",isAutheticated,authorizeRoles("admin"),addReviewReply);
+courseRouter.put("/add-review-reply",isAutheticated,authorizeRoles("admin"),addReviewReply);
 courseRouter.get("/get-course-content/:id", isAutheticated, getCourseContent);
 
 courseRouter.get("/get-admin-courses", isAutheticated, authorizeRoles("admin"), getAdminAllCourses);

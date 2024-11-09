@@ -14,13 +14,14 @@ import { styles } from '@/app/styles/styles';
 import Link from 'next/link';
 import CourseContentList from './CourseContentList';
 import { useLoadUserQuery } from '@/redux/features/api/apiSlice';
+import Image from 'next/image';
 
 type Props = {
     data: any;
 }
 
 const CourseDetail = ({ data }: Props) => {
-    const { data:userData } = useLoadUserQuery(undefined, {});
+    const { data: userData } = useLoadUserQuery(undefined, {});
     const user = userData?.user;
     const discountPercentage = ((data?.estimatedPrice - data?.price) / data?.estimatedPrice) * 100;
     const discountPercentagePrice = discountPercentage.toFixed(0);
@@ -85,11 +86,11 @@ const CourseDetail = ({ data }: Props) => {
                             <h1 className="text-[25px] font-Poppins font-[600] text-black dark:text-white">
                                 Course Overview
                             </h1>
-                            <CourseContentList 
-                            data={data.courseData}
-                            isDemo={true}
+                            <CourseContentList
+                                data={data.courseData}
+                                isDemo={true}
                             />
-                            
+
                         </div>
 
                         <br></br>
@@ -124,9 +125,13 @@ const CourseDetail = ({ data }: Props) => {
                                     <div className="flex">
                                         <div className="w-[50px] h-[50px]">
                                             <div className="w-[50px] h-[50px] bg-slate-600 rounded-[50px] flex items-center justify-center cursor-pointer">
-                                                <h1 className="uppercase text-[18px] text-black dark: text-white">
-                                                    (item.user.name.slice(0, 2))
-                                                </h1>
+                                                <Image
+                                                    src={item.user?.avatar ? item.user?.avatar.url : ""}
+                                                    width={50}
+                                                    height={50}
+                                                    alt=""
+                                                    className="w-[50px] h-[50px] rounded-full object-cover"
+                                                />
                                             </div>
                                         </div>
                                         <div className="hidden 800px:block pl-2">
@@ -143,7 +148,35 @@ const CourseDetail = ({ data }: Props) => {
                                             <h5 className="text-[18px] pr-2 text-black dark: text-white">{item.user.name}</h5>
                                             <Ratings rating={item.rating} />
                                         </div>
+
                                     </div>
+                                    {
+                                            item.commentReplies.map((i: any, index: number) => (
+                                                <div className="w-full flex 800px:ml-16 my-5">
+                                                    <div className="w-[50px] h-[50px]">
+                                                        <div className="w-[50px] h-[50px] bg-slate-600 rounded-[50px] flex items-center justify-center cursor-pointer">
+                                                            <Image
+                                                                src={i.user?.avatar ? i.user?.avatar.url : ""}
+                                                                width={50}
+                                                                height={50}
+                                                                alt=""
+                                                                className="w-[50px] h-[50px] rounded-full object-cover"
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                    <div className="pl-2">
+                                                        <div className="flex items-center">
+                                                            <h5 className="text-[20px]">{i.user.name}</h5>
+                                                            <h5 className="text-[#d1001f] ml-2 text-[20px] capitalize italic drop-shadow-2xl">{i.user.role === "user" ? "" : i.user.role}</h5>
+                                                        </div>
+                                                        <p>{i.comment}</p>
+                                                        <small className="text-[#ffffff83]">
+                                                            {format(i.createdAt)}.
+                                                        </small>
+                                                    </div>
+                                                </div>
+                                            ))
+                                        }
                                 </div>
                             ))}
                         </div>

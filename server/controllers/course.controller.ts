@@ -305,10 +305,16 @@ export const addReview = CatchAsyncError(async (req: Request, res: Response, nex
 
         await course?.save();
 
-        const notification = {
+        await redis.set(courseId, JSON.stringify(course), 'EX', 604800)
+
+
+        await NotificationModel.create({
+            user: req.user?._id,
             title: "New Review Received",
             message: `${req.user?.name} has given a review on your course: ${course?.name}`,
-        }
+        });
+
+
         res.status(200).json({
             success: true,
             course,
@@ -320,7 +326,7 @@ export const addReview = CatchAsyncError(async (req: Request, res: Response, nex
 
 interface IAddReviewReplyData {
     comment: string;
-    courseId: number;
+    courseId: string;
     reviewId: string;
 }
 
@@ -348,6 +354,9 @@ export const addReviewReply = CatchAsyncError(async (req: Request, res: Response
         review.commentReplies?.push(reviewReplyData);
 
         await course?.save();
+
+        await redis.set(courseId, JSON.stringify(course), 'EX', 604800);
+
         res.status(200).json({
             success: true,
             course,
