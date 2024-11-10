@@ -12,15 +12,16 @@ import CoursePlayer from "@/app/utils/CoursePlayer";
 import { styles } from "@/app/styles/styles";
 import Link from "next/link";
 import CourseContentList from "./CourseContentList";
+import { Elements } from "@stripe/react-stripe-js";
+import CheckOutForm from "../Payment/CheckOutForm";
 
 type Props = {
   data: any;
-  stripePromise:any;
-  clientSecret:any;
-  
+  stripePromise: any;
+  clientSecret: string;
 };
 
-const CourseDetail = ({ data,stripePromise,clientSecret }: Props) => {
+const CourseDetail = ({ data, stripePromise, clientSecret }: Props) => {
   const { user } = useSelector((state: any) => state.auth);
   const [open, setOpen] = useState(false);
   const discountPercentage =
@@ -220,6 +221,13 @@ const CourseDetail = ({ data,stripePromise,clientSecret }: Props) => {
                   className="text-black cursor-pointer"
                   onClick={() => setOpen(false)}
                 ></IoCloseOutline>
+              </div>
+              <div className="w-full">
+                {stripePromise && clientSecret && (
+                  <Elements stripe={stripePromise} options={{ clientSecret }}>
+                    <CheckOutForm setOpen={setOpen} data={data}></CheckOutForm>
+                  </Elements>
+                )}
               </div>
             </div>
           </div>

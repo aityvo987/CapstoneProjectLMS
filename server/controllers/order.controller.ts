@@ -94,6 +94,7 @@ export const createOrder = CatchAsyncError(async (req: Request, res: Response, n
         //push new course element into user.course array
         user?.courses.push(course?._id); // fixing it document.d.ts ==> check it if bug
 
+        //update redis
         await redis.set(req.user?._id, JSON.stringify(user));
         
         //update user table 
@@ -103,7 +104,7 @@ export const createOrder = CatchAsyncError(async (req: Request, res: Response, n
         await NotificationModel.create({
             userId: user?._id,
             title: "New Order",
-            message: `You have new order: ${course.name}`,
+            message: `You have new order: ${course?.name}`,
         });
 
         //update user.purchase
@@ -126,7 +127,7 @@ export const getAllOrders = CatchAsyncError(
         try {
             getAllOrdersService(res);
         } catch (error: any) {
-            return next(new ErrorHandler(error.message, 400));
+            return next(new ErrorHandler(error.message, 500));
         }
     }
 );
@@ -145,12 +146,12 @@ export const sendStripePublishableKey = CatchAsyncError(async (req: Request, res
 export const newPayment = CatchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
     try {
         const myPayment = await stripe.paymentIntents.create({
-            amount: req.params.amount,
-            currency: "USD",
+            amount: req.body.amount,
+            currency: "GBP",
             metadata: {
                 company: "ELearning_CuongDat"
             },
-            automatic_payment_method: {
+            automatic_payment_methods: {
                 enabled: true,
             }
         });
