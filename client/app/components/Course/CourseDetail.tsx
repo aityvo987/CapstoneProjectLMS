@@ -38,6 +38,13 @@ const CourseDetail = ({
 
   useEffect(() => {
     setUser(userData?.user);
+
+    // Kiểm tra trạng thái đăng nhập khi tải trang
+    // if (!userData?.user) {
+    //   // Nếu chưa đăng nhập, hiển thị modal đăng nhập
+    //   setRoute("Login");
+    //   openAuthModal(true);
+    // }
   }, [userData]);
   
   const discountPercentage =
