@@ -1,5 +1,5 @@
 import { useGetUserCourseDetailQuery } from "@/redux/features/courses/coursesApi";
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import Loader from "../Loader/Loader";
 import Heading from "@/app/utils/Heading";
 import Header from "../Header";
@@ -14,25 +14,49 @@ import Link from "next/link";
 import CourseContentList from "./CourseContentList";
 import { Elements } from "@stripe/react-stripe-js";
 import CheckOutForm from "../Payment/CheckOutForm";
+import { useLoadUserQuery } from "@/redux/features/api/apiSlice";
 
 type Props = {
   data: any;
   stripePromise: any;
   clientSecret: string;
+  setRoute: any;
+  setOpen: any;
 };
 
-const CourseDetail = ({ data, stripePromise, clientSecret }: Props) => {
-  const { user } = useSelector((state: any) => state.auth);
+const CourseDetail = ({
+  data,
+  stripePromise,
+  clientSecret,
+  setRoute,
+  setOpen: openAuthModal,
+}: Props) => {
+  const { data: userData } = useLoadUserQuery(undefined, {});
+  const [user, setUser] = useState<any>();
+  // const { user } = useSelector((state: any) => state.auth);
   const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    setUser(userData?.user);
+  }, [userData]);
+  
   const discountPercentage =
     ((data?.estimatedPrice - data?.price) / data?.estimatedPrice) * 100;
   const discountPercentagePrice = discountPercentage.toFixed(0);
 
   const isPurchased =
     user && user?.courses?.find((item: any) => item._id === data._id);
+
+
+
   const handleOrder = (e: any) => {
     // console.log('ggg');
-    setOpen(true);
+    if (user) {
+      setOpen(true);
+    } else {
+      setRoute("Login");
+      openAuthModal(true);
+    }
   };
 
   return (

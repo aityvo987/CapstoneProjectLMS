@@ -72,6 +72,10 @@ const CourseDetailPage = ({ id }: Props) => {
               data={data.course}
               stripePromise={stripePromise}
               clientSecret={clientSecret}
+              setRoute={(route: string) => {
+                /* logic chuyển hướng hoặc cập nhật route */
+              }}
+              setOpen={setOpen}
             />
           )}
 
