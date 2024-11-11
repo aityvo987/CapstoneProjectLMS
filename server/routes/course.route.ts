@@ -16,13 +16,13 @@ courseRouter.get("/get-courses/", getAllCourse);
 
 courseRouter.get("/get-course-content/:id",isAutheticated,getCourseContent);
 
-courseRouter.put("/add-question",isAutheticated,addQuestion);
+courseRouter.post("/add-question",isAutheticated,addQuestion);
 
 courseRouter.put("/add-answer",isAutheticated,addAnswer);
 
 courseRouter.put("/add-review/:id",isAutheticated,addReview);
 
-courseRouter.put("/add-review-reply/:id",isAutheticated,authorizeRoles("admin"),addReviewReply);
+courseRouter.put("/add-review-reply",isAutheticated,authorizeRoles("admin"),addReviewReply);
 courseRouter.get("/get-course-content/:id", isAutheticated, getCourseContent);
 
 courseRouter.get("/get-admin-courses", isAutheticated, authorizeRoles("admin"), getAdminAllCourses);
