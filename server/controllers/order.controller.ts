@@ -3,7 +3,7 @@ import { CatchAsyncError } from "../middleware/catchAsyncErrors";
 import ErrorHandler from "../utils/ErrorHandler";
 import OrderModel, { IOrder } from "../models/order.model";
 import userModel from "../models/user.model";
-import CourseModel from "../models/course.model";
+import CourseModel, { ICourse } from "../models/course.model";
 import path from "path";
 import ejs from "ejs";
 import sendMail from "../utils/sendMail";
@@ -41,7 +41,7 @@ export const createOrder = CatchAsyncError(async (req: Request, res: Response, n
         }
 
         //check course exist
-        const course = await CourseModel.findById(courseId);
+        const course: ICourse | null = await CourseModel.findById(courseId);
         if (!course) {
             return next(new ErrorHandler("Course not found", 404));
         }
@@ -96,7 +96,7 @@ export const createOrder = CatchAsyncError(async (req: Request, res: Response, n
 
         //update redis
         await redis.set(req.user?._id, JSON.stringify(user));
-        
+
         //update user table 
         await user?.save();
 
@@ -109,6 +109,7 @@ export const createOrder = CatchAsyncError(async (req: Request, res: Response, n
 
         //update user.purchase
         course.purchased = (course.purchased ?? 0) + 1;
+
         await course.save();
 
         //create new order
