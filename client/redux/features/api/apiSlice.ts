@@ -7,7 +7,7 @@ export const apiSlice = createApi({
     reducerPath: "api",
     baseQuery: fetchBaseQuery({
         baseUrl: process.env.NEXT_PUBLIC_SERVER_URI,
-
+        credentials: "include", // Đảm bảo cookie được gửi kèm với mỗi yêu cầu
     }),
     endpoints: (builder) => ({
         //automatically refresh the access token 

@@ -18,6 +18,8 @@ import {
   useSocialAuthMutation,
 } from "@/redux/features/auth/authApi";
 import toast from "react-hot-toast";
+import { useLoadUserQuery } from "@/redux/features/api/apiSlice";
+import { useEditHeroDataMutation } from "@/redux/features/layout/layoutApi";
 
 type Props = {
   open: boolean;
@@ -29,7 +31,8 @@ type Props = {
 const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
   const [active, setActive] = useState(false);
   const [openSidebar, setOpenSidebar] = useState(false);
-  const { user } = useSelector((state: any) => state.auth);
+  // const { user } = useSelector((state: any) => state.auth);
+  const {data:userData,isLoading,refetch} = useLoadUserQuery(undefined,{})
   const { data } = useSession();
   const [socialAuth, { isSuccess, error }] = useSocialAuthMutation();
   const [logout, setLogout] = useState(false);
@@ -38,8 +41,9 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
   });
 
   useEffect(() => {
-    //check user existence
-    if (!user) {
+   if(!isLoading){
+     //check user existence
+     if (!userData) {
       if (data) {
         socialAuth({
           email: data?.user?.email,
@@ -52,17 +56,25 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
     if (data === null) {
       //Success
       if (!isSuccess) {
-        setLogout(true); //log out
+        // setLogout(true); //log out
 
         // if (logout === false) {
         //   toast.success("Logout successfully!");
         //   return;
         // }
-      } else {
-        toast.success("Login successfully!");
+
+        toast.success("Logout successfully!");
+      } 
+      // else {
+      //   toast.success("Login successfully!");
+      // }
+
+      if(!isLoading && !userData){
+        setLogout(true);
       }
     }
-  }, [data, user]);
+   }
+  }, [data, userData,isLoading]);
 
   // console.log(data);
 
@@ -112,10 +124,10 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
                   onClick={() => setOpenSidebar(true)}
                 />
               </div>
-              {user ? (
+              {userData ? (
                 <Link href={"/profile"}>
                   <Image
-                    src={user.avatar ? user.avatar.url : avatar}
+                    src={userData.avatar ? userData.avatar.url : avatar}
                     width={30}
                     height={30}
                     alt="avatar"
@@ -144,10 +156,10 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
           >
             <div className="w-[70%] fixed z-[999999999] h-screen bg-white dark:bg-slate-900 dark:bg-opacity-90 top-0 right-0">
               <NavItems activeItem={activeItem} isMobile={true} />
-              {user ? (
+              {userData ? (
                 <>
                   <Image
-                    src={user.avatar ? user.avatar : avatar}
+                    src={userData.avatar ? userData.avatar : avatar}
                     alt="avatar"
                     className={`${styles.avatar}  ml-4 mt-2`}
                   ></Image>
@@ -179,6 +191,7 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
                 setRoute={setRoute}
                 activeItem={activeItem}
                 component={Login}
+                refetch= {refetch}
               />
             )}
           </>
