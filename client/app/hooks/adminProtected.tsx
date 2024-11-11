@@ -11,7 +11,7 @@ export default function AdminProtected({ children }: ProtectedProps) {
   const {data:userData,isLoading,refetch} = useLoadUserQuery(undefined,{})
 
   if (userData) {
-    const isAdmin = userData?.role === "admin";
+    const isAdmin = userData?.user.role === "admin";
     return isAdmin ? children : redirect("/");
   }
 }

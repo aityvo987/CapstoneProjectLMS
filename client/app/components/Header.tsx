@@ -42,6 +42,7 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
 
   useEffect(() => {
    if(!isLoading){
+    console.log("UserData:",userData);
      //check user existence
      if (!userData) {
       if (data) {
@@ -51,6 +52,7 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
           avatar: data?.user?.image,
         });
       }
+      
     }
 
     if (data === null) {
@@ -127,7 +129,7 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
               {userData ? (
                 <Link href={"/profile"}>
                   <Image
-                    src={userData.avatar ? userData.avatar.url : avatar}
+                    src={userData.user.avatar ? userData.user.avatar.url : avatar}
                     width={30}
                     height={30}
                     alt="avatar"

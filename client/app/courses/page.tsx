@@ -1,6 +1,6 @@
 "use client";
 
-import { useGetAllCoursesQuery } from "@/redux/features/courses/coursesApi";
+import { useGetAllCoursesQuery, useGetAllUsersCoursesQuery } from "@/redux/features/courses/coursesApi";
 import { useGetHeroDataQuery } from "@/redux/features/layout/layoutApi";
 import { useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
@@ -16,7 +16,7 @@ type Props = {};
 const page = (props: Props) => {
   const searchParams = useSearchParams();
   const search = searchParams?.get("title");
-  const { data, isLoading } = useGetAllCoursesQuery(undefined, {});
+  const { data, isLoading } = useGetAllUsersCoursesQuery(undefined, {});
   const { data: categoriesData } = useGetHeroDataQuery("Categories", {});
   const [route, setRoute] = useState("Login");
   const [open, setOpen] = useState(false);
@@ -27,6 +27,8 @@ const page = (props: Props) => {
     //Hiển thị tất cả khóa học
     if (category === "All") {
       setCourses(data?.courses);
+      console.log("Courses",data);
+      console.log("Category",categoriesData);
     }
 
     //Hiển thi khóa học theo danh mục khóa học
@@ -84,11 +86,11 @@ const page = (props: Props) => {
                   <div key={index}>
                     <div
                       className={`h-[35px] ${
-                        category === item.title
+                        category === item._id
                           ? "bg-[crimson]"
                           : "bg-[#5050cb]"
                       } m-3 px-3 rounded-[30px] flex items-center justify-center font-Poppins cursor-pointer`}
-                      onClick={() => setCategory(item.title)}
+                      onClick={() => setCategory(item._id)}
                     >
                       {item.title}
                     </div>
