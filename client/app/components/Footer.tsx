@@ -9,7 +9,7 @@ const Footer: FC<Props> = (props: Props) => {
 
     return (
         <div className="w-[90%] 800px:w-[80%] m-auto">
-            <footer className="bg-black text-white py-8">
+            <footer className="dark:bg-black dark:text-white text-black py-8">
                 <div className="container mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 px-4">
 
                     {/* About Section */}
