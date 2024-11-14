@@ -9,6 +9,7 @@ import Header from "../components/Header";
 import Heading from "../utils/Heading";
 import { styles } from "../styles/styles";
 import CourseCard from "../components/Course/CourseCard";
+import Footer from "../components/Footer";
 // import { number } from "yup";
 
 type Props = {};
@@ -120,6 +121,7 @@ const page = (props: Props) => {
           </div>
         </>
       )}
+      <Footer/>
     </div>
   );
 };
