@@ -1,13 +1,11 @@
 'use client'
 
 import React, { FC, useState } from "react";
-import Protected from "../hooks/useProtected";
 import Heading from "../utils/Heading";
 import Header from "../components/Header";
-import  Profile from "../components/Profile/Profile";
-import { useSelector } from "react-redux";
 import Footer from "../components/Footer";
 import { useLoadUserQuery } from "@/redux/features/api/apiSlice";
+import FAQ from "../components/Route/FAQ";
 
 type Props = {};
 
@@ -20,9 +18,9 @@ const page: FC<Props> = () => {
   const user = data.user;
   return (
     <div>
-      <Protected>
+      
         <Heading
-          title={`${user?.name} profile`}
+          title="FAQ - Elearning"
           description="ELearning is a platform for students to learn get help from lecturers"
           keywords="Progamming,MERN,Machine Learning"
         />
@@ -33,9 +31,9 @@ const page: FC<Props> = () => {
           setRoute={setRoute}
           route={route}
         />
-        <Profile user={user}></Profile>
+        <FAQ/>
         <Footer/>
-      </Protected>
+     
     </div>
   );
 };

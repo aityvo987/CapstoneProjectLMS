@@ -1,6 +1,4 @@
 'use client'
-
-'use client'
 import CourseDetailPage from '@/app/components/Course/CourseDetailPage';
 import CourseUserContent from '@/app/components/Course/CourseUserContent';
 import Loader from '@/app/components/Loader/Loader';
