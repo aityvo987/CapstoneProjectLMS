@@ -1,10 +1,11 @@
-import React, { FC } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import { BiBorderLeft } from 'react-icons/bi';
 import { PiUsersFourLight } from 'react-icons/pi';
 import UsersAnalytics from '../Analytics/UsersAnalytics';
 import { Box, CircularProgress } from '@mui/material';
 import OrdersAnalytics from '../Analytics/OrdersAnalytics';
 import AllInvoices from '../Order/AllInvoices';
+import { useGetOrdersAnalyticsQuery, useGetUsersAnalyticsQuery } from '@/redux/features/analytics/analyticsApi';
 type Props = {
     open?: boolean;
     value?: number;
@@ -36,6 +37,47 @@ const CircularProgressWithLabel: FC<Props> = ({ open, value }) => {
     )
 }
 const DashboardWidgets: FC<Props> = ({ open, value }) => {
+    const [orderComparePercentage, setOrderComparePercentage] = useState<any>();
+    const [userComparePercentage, setUserComparePercentage] = useState<any>();
+
+    const { data, isLoading } = useGetUsersAnalyticsQuery({});
+    const { data: orderData, isLoading: orderIsLoading } = useGetOrdersAnalyticsQuery({});
+
+    useEffect(() => {
+        if (isLoading || orderIsLoading) {
+            return;
+        } else {
+            if (data && orderData) {
+                const userLastTwoMonths = data.users.last12Months.slice(-2);
+                const orderLastTwoMonths = orderData.orders.last12Months.slice(-2);
+
+                if (userLastTwoMonths.length === 2 && orderLastTwoMonths === 2) {
+                    const userCurrentMonth = userLastTwoMonths[1].count;
+                    const userPreviousMonth = userLastTwoMonths[0].count;
+                    const orderCurrentMonth = orderLastTwoMonths[1].count;
+                    const orderPreviousMonth = orderLastTwoMonths[0].count;
+
+                    const userPercentChange = userPreviousMonth !== 0 ? ((userCurrentMonth - userPreviousMonth) / userPreviousMonth) * 100 : 100;
+                    const orderPercentChange = orderPreviousMonth !== 0 ? ((orderCurrentMonth - orderPreviousMonth) / orderPreviousMonth) * 100 : 100;
+
+                    setUserComparePercentage({
+                        currentMonth: userCurrentMonth,
+                        previousMonth: userPreviousMonth,
+                        percentChange: userPercentChange,
+                    })
+                    setOrderComparePercentage({
+                        currentMonth: orderCurrentMonth,
+                        previousMonth: orderPreviousMonth,
+                        percentChange: orderPercentChange,
+                    })
+                }
+            }
+
+        }
+    }, [isLoading, orderIsLoading, data, orderData])
+
+
+
     return (
         <div className="mt-[30px] min-h-screen">
             <div className="grid grid-cols-[75%,25%]">
@@ -49,7 +91,7 @@ const DashboardWidgets: FC<Props> = ({ open, value }) => {
                             <div className="">
                                 <BiBorderLeft className="dark:text-[#45CBA0] text-[#000] text-[30px]" />
                                 <h5 className="pt-2 font-Poppins dark:text-[#fff] text-black text-[20px]">
-                                    120
+                                    {orderComparePercentage?.currentMonth}
                                 </h5>
                                 <h5 className="py-2 font-Poppins dark:text-[#45CBA0] text-black text-[20px] font-[400]">
                                     Sales Obtained
@@ -57,8 +99,18 @@ const DashboardWidgets: FC<Props> = ({ open, value }) => {
                             </div>
 
                             <div>
-                                <CircularProgressWithLabel value={100} open={open} />
-                                <h5 className="text-center pt-4 dark:text-[#fff] text-black ">+120%</h5>
+                                <CircularProgressWithLabel value={
+                                    orderComparePercentage?.percentChange>0
+                                    ? 100 : 0
+                                } open={open} />
+                                <h5 className="text-center pt-4 dark:text-[#fff] text-black ">
+                                    {
+                                        orderComparePercentage?.percentChange > 0
+                                            ? '+' + orderComparePercentage?.percentChange.toFixed(2)
+                                            : '-' + orderComparePercentage?.percentChange.toFixed(2)
+
+                                    }%
+                                </h5>
                             </div>
                         </div>
                     </div>
@@ -68,15 +120,25 @@ const DashboardWidgets: FC<Props> = ({ open, value }) => {
                             <div className="">
                                 <PiUsersFourLight className="dark:text-[#45CBA0] text-[#000] text-[30px]" />
                                 <h5 className="pt-2 font-Poppins dark:text-[#fff] text-black text-[20px]">
-                                    450
+                                    {userComparePercentage?.currentMonth}
                                 </h5>
                                 <h5 className="py-2 font-Poppins dark:text-[#45CBA0] text-black text-[20px]">
                                     New Users
                                 </h5>
                             </div>
                             <div>
-                                <CircularProgressWithLabel value={100} open={open} />
-                                <h5 className="text-center pt-4 dark:text-[#fff] text-black ">+150%</h5>
+                                <CircularProgressWithLabel value={
+                                    userComparePercentage?.percentChange>0
+                                    ? 100 : 0
+                                } open={open} />
+                                <h5 className="text-center pt-4 dark:text-[#fff] text-black ">
+                                    {
+                                        userComparePercentage?.percentChange > 0
+                                            ? '+' + userComparePercentage?.percentChange.toFixed(2)
+                                            : '-' + userComparePercentage?.percentChange.toFixed(2)
+
+                                    }%
+                                </h5>
                             </div>
                         </div>
                     </div>
