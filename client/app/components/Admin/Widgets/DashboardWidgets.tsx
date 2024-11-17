@@ -51,7 +51,7 @@ const DashboardWidgets: FC<Props> = ({ open, value }) => {
                 const userLastTwoMonths = data.users.last12Months.slice(-2);
                 const orderLastTwoMonths = orderData.orders.last12Months.slice(-2);
 
-                if (userLastTwoMonths.length === 2 && orderLastTwoMonths === 2) {
+                if (userLastTwoMonths.length === 2 && orderLastTwoMonths.length === 2) {
                     const userCurrentMonth = userLastTwoMonths[1].count;
                     const userPreviousMonth = userLastTwoMonths[0].count;
                     const orderCurrentMonth = orderLastTwoMonths[1].count;
