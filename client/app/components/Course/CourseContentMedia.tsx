@@ -234,6 +234,7 @@ const CourseContentMedia: FC<Props> = ({ data, id, activeVideo, setActiveVideo, 
                             setAnswer={setAnswer}
                             handleAnswerSubmit={handleAnswerSubmit}
                             user={user}
+                            questionId={questionId}
                             setQuestionId={setQuestionId}
                             answerCreateLoading={answerCreateLoading}
                         />
@@ -329,7 +330,7 @@ const CourseContentMedia: FC<Props> = ({ data, id, activeVideo, setActiveVideo, 
                                             </div>
                                         </div>
                                         {
-                                            user.role === "admin" && (
+                                            user.role === "admin" && item.commentReplies.length === 0 &&(
                                                 <span className={`${styles.label} !ml-10 cursor-pointer`}
                                                     onClick={() => {
                                                         setIsReviewReply(true)
@@ -342,7 +343,7 @@ const CourseContentMedia: FC<Props> = ({ data, id, activeVideo, setActiveVideo, 
                                             )
                                         }
                                         {
-                                            isReviewReply && (
+                                            isReviewReply && reviewId === item._id &&(
                                                 <div className="w-full flex relative dark:text-white text-black">
                                                     <input
                                                         type="text"
@@ -405,7 +406,7 @@ const CourseContentMedia: FC<Props> = ({ data, id, activeVideo, setActiveVideo, 
 };
 
 
-const QuestionReply = ({ data, activeVideo, answer, setAnswer, handleAnswerSubmit, user, setQuestionId, answerCreateLoading }: any) => {
+const QuestionReply = ({ data, activeVideo, answer, setAnswer, handleAnswerSubmit, user,questionId, setQuestionId, answerCreateLoading }: any) => {
     return (
         <>
             <div className="w-full my-3">
@@ -419,6 +420,7 @@ const QuestionReply = ({ data, activeVideo, answer, setAnswer, handleAnswerSubmi
                             index={index}
                             answer={answer}
                             setAnswer={setAnswer}
+                            questionId={questionId}
                             setQuestionId={setQuestionId}
                             handleAnswerSubmit={handleAnswerSubmit}
                             answerCreateLoading={answerCreateLoading}
@@ -433,6 +435,7 @@ const QuestionReply = ({ data, activeVideo, answer, setAnswer, handleAnswerSubmi
 const QuestionItem = ({
     data,
     activeVideo,
+    questionId,
     item,
     answer,
     setAnswer,
@@ -478,7 +481,7 @@ const QuestionItem = ({
                     </span>
                 </div>
                 {
-                    replyActive && (
+                    replyActive && questionId === item._id && (
                         <>
                             {
                                 item.questionReplies.map((item: any, index: any) => (
