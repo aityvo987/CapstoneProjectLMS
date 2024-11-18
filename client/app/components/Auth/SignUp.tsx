@@ -144,10 +144,10 @@ const Signup: FC<Props> = ({ setRoute }) => {
           <FcGoogle size={30} className="cursor-pointer mr-2"></FcGoogle>
           <AiFillGithub
             size={30}
-            className="cursor-pointer ml-2"
+            className="cursor-pointer ml-2 dark:text-white"
           ></AiFillGithub>
         </div>
-        <h5 className="text-center pt-4 font-Poppins text-[14px]">
+        <h5 className="text-center pt-4 font-Poppins  text-black dark:text-white text-[14px]">
           Already have an account ?{""}
           <span
             className="text-[#2190ff] pl-1 cursor-pointer"

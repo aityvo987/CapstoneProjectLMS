@@ -120,7 +120,7 @@ const CourseInformation: FC<Props> = ({ courseInfo, setCourseInfo, active, setAc
                             className={`${styles.input}`}
                         />
                     </div>
-                    <div className="w-[45%]">
+                    <div className="w-[50%]">
                         <label className={`${styles.label}`}>
                             Estimated Price (optional)
                         </label>
@@ -158,20 +158,20 @@ const CourseInformation: FC<Props> = ({ courseInfo, setCourseInfo, active, setAc
                         />
                     </div>
                     {/*Course Level */}
-                    <div className="w-[50%]">
+                    <div className="w-[50%] flex flex-col">
                         <label className={`${styles.label} w-[50%]`} >
-                            course Categories
+                            Course Categories
                         </label>
                         <select 
                         name="" 
                         id="" 
-                        className={`${styles.input}`}
+                        className="w-ful bg-transparent border rounded h-[40px] px-2 outline-none mt-[10px] font-Poppins"
                         value={courseInfo.category}
                         onChange={(e:any)=>setCourseInfo({...courseInfo,category:e.target.value})}
                         >
-                            <option value="">Select Category</option>
+                            <option value="" className= "text-black dark:text-white">Select Category</option>
                             {categories.map((item: any) => (
-                                <option value={item._id} key={item._id}>
+                                <option className="text-black" value={item._id} key={item._id}>
                                     {item.title}
                                 </option>
                             ))}
