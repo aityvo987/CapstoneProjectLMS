@@ -28,7 +28,8 @@ const Profile: FC<Props> = ({ user }) => {
     signOut();
     await setLogout(true);
 
-    // redirect("/"); ==> Automatically redirect to homepage thank to Protected component
+    redirect("/"); 
+    // ==> Automatically redirect to homepage thank to Protected component
   };
 
   if (typeof window !== "undefined") {
@@ -100,6 +101,7 @@ const Profile: FC<Props> = ({ user }) => {
 
       )}
     </div>
+    
   );
 };
 

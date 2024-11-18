@@ -232,9 +232,9 @@ const AllUsers: FC<Props> = ({ isTeam }) => {
                                                 className={`${styles.input}`}
                                             />
                                             <select name="" id="" className={`${styles.input} !mt-6`}>
-                                                <option value="admin">Admin</option>
-                                                <option value="user">User</option>
-                                                <option value="lecturer">Lecturer</option>
+                                                <option className="text-black" value="admin">Admin</option>
+                                                <option className="text-black" value="user">User</option>
+                                                <option className="text-black" value="lecturer">Lecturer</option>
                                             </select>
                                             <br></br>
                                             <div className={`${styles.button} my-6 !h-[30px]`}

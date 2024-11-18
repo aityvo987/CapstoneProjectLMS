@@ -1,17 +1,12 @@
-
-import AllCourses from '@/app/components/Admin/Course/AllCourses';
-import AllUsers from '@/app/components/Admin/Users/AllUsers';
-import { useEditHeroDataMutation, useGetHeroDataQuery } from '@/redux/features/layout/layoutApi';
-import Heading from '@/app/utils/Heading';
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import { AiOutlineCamera, AiOutlineDelete } from 'react-icons/ai';
+import { AiOutlineDelete } from 'react-icons/ai';
 import { IoMdAddCircleOutline } from 'react-icons/io';
 import Loader from '../../Loader/Loader';
 import { styles } from '@/app/styles/styles';
+import { useEditHeroDataMutation, useGetHeroDataQuery } from '@/redux/features/layout/layoutApi';
 
-type Props = {
-}
+type Props = {};
 
 const EditCategories: FC<Props> = (props: Props) => {
     const [categories, setCategories] = useState<any[]>([]);
@@ -34,15 +29,13 @@ const EditCategories: FC<Props> = (props: Props) => {
                 toast.error(errorMessage?.data?.message);
             }
         }
-    }, [data, isSuccess, error])
-
+    }, [data, isSuccess, error]);
 
     const handleCategoriesAdd = (id: any, value: string) => {
         setCategories((prevCategory: any) =>
             prevCategory.map((i: any) => (i._id === id ? { ...i, title: value } : i))
         );
-    }
-
+    };
 
     const newCategoriesHandler = async () => {
         if (categories[categories.length - 1]?.title === "") {
@@ -52,13 +45,13 @@ const EditCategories: FC<Props> = (props: Props) => {
         }
     };
 
-
     const areCategoriesUnchanged = (
         originalCategories: any[],
         newCategories: any[]
     ) => {
         return JSON.stringify(originalCategories) === JSON.stringify(newCategories);
     };
+
     const isAnyCategoryEmpty = (categories: any[]) => {
         return categories.some((c) => c.title === "");
     };
@@ -70,7 +63,7 @@ const EditCategories: FC<Props> = (props: Props) => {
                 categories: categories,
             });
         }
-    }
+    };
 
     return (
         <>
@@ -78,13 +71,12 @@ const EditCategories: FC<Props> = (props: Props) => {
                 isLoading ? (
                     <Loader />
                 ) : (
-
-                    <div className="mt-[120px] text-center">
-                        <h1 className={`${styles.title}`}>All Categories</h1>
-                        {
-                            categories && categories.map((item: any, index: number) => {
+                    <div className="min-h-screen flex flex-col justify-between"> {/* Set full screen height */}
+                        <div className="mt-[120px] text-center flex-grow"> {/* Use flex-grow to fill remaining space */}
+                            <h1 className={`${styles.title}`}>All Categories</h1>
+                            {categories && categories.map((item: any, index: number) => {
                                 return (
-                                    <div className="flex justify-center ">
+                                    <div className="flex justify-center mb-2">
                                         <div className="flex items-center w-fit justify-center gap-2 dark:bg-[#101725] mt-1 p-3 border border-[#2190ff] rounded ">
                                             <input
                                                 className={`${styles.input} !mt-0 !w-[unset] !border-none ! text-[20px]  `}
@@ -94,7 +86,6 @@ const EditCategories: FC<Props> = (props: Props) => {
                                                 }
                                                 placeholder="Enter category title..."
                                             />
-
                                             <AiOutlineDelete
                                                 className="text-red-500 text-[18px] cursor-pointer"
                                                 onClick={() => {
@@ -103,44 +94,41 @@ const EditCategories: FC<Props> = (props: Props) => {
                                                     );
                                                 }}
                                             />
-
                                         </div>
                                     </div>
                                 );
-                            })
-                        }
-                        <br />
-                        <div className="w-full flex justify-center mb-3 ">
-                            <IoMdAddCircleOutline
-                                className="text-[#2190ff] text-[25px] cursor-pointer"
-                                onClick={newCategoriesHandler}
-                            />
+                            })}
+                            <br />
+                            <div className="w-full flex justify-center mb-3 ">
+                                <IoMdAddCircleOutline
+                                    className="text-[#2190ff] text-[25px] cursor-pointer"
+                                    onClick={newCategoriesHandler}
+                                />
+                                <div
+                                    className={`${styles.button} !w-[100px] !min-h-[40px] !h-[40px] dark:text-white text-black absolute right-14
+                                    
+                                    ${areCategoriesUnchanged(data?.layout?.categories, categories) ||
+                                            isAnyCategoryEmpty(categories)
+                                        ? "!cursor-not-allowed"
+                                        : "cursor-pointer bg-[#42d383]"
+                                    }
+                                    !rounded`}
+                                    onClick={
+                                        areCategoriesUnchanged(data?.layout?.categories, categories) ||
+                                        isAnyCategoryEmpty(categories)
+                                        ? () => null
+                                        : editCategoriesHandler
+                                    }
+                                >
+                                    Save
+                                </div>
+                            </div>
                         </div>
-                        <div
-                            className={`${styles.button} !w-[100px] !min-h-[40px] !h-[40px] dark:text-white text-black 
-                        
-                            ${areCategoriesUnchanged(data?.layout?.categories, categories) ||
-                                    isAnyCategoryEmpty(categories)
-                                    ? "!cursor-not-allowed"
-                                    : "cursor-pointer bg-[#42d383]"
-                                }
-                            !rounded absolute bottom-12 right-12`}
-                            onClick={
-                                areCategoriesUnchanged(data?.layout?.categories, categories) ||
-                                    isAnyCategoryEmpty(categories)
-                                    ? () => null
-                                    : editCategoriesHandler
-                            }
-                        >
-                            Save
-                        </div>
-
-
                     </div>
-
                 )
             }
         </>
-    )
-}
-export default EditCategories
+    );
+};
+
+export default EditCategories;
