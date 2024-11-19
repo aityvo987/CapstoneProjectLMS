@@ -498,7 +498,7 @@ const QuestionItem = ({
 
 
                                         <div className="pl-2">
-                                            <div className="flex items-center">
+                                            <div className="flex items-center dark:text-white text-black">
                                                 <h5 className="text-[20px]">{item.user.name}</h5>
                                                 <h5 className="text-[#d1001f] ml-2 text-[20px] capitalize italic drop-shadow-2xl">{item.user.role === "user" ? "" : item.user.role}</h5>
                                             </div>
