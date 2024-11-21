@@ -33,9 +33,9 @@ const OrdersAnalytics: FC<Props> = ({isDashboard}: Props) => {
                 isLoading ? (
                     <Loader />
                 ) : (
-                    <div className={isDashboard ? "h-[30vh]" : "h-screen ml-6"}>
+                    <div className={isDashboard ? "h-[30vh]" : "h-fit ml-6 mb"}>
                         <div
-                            className={isDashboard ? "mt-[0px] pl-[40px] mb-2" : "mt-[50px]"}
+                            className={isDashboard ? "mt-[0px] pl-[40px] mb-2" : "mt-[120px] mb-[50px]"}
                         >
                             <h1
                                 className={`${styles.title} ${isDashboard && "!text-[20px]"
@@ -50,7 +50,7 @@ const OrdersAnalytics: FC<Props> = ({isDashboard}: Props) => {
                             )}
                         </div>
                         <div
-                            className={`w-full ${isDashboard ? "h-[90%]" : "h-full"
+                            className={`w-full ${isDashboard ? "h-[90%]" : "h-fit"
                                 } flex items-center justify-center`}
                         >
 

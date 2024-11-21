@@ -40,7 +40,7 @@ const CoursesAnalytics: FC<Props> = (props: Props) => {
                 isLoading ? (
                     <Loader />
                 ) : (
-                    <div className="h-[100%] ml-6">
+                    <div className="mt-[120px] h-fit ml-6">
                         <div className="mt-[50px]">
                             <h1 className={`${styles.title} px-5 !text-start`}>
                                 Courses Analytics

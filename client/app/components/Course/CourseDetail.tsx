@@ -150,7 +150,7 @@ const CourseDetail = ({
               <div className="800px:flex items-center">
                 <Ratings rating={data?.ratings} />
                 <div className="mb-2 800px:mb-[unset]" />
-                <h5 className="text-[25px] font-Poppins text-black dark: text-white">
+                <h5 className="text-[25px] font-Poppins text-black dark:text-white">
                   {Number.isInteger(data?.ratings)
                     ? data?.ratings.toFixed(1)
                     : data?.ratings.toFixed(2)}{""}
@@ -176,7 +176,7 @@ const CourseDetail = ({
                     </div>
                     <div className="hidden 800px:block pl-2">
                       <div className="flex items-center">
-                        <h5 className="text-[18px] pr-2 text-black dark: text-white">{item.user.name}</h5>
+                        <h5 className="text-[18px] pr-2 text-black dark:text-white">{item.user.name}</h5>
                         <Ratings rating={item.rating} />
                       </div>
                       <p className="text-black dark:text-white">{item.comment}</p>
@@ -185,7 +185,7 @@ const CourseDetail = ({
                       </small>
                     </div>
                     <div className="pl-2 flex 800px:hidden items-center">
-                      <h5 className="text-[18px] pr-2 text-black dark: text-white">{item.user.name}</h5>
+                      <h5 className="text-[18px] pr-2 text-black dark:text-white">{item.user.name}</h5>
                       <Ratings rating={item.rating} />
                     </div>
 
@@ -204,7 +204,7 @@ const CourseDetail = ({
                             />
                           </div>
                         </div>
-                        <div className="pl-2">
+                        <div className="pl-2 dark:text-white text-black">
                           <div className="flex items-center">
                             <h5 className="text-[20px]">{i.user.name}</h5>
                             <h5 className="text-[#d1001f] ml-2 text-[20px] capitalize italic drop-shadow-2xl">{i.user.role === "user" ? "" : i.user.role}</h5>

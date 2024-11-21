@@ -8,6 +8,7 @@ import  Profile from "../components/Profile/Profile";
 import { useSelector } from "react-redux";
 import Footer from "../components/Footer";
 import { useLoadUserQuery } from "@/redux/features/api/apiSlice";
+import Loader from "../components/Loader/Loader";
 
 type Props = {};
 
@@ -17,7 +18,20 @@ const page: FC<Props> = () => {
   const [activeItem, setActiveItem] = useState(0);
   const [route,setRoute] = useState("Login");
   const {data,isLoading,refetch} = useLoadUserQuery(undefined,{})
-  const user = data.user;
+  const user = data?.user;
+
+  if (isLoading) {
+    return <Loader></Loader>; // Display a loading state while fetching data
+  }
+
+  if (!user) {
+    return (
+      <div>
+        <p>User not found or not logged in.</p>
+        <button onClick={() => refetch()}>Retry</button>
+      </div>
+    ); // Handle undefined user gracefully
+  }
   return (
     <div>
       <Protected>
