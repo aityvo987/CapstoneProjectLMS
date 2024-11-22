@@ -7,12 +7,15 @@ import ProfileInfo from "./ProfileInfo";
 import ChangePassword from "./ChangePassword";
 import CourseCard from "../Course/CourseCard";
 import { useGetAllUsersCoursesQuery } from "@/redux/features/courses/coursesApi";
+import toast from "react-hot-toast";
 
 type Props = {
   user: any;
+  route:any;
+  setRoute:any;
 };
 
-const Profile: FC<Props> = ({ user }) => {
+const Profile: FC<Props> = ({ user,route,setRoute }) => {
   const [scroll, setScroll] = useState(false);
   const [avatar, setAvatar] = useState(null);
   const [logout, setLogout] = useState(false);
@@ -25,10 +28,10 @@ const Profile: FC<Props> = ({ user }) => {
   const [active, setActive] = useState(1);
 
   const logOutHandler = async () => {
+    toast.success("Logout successfully!");
+    setRoute("Logout");
     signOut();
     await setLogout(true);
-
-    redirect("/"); 
     // ==> Automatically redirect to homepage thank to Protected component
   };
 
