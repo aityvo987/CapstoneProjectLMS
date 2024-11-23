@@ -1,5 +1,5 @@
 'use client'
-import React from 'react'
+import React, { useState } from 'react'
 import Heading from '@/app/utils/Heading'
 import CreateCourse from '@/app/components/Admin/Course/CreateCourse'
 import AdminProtected from '@/app/hooks/adminProtected'
@@ -8,6 +8,7 @@ import DashboardHeader from '@/app/components/Admin/DashboardHeader'
 type Props = {}
 
 const page = (props: Props) => {
+    const [open, setOpen] = useState(false);
     return (
         <div>
             <AdminProtected>
@@ -20,7 +21,7 @@ const page = (props: Props) => {
                         <AdminSidebar/>
                     </div>
                     <div className="w-[85%]">
-                        <DashboardHeader/>
+                        <DashboardHeader open={open} setOpen={setOpen}/>
                         <CreateCourse />
                     </div>
                 </div>
