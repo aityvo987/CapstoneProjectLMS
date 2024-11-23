@@ -7,11 +7,16 @@ interface ProtectedProps {
   children: React.ReactNode;
 }
 export default function AdminProtected({ children }: ProtectedProps) {
-  // const { user } = useSelector((state: any) => state.auth);
-  const {data:userData,isLoading,refetch} = useLoadUserQuery(undefined,{})
+  const { user } = useSelector((state: any) => state.auth);
+  if (user){
+    const {data:userData,isLoading,refetch} = useLoadUserQuery(undefined,{})
 
-  if (userData) {
-    const isAdmin = userData?.user.role === "admin";
-    return isAdmin ? children : redirect("/");
+    if (userData) {
+      const isAdmin = userData?.user.role === "admin";
+      return isAdmin ? children : redirect("/");
+    }
+  }
+  else{
+    return redirect("/");
   }
 }

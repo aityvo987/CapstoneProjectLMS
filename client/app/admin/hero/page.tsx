@@ -6,12 +6,12 @@ import AdminSidebar from '@/app/components/Admin/sidebar/AdminSidebar';
 import AllUsers from '@/app/components/Admin/Users/AllUsers';
 import AdminProtected from '@/app/hooks/adminProtected';
 import Heading from '@/app/utils/Heading';
-import React, { FC } from 'react'
+import React, { FC, useState } from 'react'
 type Props = {
 }
 
 const page = (props: Props) => {
-
+    const [open, setOpen] = useState(false);
     return (
         <div>
             <AdminProtected>
@@ -24,7 +24,7 @@ const page = (props: Props) => {
                         <AdminSidebar/>
                     </div>
                     <div className="w-[85%]">
-                        <DashboardHeader/>
+                        <DashboardHeader open={open} setOpen={setOpen}/>
                         <EditHero />
                     </div>
                 </div>

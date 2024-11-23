@@ -15,26 +15,20 @@ type Props = {};
 const page: FC<Props> = () => {
 
   const [open, setOpen] = useState(false);
+  const [isLogout, setIsLogout] = useState(false);
   const [activeItem, setActiveItem] = useState(0);
   const [route,setRoute] = useState("Login");
   const {data,isLoading,refetch} = useLoadUserQuery(undefined,{})
   const user = data?.user;
-
+  console.log("routeCurrent",route);
   if (isLoading) {
     return <Loader></Loader>; // Display a loading state while fetching data
   }
 
-  if (!user) {
-    return (
-      <div>
-        <p>User not found or not logged in.</p>
-        <button onClick={() => refetch()}>Retry</button>
-      </div>
-    ); // Handle undefined user gracefully
-  }
+  
   return (
     <div>
-      <Protected>
+      <Protected user={user}>
         <Heading
           title={`${user?.name} profile`}
           description="ELearning is a platform for students to learn get help from lecturers"
@@ -47,7 +41,7 @@ const page: FC<Props> = () => {
           setRoute={setRoute}
           route={route}
         />
-        <Profile user={user}></Profile>
+        <Profile user={user} route={route} setRoute={setRoute}></Profile>
         <Footer/>
       </Protected>
     </div>

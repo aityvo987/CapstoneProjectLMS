@@ -32,53 +32,41 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
   const [active, setActive] = useState(false);
   const [openSidebar, setOpenSidebar] = useState(false);
   // const { user } = useSelector((state: any) => state.auth);
-  const {data:userData,isLoading,refetch} = useLoadUserQuery(undefined,{})
+  const { data: userData, isLoading, refetch } = useLoadUserQuery(undefined, {})
   const { data } = useSession();
   const [socialAuth, { isSuccess, error }] = useSocialAuthMutation();
   const [logout, setLogout] = useState(false);
-  const {} = useLogOutQuery(undefined, {
+  const { } = useLogOutQuery(undefined, {
     skip: !logout ? true : false,
   });
 
   useEffect(() => {
-   if(!isLoading){
-    console.log("UserData:",userData);
-     //check user existence
-     if (!userData) {
-      if (data) {
-        socialAuth({
-          email: data?.user?.email,
-          name: data?.user?.name,
-          avatar: data?.user?.image,
-        });
+    if (!isLoading) {
+      console.log("UserData:", userData);
+      //check user existence
+      if (!userData) {
+        if (data) {
+          socialAuth({
+            email: data?.user?.email,
+            name: data?.user?.name,
+            avatar: data?.user?.image,
+          });
+        }
+
       }
-      
-    }
 
-    if (data === null) {
-      //Success
-      if (!isSuccess) {
-        // setLogout(true); //log out
+      if (data === null) {
+        //Success
+        if (route==="Logout") {
+          toast.success("Logout successfully!");
+        }
 
-        // if (logout === false) {
-        //   toast.success("Logout successfully!");
-        //   return;
-        // }
-
-        toast.success("Logout successfully!");
-      } 
-      // else {
-      //   toast.success("Login successfully!");
-      // }
-
-      if(!isLoading && !userData){
-        setLogout(true);
+        if (!isLoading && !userData) {
+          setRoute("Login");
+        }
       }
     }
-   }
-  }, [data, userData,isLoading]);
-
-  // console.log(data);
+  }, [data, userData, isLoading]);
 
   if (typeof window !== "undefined") {
     window.addEventListener("scroll", () => {
@@ -101,11 +89,10 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
   return (
     <div className="w-full relative">
       <div
-        className={`${
-          active
+        className={`${active
             ? "dark:bg-opacity-50 dark:bg-gradient-to-b dark:from-gray-900 dark:to-black fixed top-0 left-0 w-full h-[80px] z-[80] border-b dark:border-[#ffffff1c] shadow-xl transistion duration-500"
             : "w-full border-b dark:border-[#fffff1c] h-[80px] z-[80] dark:shadow "
-        }`}
+          }`}
       >
         <div className="w-[95%] 800px:w-[92%] m-auto py-2 h-full">
           <div className="w-full h-[80px] flex items-center justify-between p-3">
@@ -198,7 +185,7 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
                 setRoute={setRoute}
                 activeItem={activeItem}
                 component={Login}
-                refetch= {refetch}
+                refetch={refetch}
               />
             )}
           </>
