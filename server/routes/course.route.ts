@@ -1,5 +1,5 @@
 import express from "express";
-import { addAnswer, addQuestion, addReview, addReviewReply, editCourse, getAdminAllCourses, getAllCourse, getCourseContent, getSingleCourse, uploadCourse } from "../controllers/course.controller";
+import { addAnswer, addQuestion, addReview, addReviewReply, editCourse, getAdminAllCourses, getAllCourse, getCourseContent, getSingleCourse, updateProgress, uploadCourse } from "../controllers/course.controller";
 import { authorizeRoles, isAutheticated } from "../middleware/auth";
 import { deleteCourse } from "../controllers/course.controller";
 import { updateAccessToken } from "../controllers/user.controller";
@@ -17,6 +17,8 @@ courseRouter.get("/get-courses/", getAllCourse);
 courseRouter.get("/get-course-content/:id",isAutheticated,getCourseContent);
 
 courseRouter.post("/add-question",isAutheticated,addQuestion);
+
+courseRouter.put("/update-progress",isAutheticated,updateProgress);
 
 courseRouter.put("/add-answer",isAutheticated,addAnswer);
 

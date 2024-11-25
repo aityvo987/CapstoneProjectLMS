@@ -85,6 +85,14 @@ export const courseApi = apiSlice.injectEndpoints({
                 credentials: "include" as const,
             }),
         }),
+        updateProgress: builder.mutation({
+            query: ({ userId, courseId, progress }) => ({
+                url: `/update-progress`,
+                method: "PUT",
+                body: {userId, courseId, progress},
+                credentials: "include" as const,
+            }),
+        }),
     })
 })
 
@@ -100,4 +108,5 @@ export const {
     useAddNewAnswerMutation,
     useAddNewReviewMutation,
     useAddNewReviewReplyMutation,
+    useUpdateProgressMutation,
 } = courseApi;

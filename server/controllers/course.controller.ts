@@ -15,6 +15,7 @@ import ejs from "ejs";
 import path from "path";
 import sendMail from "../utils/sendMail";
 import NotificationModel from "../models/notification.model";
+import userModel from "../models/user.model";
 
 
 export const uploadCourse = CatchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
@@ -400,3 +401,33 @@ export const getAdminAllCourses = CatchAsyncError(
         }
     }
 );
+
+export const updateProgress = CatchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { userId, courseId, progress } = req.body as { userId: string, courseId: string, progress: number };
+
+        // Find the user by userId
+        const user = await userModel.findById(userId);
+        if (!user) {
+            return next(new ErrorHandler("User not found", 404));
+        }
+        console.log("User data",user);
+        // Find the course in the user's courses
+        const courseIndex = user.courses.findIndex((course: any) => course._id.toString() === courseId);
+        if (courseIndex === -1) {
+            return next(new ErrorHandler("Course not found in user's courses", 404));
+        }
+
+        // Update the progress for the course
+        user.courses[courseIndex].progress = progress;
+
+        // Save the updated user data
+        await user.save();
+        await redis.set(userId, JSON.stringify(user));
+
+        res.status(200).json({ success: true, message: "Progress updated successfully" });
+
+    } catch (err: any) {
+        return next(new ErrorHandler(err.message, 500));
+    }
+});
