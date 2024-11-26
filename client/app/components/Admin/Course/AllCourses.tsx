@@ -5,12 +5,13 @@ import { Box, Button, Modal } from "@mui/material";
 import { AiOutlineDelete } from "react-icons/ai";
 import { useTheme } from "next-themes";
 import { FiEdit2 } from 'react-icons/fi';
-import { useDeleteCourseMutation, useGetAllCoursesQuery } from '@/redux/features/courses/coursesApi';
+import { useDeleteCourseMutation, useGetAllCoursesQuery, useGetLecturerAllCoursesQuery } from '@/redux/features/courses/coursesApi';
 import { format } from "timeago.js";
 import toast from 'react-hot-toast';
 import Link from 'next/link';
 import { styles } from '@/app/styles/styles';
 import Loader from '../../Loader/Loader';
+import { useSelector } from 'react-redux';
 type Props = {
 }
 
@@ -18,7 +19,11 @@ const AllCourses = (props: Props) => {
     const { theme, setTheme } = useTheme();
     const [open, setOpen] = useState(false);
     const [courseId, setCourseId] = useState('');
-    const { isLoading, data, refetch } = useGetAllCoursesQuery({}, { refetchOnMountOrArgChange: true });
+    const { user } = useSelector((state: any) => state.auth);
+    const { isLoading, data,error, refetch } = user.role === 'admin'
+    ? useGetAllCoursesQuery({}, { refetchOnMountOrArgChange: true })
+    : useGetLecturerAllCoursesQuery({}, { refetchOnMountOrArgChange: true });
+    
     const [deleteCourse, { isSuccess: deleteSuccess, error: deleteError }] = useDeleteCourseMutation({})
     const columns = [
         { field: "id", headerName: "ID", flex: 0.5 },
@@ -84,8 +89,10 @@ const AllCourses = (props: Props) => {
             })
         });
     }
-
     useEffect(() => {
+        if(isLoading){
+            console.log("isLoading",user);
+        }
         if (deleteSuccess) {
             refetch();
             toast.success("Delete course successfully")
@@ -97,7 +104,13 @@ const AllCourses = (props: Props) => {
                 toast.error(errorMessage.data.message);
             }
         }
-    }, [deleteSuccess, deleteError])
+        if (error) {
+            if ("data" in error) {
+                const errorMessage = error as any;
+                toast.error(errorMessage.data.message);
+            }
+        }
+    }, [deleteSuccess, deleteError,error])
 
     const handleDelete = async () => {
         const id = courseId;

@@ -9,11 +9,13 @@ import CoursePreview from './CoursePreview'
 import { useCreateCourseMutation } from '@/redux/features/courses/coursesApi'
 import toast from 'react-hot-toast'
 import { redirect } from 'next/navigation'
+import { useSelector } from 'react-redux'
 
 type Props = {}
 
 const CreateCourse = (props: Props) => {
     const [createCourse, { isLoading, isSuccess, error }] = useCreateCourseMutation();
+    const { user } = useSelector((state: any) => state.auth);
 
     useEffect(() => {
         if (isSuccess) {
@@ -35,6 +37,7 @@ const CreateCourse = (props: Props) => {
         description: "",
         category:"",
         price: "",
+        lecturer:"",
         estimatedPrice: "",
         tags: "",
         level: "",
@@ -81,6 +84,7 @@ const CreateCourse = (props: Props) => {
             name: courseInfo.name,
             description: courseInfo.description,
             category:courseInfo.category,
+            lecturer:user,
             price: courseInfo.price,
             estimatedPrice: courseInfo.estimatedPrice,
             tags: courseInfo.tags,

@@ -107,7 +107,7 @@ const AllUsers: FC<Props> = ({ isTeam }) => {
     ];
 
     if (isTeam) {
-        const newData = data && data.users.filter((item: any) => item.role === "admin");
+        const newData = data && data.users.filter((item: any) => item.role === "admin" ||item.role === "lecturer" );
         newData && newData.forEach((item: any) => {
             rows.push({
                 id: item._id,
@@ -131,10 +131,11 @@ const AllUsers: FC<Props> = ({ isTeam }) => {
             })
         });
     }
-
+    const handleRoleChange = (event:any) => {
+        setRole(event.target.value);
+    };
     const handleSubmit = async () => {
-        await updateUserRole({ userId, email, role })
-
+        await updateUserRole({ userId, email, role });
     };
     const handleDelete = async () => {
         const id = userId;
@@ -152,7 +153,7 @@ const AllUsers: FC<Props> = ({ isTeam }) => {
                             <div className="w-full flex justify-end">
                                 <div className={`${styles.button} !w-[230px] dark:bg-[#57c7a3] h-[35px] dark: border dark:border-[#ffffff6c]`}
                                     onClick={() => setActive(!active)}>
-                                    Add New Member
+                                    Change User Roles
                                 </div>
                             </div>
                         )}
@@ -231,7 +232,8 @@ const AllUsers: FC<Props> = ({ isTeam }) => {
                                                 placeholder="Enter email..."
                                                 className={`${styles.input}`}
                                             />
-                                            <select name="" id="" className={`${styles.input} !mt-6`}>
+                                            <select name="" id="" className={`${styles.input} !mt-6`} value={role}
+                                                onChange={handleRoleChange}>
                                                 <option className="text-black" value="admin">Admin</option>
                                                 <option className="text-black" value="user">User</option>
                                                 <option className="text-black" value="lecturer">Lecturer</option>

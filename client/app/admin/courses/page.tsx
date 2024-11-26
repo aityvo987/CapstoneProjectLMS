@@ -6,12 +6,12 @@ import AdminProtected from '@/app/hooks/adminProtected';
 import Heading from '@/app/utils/Heading';
 import React, { FC, useState } from 'react'
 import { IoMdCheckmark } from 'react-icons/io'
+import { useSelector } from 'react-redux';
 type Props = {
 }
 
 const page = (props: Props) => {
     const [open, setOpen] = useState(false);
-
     return (
         <div>
             <AdminProtected>
@@ -25,7 +25,7 @@ const page = (props: Props) => {
                     </div>
                     <div className="w-[85%]">
                         <DashboardHeader open={open} setOpen={setOpen}/>
-                        <AllCourses />
+                        <AllCourses  />
                     </div>
                 </div>
             </AdminProtected>

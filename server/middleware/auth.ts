@@ -22,13 +22,13 @@ export const isAutheticated = CatchAsyncError(async (req: Request, res: Response
 
             //access token validation
             if (!decoded) {
-                return next(new ErrorHandler("Refresh token is invalid!", 400));
+                return next(new ErrorHandler("Please login to access this page!", 400));
             }
             //check if refresh token is expired
 
             if (decoded.exp && decoded.exp <= Date.now() / 1000) {
 
-                return next(new ErrorHandler("Refresh token is invalid!", 400));
+                return next(new ErrorHandler("Please login to access this page!", 400));
 
             }
             try {
