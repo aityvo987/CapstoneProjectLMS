@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState } from "react";
 import { useAddNewAnswerMutation, useAddNewQuestionMutation, useAddNewReviewMutation, useAddNewReviewReplyMutation, useGetAllCoursesQuery, useGetUserCourseDetailQuery, useUpdateProgressMutation } from "@/redux/features/courses/coursesApi";
-import Link from "next/link";
+import avatarDefault from "../../../public/assets/avatar.png";
 import Image from "next/image";
 import Ratings from "@/app/utils/Rating";
 import { AiFillStar, AiOutlineArrowLeft, AiOutlineArrowRight, AiOutlineStar, AiOutlineUnorderedList } from "react-icons/ai";
@@ -207,9 +207,28 @@ const CourseContentMedia: FC<Props> = ({ data, id, activeVideo, setActiveVideo, 
             </div>
             <br></br>
             {activeBar === 0 && (
-                <p className="text-[18px] dark:text-white text-black whitespace-pre-line mb-3">
-                    {data[activeVideo]?.description}
-                </p>
+                <div>
+                    <p className="text-[18px] dark:text-white text-black whitespace-pre-line mb-3">
+                        {data[activeVideo]?.description}
+                    </p>
+                    <div className="p-2 mt-3">
+                        <div className="flex items-center">
+                            <Image
+                                src={dataCourse.course.lecturer?.avatar ? dataCourse.course.lecturer?.avatar.url : avatarDefault}
+                                alt="User Avatar"
+                                width={100}
+                                height={100}
+                                className={`${styles.avatar} w-[50px] h-[50px]`}
+                                style={{
+                                    cursor: "pointer",
+                                    border: "2px solid #37a39a",
+                                    borderRadius: "50%",
+                                }}
+                            />
+                            <h5 className="pl-2 text-[20px] text-black dark:text-[#fff]">{dataCourse.course.lecturer?dataCourse.course.lecturer?.name:"Anonymous Lecturer"}</h5>
+                        </div>
+                    </div>
+                </div>
             )}
 
             {

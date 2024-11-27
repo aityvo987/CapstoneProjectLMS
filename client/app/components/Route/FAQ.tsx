@@ -1,11 +1,7 @@
 "use client";
 
 import React, { FC, useEffect, useState } from "react";
-import { useGetAllCoursesQuery } from "@/redux/features/courses/coursesApi";
-import CourseCard from "../Course/CourseCard";
-import Image from "next/image";
 import { styles } from "@/app/styles/styles";
-import ReviewCard from "../Course/ReviewCard";
 import { useGetHeroDataQuery } from "@/redux/features/layout/layoutApi";
 import { HiMinus, HiPlus } from "react-icons/hi";
 
