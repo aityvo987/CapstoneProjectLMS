@@ -8,12 +8,18 @@ import AdminProtected from '../hooks/adminProtected';
 import AdminSidebar from '../components/Admin/sidebar/AdminSidebar';
 import DashboardHeader from '../components/Admin/DashboardHeader';
 import DashboardHero from '../components/Admin/DashboardHero';
+import { useSelector } from 'react-redux';
+import { redirect } from 'next/navigation';
 
 type Props = {
 }
 
 const page = (props: Props) => {
     const [open, setOpen] = useState(false);
+    const { user } = useSelector((state: any) => state.auth);
+    if (user.role==="lecturer"){
+        redirect("/admin/create-course");
+    }
     return (
         <div>
             <AdminProtected>

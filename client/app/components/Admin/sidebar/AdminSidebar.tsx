@@ -27,6 +27,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useTheme } from "next-themes";
 import { IoMdList } from "react-icons/io";
+import { styles } from "@/app/styles/styles";
 
 interface ItemProps {
   title: string;
@@ -112,6 +113,7 @@ const AdminSidebar = () => {
                   alt="User Avatar"
                   width={100}
                   height={100}
+                  className={`${styles.avatar} w-[100px] h-[100px]`}
                   style={{
                     cursor: "pointer",
                     border: "3px solid #5b6fe6",

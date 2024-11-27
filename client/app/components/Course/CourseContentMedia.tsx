@@ -216,8 +216,6 @@ const CourseContentMedia: FC<Props> = ({ data, id, activeVideo, setActiveVideo, 
                             <Image
                                 src={dataCourse.course.lecturer?.avatar ? dataCourse.course.lecturer?.avatar.url : avatarDefault}
                                 alt="User Avatar"
-                                width={100}
-                                height={100}
                                 className={`${styles.avatar} w-[50px] h-[50px]`}
                                 style={{
                                     cursor: "pointer",

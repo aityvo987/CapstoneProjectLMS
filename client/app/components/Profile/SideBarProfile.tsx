@@ -27,9 +27,8 @@ const SideBarProfile: FC<Props> = ({
       <div className="w-full ">
         {/* avatar */}
         <div
-          className={`w-full flex items-center px-3 py-4 cursor-pointer ${
-            active === 1 ? "dark:bg-slate-800 bg-white" : "bg-transparent"
-          }`}
+          className={`w-full flex items-center px-3 py-4 cursor-pointer ${active === 1 ? "dark:bg-slate-800 bg-white" : "bg-transparent"
+            }`}
           onClick={() => setActive(1)}
         >
           <Image
@@ -47,9 +46,8 @@ const SideBarProfile: FC<Props> = ({
         </div>
         {/* password */}
         <div
-          className={`w-full flex items-center px-3 py-4 cursor-pointer ${
-            active === 2 ? "dark:bg-slate-800 bg-white" : "bg-transparent"
-          }`}
+          className={`w-full flex items-center px-3 py-4 cursor-pointer ${active === 2 ? "dark:bg-slate-800 bg-white" : "bg-transparent"
+            }`}
           onClick={() => setActive(2)}
         >
           <RiLockPasswordLine size={30} fill="#fff"></RiLockPasswordLine>
@@ -60,9 +58,8 @@ const SideBarProfile: FC<Props> = ({
         </div>
         {/* Enrolled Class */}
         <div
-          className={`w-full flex items-center px-3 py-4 cursor-pointer ${
-            active === 3 ? "dark:bg-slate-800 bg-white" : "bg-transparent"
-          }`}
+          className={`w-full flex items-center px-3 py-4 cursor-pointer ${active === 3 ? "dark:bg-slate-800 bg-white" : "bg-transparent"
+            }`}
           onClick={() => setActive(3)}
         >
           <SiCoursera size={30} fill="#fff"></SiCoursera>
@@ -72,25 +69,26 @@ const SideBarProfile: FC<Props> = ({
           </h5>
         </div>
         {/* Admin dashboard */}
-        {user.role === "admin" && (
+        {(user.role === "admin" || user.role === "lecturer") && (
           <Link
-            className={`w-full flex gap-2 items-center py-3 px-4 cursor-pointer${
-              active === 6 ? "dark:bg-slate-800 bg-white" : "bg-transparent"
-            }`}
+            className={`w-full flex gap-2 items-center py-3 px-4 cursor-pointer${active === 6 ? "dark:bg-slate-800 bg-white" : "bg-transparent"
+              }`}
             href={"/admin"}
           >
             <MdOutlineAdminPanelSettings
               size={30}
               fill="#fff"
             ></MdOutlineAdminPanelSettings>
-            <h5 className="dark:text-white text-black">Admin Dashboard</h5>
+            <h5 className="dark:text-white text-black">{user.role === "admin" ? "Admin Dashboard" : "Lecturer Dashboard"}</h5>
           </Link>
+
+
         )}
+
         {/* LogOut */}
         <div
-          className={`w-full flex items-center px-3 py-4 cursor-pointer ${
-            active === 4 ? "dark:bg-slate-800 bg-white" : "bg-transparent"
-          }`}
+          className={`w-full flex items-center px-3 py-4 cursor-pointer ${active === 4 ? "dark:bg-slate-800 bg-white" : "bg-transparent"
+            }`}
           onClick={() => logOutHandler()}
         >
           <AiOutlineLogout size={30} fill="#fff"></AiOutlineLogout>
