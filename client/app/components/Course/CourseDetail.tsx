@@ -88,7 +88,7 @@ const CourseDetail = ({
             <div className="p-2 mt-3">
               <div className="flex items-center">
                 <Image
-                  src={data.lecturer.avatar ? data.lecturer.avatar.url : avatarDefault}
+                  src={data.lecturer?.avatar ? data.lecturer?.avatar?.url : avatarDefault}
                   alt="User Avatar"
                   width={100}
                   height={100}
@@ -99,7 +99,7 @@ const CourseDetail = ({
                     borderRadius: "50%",
                   }}
                 />
-                <h5 className="pl-2 text-[20px] text-black dark:text-[#fff]">{data.lecturer.name}</h5>
+                <h5 className="pl-2 text-[20px] text-black dark:text-[#fff]">{data.lecturer?data.lecturer?.name:"Anonymous Lecturer"}</h5>
               </div>
             </div>
             <br></br>
