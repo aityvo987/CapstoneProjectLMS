@@ -214,8 +214,10 @@ const CourseContentMedia: FC<Props> = ({ data, id, activeVideo, setActiveVideo, 
                     <div className="p-2 mt-3">
                         <div className="flex items-center">
                             <Image
-                                src={dataCourse.course.lecturer?.avatar ? dataCourse.course.lecturer?.avatar.url : avatarDefault}
+                                src={dataCourse?.course?.lecturer?.avatar ? dataCourse?.course?.lecturer?.avatar.url : avatarDefault}
                                 alt="User Avatar"
+                                width={50}
+                                height={50}
                                 className={`${styles.avatar} w-[50px] h-[50px]`}
                                 style={{
                                     cursor: "pointer",
@@ -223,7 +225,7 @@ const CourseContentMedia: FC<Props> = ({ data, id, activeVideo, setActiveVideo, 
                                     borderRadius: "50%",
                                 }}
                             />
-                            <h5 className="pl-2 text-[20px] text-black dark:text-[#fff]">{dataCourse.course.lecturer?dataCourse.course.lecturer?.name:"Anonymous Lecturer"}</h5>
+                            <h5 className="pl-2 text-[20px] text-black dark:text-[#fff]">{dataCourse?.course?.lecturer?dataCourse?.course?.lecturer?.name:"Anonymous Lecturer"}</h5>
                         </div>
                     </div>
                 </div>
