@@ -1,6 +1,6 @@
 'use client'
 import { useGetUserCourseContentQuery } from '@/redux/features/courses/coursesApi';
-import React, { FC, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import Loader from '../Loader/Loader';
 import Heading from '@/app/utils/Heading';
 import Header from '../Header';
@@ -19,7 +19,11 @@ const CourseUserContent = ({ id, user }: Props) => {
     const [route, setRoute] = useState("Login");
     const { data, isLoading,refetch } = useGetUserCourseContentQuery({ id },{refetchOnMountOrArgChange:true});
     const content = data?.content;
-    console.log(data)
+    const progress = user.courses.find((course: any) => course._id.toString() === id)?.progress || 0;
+    useEffect(() => {
+        setActiveVideo(progress);
+    }, []);
+
     return (
         <>
             {isLoading ? (

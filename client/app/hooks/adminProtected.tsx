@@ -8,15 +8,21 @@ interface ProtectedProps {
 }
 export default function AdminProtected({ children }: ProtectedProps) {
   const { user } = useSelector((state: any) => state.auth);
-  if (user){
-    const {data:userData,isLoading,refetch} = useLoadUserQuery(undefined,{})
-
+  console.log("useradminprotectd", user);
+  if (user) {
+    const { data: userData, isLoading, refetch } = useLoadUserQuery(undefined, {})
+    console.log("useradminprotectedaefwaf", user);
     if (userData) {
-      const isAdmin = userData?.user.role === "admin";
-      return isAdmin ? children : redirect("/");
+      const isRoleAllowed = userData.user.role === "admin" || userData.user.role === "lecturer";
+
+      if (isRoleAllowed) {
+        return children;
+      } else {
+        return redirect("/");
+      }
     }
   }
-  else{
-    return redirect("/");
+  else {
+    console.log("Missing User", user);
   }
 }

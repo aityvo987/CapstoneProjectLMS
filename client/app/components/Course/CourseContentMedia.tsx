@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState } from "react";
-import { useAddNewAnswerMutation, useAddNewQuestionMutation, useAddNewReviewMutation, useAddNewReviewReplyMutation, useGetAllCoursesQuery, useGetUserCourseDetailQuery } from "@/redux/features/courses/coursesApi";
-import Link from "next/link";
+import { useAddNewAnswerMutation, useAddNewQuestionMutation, useAddNewReviewMutation, useAddNewReviewReplyMutation, useGetAllCoursesQuery, useGetUserCourseDetailQuery, useUpdateProgressMutation } from "@/redux/features/courses/coursesApi";
+import avatarDefault from "../../../public/assets/avatar.png";
 import Image from "next/image";
 import Ratings from "@/app/utils/Rating";
 import { AiFillStar, AiOutlineArrowLeft, AiOutlineArrowRight, AiOutlineStar, AiOutlineUnorderedList } from "react-icons/ai";
@@ -30,7 +30,9 @@ const CourseContentMedia: FC<Props> = ({ data, id, activeVideo, setActiveVideo, 
     const [reviewReply, setReviewReply] = useState('');
     const [reviewId, setReviewId] = useState('');
     const [isReviewReply, setIsReviewReply] = useState(false);
+    const [progressPercentage, setProgressPercentage] = useState(0);
     const [addNewQuestion, { isSuccess, error, isLoading: questionCreateLoading }] = useAddNewQuestionMutation({});
+    const [updateProgress, { isSuccess: progressSuccess, error: progressError, isLoading: progressLoading }] = useUpdateProgressMutation({});
     const [addNewAnswer, { isSuccess: answerSuccess, error: answerError, isLoading: answerCreateLoading }] = useAddNewAnswerMutation({});
     const [addNewReview, { isSuccess: reviewSuccess, error: reviewError, isLoading: reviewCreateLoading }] = useAddNewReviewMutation({});
     const [addNewReviewReply, { isSuccess: reviewReplySuccess, error: reviewReplyError, isLoading: reviewReplyCreateLoading }] = useAddNewReviewReplyMutation({});
@@ -39,6 +41,8 @@ const CourseContentMedia: FC<Props> = ({ data, id, activeVideo, setActiveVideo, 
     const isReviewExists = dataCourse?.course.reviews?.find(
         (item: any) => item.user._id === user._id
     );
+    const totalSections = data.length;
+
     const handleQuestion = () => {
         if (question.length === 0) {
             toast.error("Question must not be empty!");
@@ -46,6 +50,15 @@ const CourseContentMedia: FC<Props> = ({ data, id, activeVideo, setActiveVideo, 
             addNewQuestion({ question, courseId: id, contentId: data[activeVideo]._id });
         }
     }
+    const refreshProgress = () => {
+        const progress = user.courses.find((course: any) => course._id.toString() === id)?.progress || 0;
+        const progressPercentage = (progress / totalSections) * 100;
+        console.log("progress: ", user.courses);
+        setProgressPercentage(progressPercentage);
+    }
+    useEffect(() => {
+        refreshProgress();
+    }, []);
 
     useEffect(() => {
         if (isSuccess) {
@@ -69,6 +82,10 @@ const CourseContentMedia: FC<Props> = ({ data, id, activeVideo, setActiveVideo, 
             courseRefetch();
             toast.success("Write review reply successfully!");
         }
+        if (progressSuccess) {
+            refreshProgress();
+            toast.success("Update Progress successfully");
+        }
         if (error) {
             if ("data" in error) {
                 const errorMessage = error as any;
@@ -77,23 +94,43 @@ const CourseContentMedia: FC<Props> = ({ data, id, activeVideo, setActiveVideo, 
         }
         if (answerError) {
             if ("data" in answerError) {
-                const errorMessage = error as any;
+                const errorMessage = answerError as any;
                 toast.error(errorMessage.data.message);
             }
         }
         if (reviewError) {
             if ("data" in reviewError) {
-                const errorMessage = error as any;
+                const errorMessage = reviewError as any;
                 toast.error(errorMessage.data.message);
             }
         }
         if (reviewReplyError) {
             if ("data" in reviewReplyError) {
-                const errorMessage = error as any;
+                const errorMessage = reviewReplyError as any;
                 toast.error(errorMessage.data.message);
             }
         }
-    }, [isSuccess, error, answerSuccess, answerError, reviewSuccess, reviewError, reviewReplySuccess, reviewReplyError])
+        if (progressError) {
+            if ("data" in progressError) {
+                const errorMessage = progressError as any;
+                toast.error(errorMessage.data.message);
+            }
+        }
+    }, [isSuccess, error, answerSuccess, answerError, reviewSuccess, reviewError, reviewReplySuccess, reviewReplyError, progressSuccess, progressError])
+
+    const handleNextLessonClick = async () => {
+        if (data && data.length - 1 !== activeVideo) {
+            setActiveVideo(activeVideo + 1);
+
+            try {
+                // Call the updateProgressMutation function
+                await updateProgress({ userId: user._id, courseId: id, progress: activeVideo + 1 });
+            } catch (error) {
+                // Handle any errors from updating the progress
+                console.error('Error updating progress:', error);
+            }
+        }
+    };
 
     const handleAnswerSubmit = () => {
         if (answer.length === 0) {
@@ -138,18 +175,23 @@ const CourseContentMedia: FC<Props> = ({ data, id, activeVideo, setActiveVideo, 
                 <div
                     className={`${styles.button} dark:text-white text-black !w-[unset] !min-h-[40px] !py-[unset] ${data.length - 1 === activeVideo && "!cursor-no-drop opacity-[.8]"
                         }`}
-                    onClick={() =>
-                        setActiveVideo(
-                            data && data.length - 1 === activeVideo
-                                ? activeVideo
-                                : activeVideo + 1
-                        )
-                    }
+                    onClick={handleNextLessonClick}
                 >
                     Next Lesson
                     <AiOutlineArrowRight className="ml-2" />
                 </div>
             </div>
+            <div className="w-full h-4 bg-gray-200 rounded mt-4">
+                <div
+                    className="h-full bg-blue-500 rounded"
+                    style={{ width: `${progressPercentage}%` }}
+                ></div>
+            </div>
+
+            {/* Display progress percentage */}
+            <p className="text-sm text-[15px] dark:text-white text-black mt-2">
+                {`Progress: ${progressPercentage.toFixed(2)}%`}
+            </p>
             <h1 className="pt-2 text-[25px] dark:text-white text-black font-[600]">{data[activeVideo].title}</h1>
             <br></br>
             <div className="w-full p-4 flex items-center justify-between bg-slate-500 bg-opacity-20 backdrop-blur shadow-[bg-slate-700) rounded shadow-inner">
@@ -165,9 +207,26 @@ const CourseContentMedia: FC<Props> = ({ data, id, activeVideo, setActiveVideo, 
             </div>
             <br></br>
             {activeBar === 0 && (
-                <p className="text-[18px] dark:text-white text-black whitespace-pre-line mb-3">
-                    {data[activeVideo]?.description}
-                </p>
+                <div>
+                    <p className="text-[18px] dark:text-white text-black whitespace-pre-line mb-3">
+                        {data[activeVideo]?.description}
+                    </p>
+                    <div className="p-2 mt-3">
+                        <div className="flex items-center">
+                            <Image
+                                src={dataCourse.course.lecturer?.avatar ? dataCourse.course.lecturer?.avatar.url : avatarDefault}
+                                alt="User Avatar"
+                                className={`${styles.avatar} w-[50px] h-[50px]`}
+                                style={{
+                                    cursor: "pointer",
+                                    border: "2px solid #37a39a",
+                                    borderRadius: "50%",
+                                }}
+                            />
+                            <h5 className="pl-2 text-[20px] text-black dark:text-[#fff]">{dataCourse.course.lecturer?dataCourse.course.lecturer?.name:"Anonymous Lecturer"}</h5>
+                        </div>
+                    </div>
+                </div>
             )}
 
             {
@@ -330,7 +389,7 @@ const CourseContentMedia: FC<Props> = ({ data, id, activeVideo, setActiveVideo, 
                                             </div>
                                         </div>
                                         {
-                                            user.role === "admin" && item.commentReplies.length === 0 &&(
+                                            user.role === "admin" && item.commentReplies.length === 0 && (
                                                 <span className={`${styles.label} !ml-10 cursor-pointer`}
                                                     onClick={() => {
                                                         setIsReviewReply(true)
@@ -343,7 +402,7 @@ const CourseContentMedia: FC<Props> = ({ data, id, activeVideo, setActiveVideo, 
                                             )
                                         }
                                         {
-                                            isReviewReply && reviewId === item._id &&(
+                                            isReviewReply && reviewId === item._id && (
                                                 <div className="w-full flex relative dark:text-white text-black">
                                                     <input
                                                         type="text"
@@ -406,7 +465,7 @@ const CourseContentMedia: FC<Props> = ({ data, id, activeVideo, setActiveVideo, 
 };
 
 
-const QuestionReply = ({ data, activeVideo, answer, setAnswer, handleAnswerSubmit, user,questionId, setQuestionId, answerCreateLoading }: any) => {
+const QuestionReply = ({ data, activeVideo, answer, setAnswer, handleAnswerSubmit, user, questionId, setQuestionId, answerCreateLoading }: any) => {
     return (
         <>
             <div className="w-full my-3">

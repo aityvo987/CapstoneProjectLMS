@@ -1,10 +1,5 @@
-import { useGetUserCourseDetailQuery } from "@/redux/features/courses/coursesApi";
+import avatarDefault from "../../../public/assets/avatar.png";
 import React, { FC, useEffect, useState } from "react";
-import Loader from "../Loader/Loader";
-import Heading from "@/app/utils/Heading";
-import Header from "../Header";
-import Footer from "../Footer";
-import { useSelector } from "react-redux";
 import Ratings from "@/app/utils/Rating";
 import { IoCheckmarkDoneOutline, IoCloseOutline } from "react-icons/io5";
 import { format } from "timeago.js";
@@ -85,6 +80,27 @@ const CourseDetail = ({
               <h5 className="text-black dark:text-white">
                 {data.purchased} Students
               </h5>
+            </div>
+            <br></br>
+            <h1 className="text-[25px] font-Poppins font-[600] text-black dark:text-white">
+              Lecturer:
+            </h1>
+            <div className="p-2 mt-3">
+              <div className="flex items-center">
+                <Image
+                  src={data.lecturer?.avatar ? data.lecturer?.avatar?.url : avatarDefault}
+                  alt="User Avatar"
+                  width={100}
+                  height={100}
+                  className={`${styles.avatar} w-[50px] h-[50px]`}
+                  style={{
+                    cursor: "pointer",
+                    border: "2px solid #37a39a",
+                    borderRadius: "50%",
+                  }}
+                />
+                <h5 className="pl-2 text-[20px] text-black dark:text-[#fff]">{data.lecturer?data.lecturer?.name:"Anonymous Lecturer"}</h5>
+              </div>
             </div>
             <br></br>
             <h1 className="text-[25px] font-Poppins font-[600] text-black dark:text-white">

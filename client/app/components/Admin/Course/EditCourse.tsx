@@ -8,7 +8,7 @@ import CourseContent from './CourseContent'
 import CoursePreview from './CoursePreview'
 import toast from 'react-hot-toast'
 import { redirect, useParams } from 'next/navigation'
-import { useEditCourseMutation, useGetAllCoursesQuery } from '@/redux/features/courses/coursesApi'
+import { useEditCourseMutation, useGetLecturerAllCoursesQuery } from '@/redux/features/courses/coursesApi'
 
 type Props = {
     id: string;
@@ -16,7 +16,7 @@ type Props = {
 
 const EditCourse: FC<Props> = ({ id }) => {
     const [editCourse, { isSuccess, error }] = useEditCourseMutation({});
-    const { isLoading, data, refetch } = useGetAllCoursesQuery({}, { refetchOnMountOrArgChange: true });
+    const { isLoading, data, refetch } = useGetLecturerAllCoursesQuery({}, { refetchOnMountOrArgChange: true });
 
     const editCourseData = data && data.courses.find((i: any) => i._id === id)
     useEffect(() => {

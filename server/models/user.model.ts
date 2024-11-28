@@ -17,7 +17,10 @@ export interface IUser extends Document {
     },
     role: string;
     isVerified: boolean;
-    courses: Array<{ courseTd: string }>;
+    courses: Array<{
+        courseId: string;
+        progress: number; // Add progress field for each course section
+    }>;
     comparePassword(password: string): Promise<boolean>;
     SignAccessToken: () => string;
     SignRefreshToken: () => string;
@@ -61,7 +64,11 @@ const userSchema: Schema<IUser> = new Schema({
     courses: [
         {
             courseId: String,
-        }
+            progress: {
+                type: Number,
+                default: 0, // Set default progress to 0
+            },
+        },
     ],
     // create 2 fields createdAt & updatedAt fields
 }, { timestamps: true });

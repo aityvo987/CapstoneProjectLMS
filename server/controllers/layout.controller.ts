@@ -68,7 +68,7 @@ export const createLayout = CatchAsyncError(async (req: Request, res: Response, 
 export const editLayout = CatchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { type } = req.body;
-        
+
         if (type === "Banner") {
             const existedBannerData: any = await LayoutModel.findOne({ type: "Banner" });
             const { image, title, subTitle } = req.body;
@@ -114,6 +114,12 @@ export const editLayout = CatchAsyncError(async (req: Request, res: Response, ne
             const existedCategoriesData = await LayoutModel.findOne({ type: "Categories" });
             const categoriesItems = await Promise.all(
                 categories.map(async (item: any) => {
+                    if (item._id) {
+                        return {
+                            title: item.title,
+                            _id: item._id,
+                        }
+                    }
                     return {
                         title: item.title,
                     };

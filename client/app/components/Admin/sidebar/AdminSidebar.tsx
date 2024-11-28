@@ -27,6 +27,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useTheme } from "next-themes";
 import { IoMdList } from "react-icons/io";
+import { styles } from "@/app/styles/styles";
 
 interface ItemProps {
   title: string;
@@ -65,9 +66,8 @@ const AdminSidebar = () => {
     <Box
       sx={{
         "& .pro-sidebar-inner": {
-          background: `${
-            theme === "dark" ? "#111C43 !important" : "#fff !important"
-          }`,
+          background: `${theme === "dark" ? "#111C43 !important" : "#fff !important"
+            }`,
         },
         "& .pro-icon-wrapper": {
           backgroundColor: "transparent !important",
@@ -113,6 +113,7 @@ const AdminSidebar = () => {
                   alt="User Avatar"
                   width={100}
                   height={100}
+                  className={`${styles.avatar} w-[100px] h-[100px]`}
                   style={{
                     cursor: "pointer",
                     border: "3px solid #5b6fe6",
@@ -144,167 +145,202 @@ const AdminSidebar = () => {
                 </IconButton>
               </Box>
               {/* Menu Items */}
-              <Box paddingLeft={isCollapsed ? undefined : "10%"}>
-                <Item
-                  title="Dashboard"
-                  to="/admin"
-                  icon={<HomeOutlinedIcon />}
-                  selected={selected}
-                  setSelected={setSelected}
-                />
-                <Typography
-                  variant="h5"
-                  className="!text-[18px] text:black dark:text-[#fff] capitalize !font-[400]"
-                  sx={{ m: "15px 0 5px 25px" }}
-                >
-                  {!isCollapsed && "Data"}
-                </Typography>
-                <Item
-                  title="Users"
-                  to="/admin/users"
-                  icon={<GroupsIcon />}
-                  selected={selected}
-                  setSelected={setSelected}
-                />
+              <div>
+                {
+                  user.role === "admin" ? (
+                    <>
+                      <Item
+                        title="Dashboard"
+                        to="/admin"
+                        icon={<HomeOutlinedIcon />}
+                        selected={selected}
+                        setSelected={setSelected}
+                      />
+                      <Typography
+                        variant="h5"
+                        className="!text-[18px] text:black dark:text-[#fff] capitalize !font-[400]"
+                        sx={{ m: "15px 0 5px 25px" }}
+                      >
+                        {!isCollapsed && "Data"}
+                      </Typography>
+                      <Item
+                        title="Users"
+                        to="/admin/users"
+                        icon={<GroupsIcon />}
+                        selected={selected}
+                        setSelected={setSelected}
+                      />
 
-                <Item
-                  title="Invoices"
-                  to="/admin/invoices"
-                  icon={<ManageHistoryIcon />}
-                  selected={selected}
-                  setSelected={setSelected}
-                />
-                <Typography
-                  variant="h5"
-                  className="!text-[18px] text:black dark:text-[#fff] capitalize !font-[400]"
-                  sx={{ m: "15px 0 5px 25px" }}
-                >
-                  {!isCollapsed && "Content"}
-                </Typography>
-                {/* Create Course */}
-                <Item
-                  title="Create course"
-                  to="/admin/create-course"
-                  icon={<VideoCallIcon />}
-                  selected={selected}
-                  setSelected={setSelected}
-                />
-                {/* Courses */}
-                <Item
-                  title="Courses"
-                  to="/admin/courses"
-                  icon={<OndemandVideoIcon />}
-                  selected={selected}
-                  setSelected={setSelected}
-                />
-                {/* Customize */}
-                <Typography
-                  variant="h5"
-                  className="!text-[18px] text:black dark:text-[#fff] capitalize !font-[400]"
-                  sx={{ m: "15px 0 5px 25px" }}
-                >
-                  {!isCollapsed && "Customize"}
-                </Typography>
-                <Item
-                  title="FAQ"
-                  to="/admin/faq"
-                  icon={<QuizIcon />}
-                  selected={selected}
-                  setSelected={setSelected}
-                />
-                <Item
-                  title="Categories"
-                  to="/admin/categories"
-                  icon={<IoMdList />}
-                  selected={selected}
-                  setSelected={setSelected}
-                />
-                <Item
-                  title="Hero"
-                  to="/admin/hero"
-                  icon={<WebIcon />}
-                  selected={selected}
-                  setSelected={setSelected}
-                />
-                {/* Analytics Section */}
-                <Typography
-                  variant="h5"
-                  className="!text-[18px] text:black dark:text-[#fff] capitalize !font-[400]"
-                  sx={{ m: "15px 0 5px 25px" }}
-                >
-                  {!isCollapsed && "Analytics"}
-                </Typography>
-                <SubMenu
-                  title="Analytics"
-                  icon={<BarChartOutlinedIcon />}
-                  placeholder={undefined}
-                  onPointerEnterCapture={undefined}
-                  onPointerLeaveCapture={undefined}
-                >
-                  <Item
-                    title="Courses"
-                    to="/admin/courses-analytics"
-                    icon={<WysiwygIcon />}
-                    selected={selected}
-                    setSelected={setSelected}
-                  />
-                  <Item
-                    title="Users"
-                    to="/admin/users-analytics"
-                    icon={<PeopleOutlinedIcon />}
-                    selected={selected}
-                    setSelected={setSelected}
-                  />
-                  <Item
-                    title="Orders"
-                    to="/admin/orders-analytics"
-                    icon={<ReceiptOutlinedIcon />}
-                    selected={selected}
-                    setSelected={setSelected}
-                  />
-                </SubMenu>
+                      <Item
+                        title="Invoices"
+                        to="/admin/invoices"
+                        icon={<ManageHistoryIcon />}
+                        selected={selected}
+                        setSelected={setSelected}
+                      />
+                      <Typography
+                        variant="h5"
+                        className="!text-[18px] text:black dark:text-[#fff] capitalize !font-[400]"
+                        sx={{ m: "15px 0 5px 25px" }}
+                      >
+                        {!isCollapsed && "Content"}
+                      </Typography>
+                      {/* Create Course */}
+                      <Item
+                        title="Create course"
+                        to="/admin/create-course"
+                        icon={<VideoCallIcon />}
+                        selected={selected}
+                        setSelected={setSelected}
+                      />
+                      {/* Courses */}
+                      <Item
+                        title="Courses"
+                        to="/admin/courses"
+                        icon={<OndemandVideoIcon />}
+                        selected={selected}
+                        setSelected={setSelected}
+                      />
+                      {/* Customize */}
+                      <Typography
+                        variant="h5"
+                        className="!text-[18px] text:black dark:text-[#fff] capitalize !font-[400]"
+                        sx={{ m: "15px 0 5px 25px" }}
+                      >
+                        {!isCollapsed && "Customize"}
+                      </Typography>
+                      <Item
+                        title="FAQ"
+                        to="/admin/faq"
+                        icon={<QuizIcon />}
+                        selected={selected}
+                        setSelected={setSelected}
+                      />
+                      <Item
+                        title="Categories"
+                        to="/admin/categories"
+                        icon={<IoMdList />}
+                        selected={selected}
+                        setSelected={setSelected}
+                      />
+                      <Item
+                        title="Hero"
+                        to="/admin/hero"
+                        icon={<WebIcon />}
+                        selected={selected}
+                        setSelected={setSelected}
+                      />
+                      {/* Analytics Section */}
+                      <Typography
+                        variant="h5"
+                        className="!text-[18px] text:black dark:text-[#fff] capitalize !font-[400]"
+                        sx={{ m: "15px 0 5px 25px" }}
+                      >
+                        {!isCollapsed && "Analytics"}
+                      </Typography>
+                      <SubMenu
+                        title="Analytics"
+                        icon={<BarChartOutlinedIcon />}
+                        placeholder={undefined}
+                        onPointerEnterCapture={undefined}
+                        onPointerLeaveCapture={undefined}
+                      >
+                        <Item
+                          title="Courses"
+                          to="/admin/courses-analytics"
+                          icon={<WysiwygIcon />}
+                          selected={selected}
+                          setSelected={setSelected}
+                        />
+                        <Item
+                          title="Users"
+                          to="/admin/users-analytics"
+                          icon={<PeopleOutlinedIcon />}
+                          selected={selected}
+                          setSelected={setSelected}
+                        />
+                        <Item
+                          title="Orders"
+                          to="/admin/orders-analytics"
+                          icon={<ReceiptOutlinedIcon />}
+                          selected={selected}
+                          setSelected={setSelected}
+                        />
+                      </SubMenu>
 
-                {/* Controller section */}
-                <Typography
-                  variant="h5"
-                  className="!text-[18px] text:black dark:text-[#fff] capitalize !font-[400]"
-                  sx={{ m: "15px 0 5px 25px" }}
-                >
-                  {!isCollapsed && "Controller"}
-                </Typography>
-                <Item
-                  title="Manage Team"
-                  to="/admin/team"
-                  icon={<GroupsIcon />}
-                  selected={selected}
-                  setSelected={setSelected}
-                />
+                      {/* Controller section */}
+                      <Typography
+                        variant="h5"
+                        className="!text-[18px] text:black dark:text-[#fff] capitalize !font-[400]"
+                        sx={{ m: "15px 0 5px 25px" }}
+                      >
+                        {!isCollapsed && "Controller"}
+                      </Typography>
+                      <Item
+                        title="Manage Team"
+                        to="/admin/team"
+                        icon={<GroupsIcon />}
+                        selected={selected}
+                        setSelected={setSelected}
+                      />
 
-                {/* Extra section */}
-                <Typography
-                  variant="h5"
-                  className="!text-[18px] text:black dark:text-[#fff] capitalize !font-[400]"
-                  sx={{ m: "15px 0 5px 25px" }}
-                >
-                  {!isCollapsed && "Extras"}
-                </Typography>
-                {/* Setting */}
-                <Item
-                  title="Settings"
-                  to="/admin/settings"
-                  icon={<SettingsIcon />}
-                  selected={selected}
-                  setSelected={setSelected}
-                />
-                {/* Logout */}
-                <Item
-                  title="Logout"
-                  to="/profile"
-                  icon={<ExitToAppIcon />}
-                  selected={selected}
-                  setSelected={setSelected}
-                />
-              </Box>
+                      {/* Extra section */}
+                      <Typography
+                        variant="h5"
+                        className="!text-[18px] text:black dark:text-[#fff] capitalize !font-[400]"
+                        sx={{ m: "15px 0 5px 25px" }}
+                      >
+                        {!isCollapsed && "Extras"}
+                      </Typography>
+                      {/* Setting */}
+                      <Item
+                        title="Settings"
+                        to="/admin/settings"
+                        icon={<SettingsIcon />}
+                        selected={selected}
+                        setSelected={setSelected}
+                      />
+                      {/* Logout */}
+                      <Item
+                        title="Logout"
+                        to="/profile"
+                        icon={<ExitToAppIcon />}
+                        selected={selected}
+                        setSelected={setSelected}
+                      />
+                    </>
+                  ) : (
+                    <>
+                      {/* Create Course */}
+                      <Item
+                        title="Create course"
+                        to="/admin/create-course"
+                        icon={<VideoCallIcon />}
+                        selected={selected}
+                        setSelected={setSelected}
+                      />
+                      {/* Courses */}
+                      <Item
+                        title="Courses"
+                        to="/admin/courses"
+                        icon={<OndemandVideoIcon />}
+                        selected={selected}
+                        setSelected={setSelected}
+                      />
+                      {/* Logout */}
+                      <Item
+                        title="Logout"
+                        to="/profile"
+                        icon={<ExitToAppIcon />}
+                        selected={selected}
+                        setSelected={setSelected}
+                      />
+                    </>
+
+                  )
+                }
+              </div>
+              
             </Box>
           )}
         </Menu>

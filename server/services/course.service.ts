@@ -19,3 +19,12 @@ export const getAllcoursesService = async (res: Response) => {
         courses,
     });
 };
+
+export const getCoursesByLecturerId = async (res:Response, lecturerId:string) => {
+    const courses = await CourseModel.find({ lecturer: lecturerId }).sort({ createdAt: -1 });
+
+    res.status(200).json({
+        success:true,
+        courses,
+    });
+};
