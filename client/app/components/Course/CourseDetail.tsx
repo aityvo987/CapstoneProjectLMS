@@ -29,11 +29,21 @@ const CourseDetail = ({
 }: Props) => {
   const { data: userData } = useLoadUserQuery(undefined, {});
   const [user, setUser] = useState<any>();
+  const [loadUser, setLoadUser] = useState(false);
   // const { user } = useSelector((state: any) => state.auth);
   const [open, setOpen] = useState(false);
+  const [isPurchased, setIsPurchased] = useState(false);
 
   useEffect(() => {
-    setUser(userData?.user);
+    if (userData) {
+      setLoadUser(true);
+      setUser(userData.user);
+  
+      // Kiểm tra và cập nhật trạng thái purchased
+      if (userData.user.courses?.find((item: any) => item._id === data._id)) {
+        setIsPurchased(true);
+      }
+    }
 
     // Kiểm tra trạng thái đăng nhập khi tải trang
     // if (!userData?.user) {
@@ -47,8 +57,8 @@ const CourseDetail = ({
     ((data?.estimatedPrice - data?.price) / data?.estimatedPrice) * 100;
   const discountPercentagePrice = discountPercentage.toFixed(0);
 
-  const isPurchased =
-    user && user?.courses?.find((item: any) => item._id === data._id);
+  // const isPurchased =
+  //   user && user?.courses?.find((item: any) => item._id === data._id);
 
 
 

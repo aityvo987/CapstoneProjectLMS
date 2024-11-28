@@ -56,6 +56,7 @@ const CheckOutForm = ({ setOpen, data, user }: Props) => {
   useEffect(() => {
     if (orderData) {
       setLoadUser(true);
+      
       socketId.emit("notification", {
         title: "New Order",
         message: `You have new order: ${data.name}`,

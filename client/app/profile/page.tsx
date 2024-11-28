@@ -1,6 +1,6 @@
 'use client'
 
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import Protected from "../hooks/useProtected";
 import Heading from "../utils/Heading";
 import Header from "../components/Header";
@@ -9,6 +9,7 @@ import { useSelector } from "react-redux";
 import Footer from "../components/Footer";
 import { useLoadUserQuery } from "@/redux/features/api/apiSlice";
 import Loader from "../components/Loader/Loader";
+import { redirect } from "next/navigation";
 
 type Props = {};
 
@@ -20,7 +21,14 @@ const page: FC<Props> = () => {
   const [route,setRoute] = useState("Login");
   const {data,isLoading,refetch} = useLoadUserQuery(undefined,{})
   const user = data?.user;
-  console.log("routeCurrent",route);
+
+  useEffect(() => {
+    if (!isLoading && !user) {
+      // Nếu không có user, chuyển hướng về dashboard
+      redirect("/");
+    }
+  }, [isLoading, user]);
+
   if (isLoading) {
     return <Loader></Loader>; // Display a loading state while fetching data
   }
