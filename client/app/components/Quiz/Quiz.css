@@ -1,0 +1,106 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+    box-sizing: border-box;
+}
+
+body {
+    background: #001e4d;
+}
+
+.app{
+    background-color: #fff;
+    width: 90%;
+    max-width: 600px;
+    margin: 100px auto 0;
+    border-radius: 10px;
+    padding:30px;
+}
+
+.app h1{
+    font-size: 25px;
+    color: #001e4d;
+    font-weight: 600px;
+    border-bottom:  1px solid #333;
+}
+
+.quiz{  
+    padding: 20px 0;
+}
+
+.img_question_contaner{
+    display: flex;
+    justify-content: center;
+    margin: 2rem 0;
+}
+
+.img_question_contaner img{
+    max-width: 100%;
+    height: auto;
+}
+
+.quiz h2{
+    font-size: 18px;
+    color: #001e4d;
+    font-weight: 600;                                                                       
+}
+
+.btn{
+    background: #fff;
+    color: #222;
+    font-weight: 600;
+    width: 100%;
+    border:1px solid #222;
+    padding: 10px;
+    margin: 10px 0;
+    text-align: left;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+/* Can not hover after user selected the answer button */
+.btn:hover:not([disabled]){
+    background: #222;
+    color: #fff;
+}
+
+.btn:disabled{
+    cursor: no-drop;
+}
+
+#next-btn{
+    background: #001e4d;
+    color:#fff;
+    font-weight: 500;
+    width:150px;
+    border:0;
+    padding:10px;
+    margin:20px auto 0;
+    border-radius: 4px;
+    cursor: pointer;
+    display: block; 
+    /* Thuộc tính display:block có thể set phần tử ra giữa  */
+}
+
+/* Correct & Incorrect classes */
+.correct{
+    background-color: #9aeabc;
+}
+
+.incorrect{
+    background-color: #ff9393;
+}
+
+/* Responsive  */
+@media only screen and (max-width:1200px){
+    .quiz h2{
+        font-size: 1rem;
+    }
+}
+
+@media only screen and (max-width:712px){
+    .quiz h2{
+        text-align: justify;
+    }
+}

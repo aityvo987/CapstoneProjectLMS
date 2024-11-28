@@ -2,7 +2,7 @@ import React, { FC, useEffect, useState } from "react";
 import SideBarProfile from "./SideBarProfile";
 import { useLogOutQuery } from "../../../redux/features/auth/authApi";
 import { signOut } from "next-auth/react";
-import { redirect } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import ProfileInfo from "./ProfileInfo";
 import ChangePassword from "./ChangePassword";
 import CourseCard from "../Course/CourseCard";
@@ -25,10 +25,11 @@ const Profile: FC<Props> = ({ user }) => {
   const [active, setActive] = useState(1);
 
   const logOutHandler = async () => {
-    signOut();
+    // const router = useRouter();
+    await signOut();
     await setLogout(true);
 
-    redirect("/"); 
+    // redirect("/"); 
     // ==> Automatically redirect to homepage thank to Protected component
   };
 
