@@ -21,7 +21,7 @@ const CourseQuizzesComp: FC<Props> = ({
     const [isCollapsed, setIsCollapsed] = useState(
         Array(courseContentData.length).fill(false)
     );
-  
+
     const handleSubmit = (e: any) => {
         e.preventDefault();
 
@@ -32,11 +32,82 @@ const CourseQuizzesComp: FC<Props> = ({
         setIsCollapsed(updatedCollapsed);
     }
 
+// Function to handle updating the essay question
+const handleEssayQuestionChange = (index:any, i:number, value:any) => {
+    const updatedData = courseContentData.map((item:any, idx:number) => {
+        if (idx === index) {
+            return {
+                ...item,
+                quizzes: {
+                    ...item.quizzes,
+                    essayQuizzes: item.quizzes.essayQuizzes.map((quiz:any, quizIdx:number) => {
+                        if (quizIdx === i) {
+                            return {
+                                ...quiz,
+                                question: value
+                            };
+                        }
+                        return quiz;
+                    })
+                }
+            };
+        }
+        return item;
+    });
+    setCourseContentData(updatedData);
+};
 
+const handleMultipleQuestionChange = (index:any, i:number, value:any) => {
+    const updatedData = courseContentData.map((item:any, idx:number) => {
+        if (idx === index) {
+            return {
+                ...item,
+                quizzes: {
+                    ...item.quizzes,
+                    multipleChoiceQuizzes: item.quizzes.multipleChoiceQuizzes.map((quiz:any, quizIdx:number) => {
+                        if (quizIdx === i) {
+                            return {
+                                ...quiz,
+                                question: value
+                            };
+                        }
+                        return quiz;
+                    })
+                }
+            };
+        }
+        return item;
+    });
+    setCourseContentData(updatedData);
+};
+// Function to handle updating an option in multiple choice quizzes
+const handleOptionChange = (index:any, i:number, o:number, value:any) => {
+    const updatedData = courseContentData.map((item:any, idx:number) => {
+        if (idx === index) {
+            return {
+                ...item,
+                quizzes: {
+                    ...item.quizzes,
+                    multipleChoiceQuizzes: item.quizzes.multipleChoiceQuizzes.map((quiz:any, quizIdx:number) => {
+                        if (quizIdx === i) {
+                            return {
+                                ...quiz,
+                                options: quiz.options.map((opt:any, optIdx:number) => (optIdx === o ? value : opt))
+                            };
+                        }
+                        return quiz;
+                    })
+                }
+            };
+        }
+        return item;
+    });
+    setCourseContentData(updatedData);
+};
 
     const handleOptions = () => {
-        if (courseContentData[courseContentData.length - 1].quizzes.multipleChoiceQuizzes[0].question!== "" ){
-            if (courseContentData[courseContentData.length - 1].quizzes.multipleChoiceQuizzes[0].options.length() === 1 ){
+        if (courseContentData[courseContentData.length - 1].quizzes.multipleChoiceQuizzes[0].question !== "") {
+            if (courseContentData[courseContentData.length - 1].quizzes.multipleChoiceQuizzes[0].options.length() < 2) {
                 toast.error("You must put at least two or more answers");
             }
         } else {
@@ -48,38 +119,63 @@ const CourseQuizzesComp: FC<Props> = ({
     const handleAddEssaysQuizzes = (index: number) => {
         const updatedData = [...courseContentData];
         const essayQuizzes = updatedData[index].quizzes.essayQuizzes;
-    
+
         // Check if the previous questions have all required input fields filled
-        const allQuestionsFilled = essayQuizzes.every((quiz: any) => quiz.question.trim() !== "");
-        
+        const allQuestionsFilled = essayQuizzes.every((quiz: any) => quiz.question !== "");
+
         if (allQuestionsFilled) {
             essayQuizzes.push({ question: "" });
             updatedData[index].quizzes.essayQuizzes = essayQuizzes;
             setCourseContentData(updatedData);
         } else {
-            // Handle the case where not all previous questions have all required input fields filled
-            console.log("Please fill all required fields in the previous questions.");
+            toast.error("Please fill your question");
         }
     }
-    
+
     const handleAddMultipleChoiceQuizzes = (index: number) => {
         const updatedData = [...courseContentData];
         const multipleChoiceQuizzes = updatedData[index].quizzes.multipleChoiceQuizzes;
-    
-        // Check if the previous questions have all required input fields filled
+
+        // Check if the previous questions have all required input fields filled and at least 2 options
         const allQuestionsFilled = multipleChoiceQuizzes.every((quiz: any) => {
-            return quiz.question.trim() !== "" && quiz.options.every((option: string) => option.trim() !== "");
+            return quiz.question.trim() !== "" && quiz.options.length >= 2 &&
+                quiz.options.every((option: string) => option.trim() !== "");
         });
-    
+
         if (allQuestionsFilled) {
-            multipleChoiceQuizzes.push({ question: "", options: ["", "", ""], correctOptionIndex: 0 });
+            multipleChoiceQuizzes.push({ question: "", options: ["", ""], correctOptionIndex: 0 });
             updatedData[index].quizzes.multipleChoiceQuizzes = multipleChoiceQuizzes;
             setCourseContentData(updatedData);
         } else {
-            // Handle the case where not all previous questions have all required input fields filled
-            console.log("Please fill all required fields in the previous questions.");
+            toast.error("Please fill your question and at least 2 options for the previous question");
         }
     }
+
+    const handleAddOption = (index: number, questionIndex: number) => {
+        const updatedData = courseContentData.map((item: any, i: number) => {
+            if (i === index) {
+                return {
+                    ...item,
+                    quizzes: {
+                        ...item.quizzes,
+                        multipleChoiceQuizzes: item.quizzes.multipleChoiceQuizzes.map((quiz: any, j: number) => {
+                            if (j === questionIndex) {
+                                return {
+                                    ...quiz,
+                                    options: [...quiz.options, ""] // Add a new empty option
+                                };
+                            }
+                            return quiz;
+                        })
+                    }
+                };
+            }
+            return item;
+        });
+
+        setCourseContentData(updatedData);
+    }
+    
     return (
         <div className="w-[80%] m-auto mt-24 p-3">
             <form onSubmit={handleSubmit}>
@@ -153,12 +249,7 @@ const CourseQuizzesComp: FC<Props> = ({
                                                             required
                                                             className={`${styles.input} my-2`}
                                                             value={essayQuizzes.title}
-                                                            onChange={(e) => {
-                                                                const updatedData = [...courseContentData];
-                                                                updatedData[index].quizzes.essayQuizzes[i] = e.target.value;
-                                                                setCourseContentData(updatedData);
-                                                            }}
-
+                                                            onChange={(e) => handleEssayQuestionChange(index, i, e.target.value)}
                                                         />
                                                     ))
                                                 }
@@ -180,29 +271,39 @@ const CourseQuizzesComp: FC<Props> = ({
                                                                 required
                                                                 className={`${styles.input} my-2`}
                                                                 value={multipleChoiceQuiz.question}
-                                                                onChange={(e) => {
-                                                                    const updatedData = [...courseContentData];
-                                                                    updatedData[index].quizzes.multipleChoiceQuizzes[i].question = e.target.value;
-                                                                    setCourseContentData(updatedData);
-                                                                }}
+                                                                onChange={(e) => handleMultipleQuestionChange(index, i, e.target.value)}
                                                             />
-                                                            {
-                                                                multipleChoiceQuiz.options?.map((option: any, o: number) => (
-                                                                    <input
-                                                                        type="text"
-                                                                        name="Option1"
-                                                                        placeholder="Option 1"
-                                                                        required
-                                                                        className={`${styles.input} my-2`}
-                                                                        value={multipleChoiceQuiz.options[0]}
-                                                                        onChange={(e) => {
-                                                                            const updatedData = [...courseContentData];
-                                                                            updatedData[index].quizzes.multipleChoiceQuizzes[i].options[o] = e.target.value;
-                                                                            setCourseContentData(updatedData);
-                                                                        }}
-                                                                    />
-                                                                ))
-                                                            }
+                                                            <div className='pl-[30px]'>
+                                                                {
+                                                                    multipleChoiceQuiz.options?.map((option: any, o: number) => (
+                                                                        <div key={o} style={{ display: 'flex', alignItems: 'center' }}>
+                                                                            <input
+                                                                                type="text"
+                                                                                name={`Option ${o}`}
+                                                                                placeholder={`Option ${o + 1}`}
+                                                                                required
+                                                                                className={`${styles.input} my-2`}
+                                                                                value={option}
+                                                                                onChange={(e) => handleOptionChange(index, i, o, e.target.value)}
+                                                                            />
+                                                                            <input
+                                                                                type="checkbox"
+                                                                                style={{ marginLeft: '10px', transform: 'scale(1.5)' }} 
+                                                                                checked={o === multipleChoiceQuiz.correctOptionIndex} 
+                                                                                onChange={() => {
+                                                                                    const updatedData = [...courseContentData];
+                                                                                    updatedData[index].quizzes.multipleChoiceQuizzes[i].correctOptionIndex = o;
+                                                                                    setCourseContentData(updatedData);
+                                                                                }}
+                                                                            />
+                                                                        </div>
+                                                                    ))
+                                                                }
+                                                                <IoIosAddCircle
+                                                                    style={{ margin: "10px 0px", cursor: "pointer", width: "30px" }}
+                                                                    onClick={() => handleAddOption(index, i)}
+                                                                />
+                                                            </div>
                                                         </div>
                                                     ))
                                                 }
@@ -210,7 +311,7 @@ const CourseQuizzesComp: FC<Props> = ({
                                                     style={{ margin: "10px 0px", cursor: "pointer", width: "30px" }}
                                                     onClick={() => handleAddMultipleChoiceQuizzes(index)}
                                                 />
-                                                <br/>
+                                                <br />
 
                                             </>
                                         )
