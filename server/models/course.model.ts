@@ -19,6 +19,15 @@ interface ILink extends Document {
     title: string;
     url: string;
 }
+interface IQuizEssay extends Document {
+    question: string;
+}
+
+interface IQuizMultipleChoice extends Document {
+    question: string;
+    options: string[];
+    correctOptionIndex: number;
+}
 
 interface ICourseData extends Document{
     title:string;
@@ -31,6 +40,10 @@ interface ICourseData extends Document{
     links:ILink[];
     suggestion:string;
     questions:IComment[];
+    quizzes: {
+        essayQuizzes: IQuizEssay[];
+        multipleChoiceQuizzes: IQuizMultipleChoice[];
+    };
 
 }
 
@@ -74,6 +87,16 @@ const commentSchema = new Schema<IComment>({
     questionReplies:[Object],
 },{timestamps:true});
 
+const quizEssaySchemma = new Schema<IQuizEssay>({
+    question:String,
+});
+
+const quizMultipleSchema = new Schema<IQuizMultipleChoice>({
+    question: String,
+    options: [String],
+    correctOptionIndex:Number,
+}); 
+
 const courseDataSchema = new Schema<ICourseData>({
     videoUrl:String, 
     videoThumbnail:Object,
@@ -85,6 +108,10 @@ const courseDataSchema = new Schema<ICourseData>({
     links:[linkSchema],
     suggestion:String,
     questions:[commentSchema],
+    quizzes: {
+        essayQuizzes: [quizEssaySchemma],
+        multipleChoiceQuizzes: [quizMultipleSchema],
+    },
 });
 
 const courseSchema = new Schema<ICourse>({

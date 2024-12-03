@@ -116,7 +116,7 @@ export const getAllCourse = CatchAsyncError(async (req: Request, res: Response, 
         //     });
         // } else {
         const courses = await CourseModel.find().select(
-            "-courseData.videoUrl -courseData.suggestion -courseData.question -courseData.links"
+            "-courseData.videoUrl -courseData.suggestion -courseData.question -courseData.links -courseData.quizzes" 
         ).select("courseData");
 
         // await redis.set("allCourses", JSON.stringify(courses));

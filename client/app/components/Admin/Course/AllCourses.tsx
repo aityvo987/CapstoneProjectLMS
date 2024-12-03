@@ -27,10 +27,10 @@ const AllCourses = (props: Props) => {
     const [deleteCourse, { isSuccess: deleteSuccess, error: deleteError }] = useDeleteCourseMutation({})
     const columns = [
         { field: "id", headerName: "ID", flex: 0.5 },
-        { field: "title", headerName: "Course Title", flex: 1 },
-        { field: "ratings", headerName: "Ratings", flex: .5 },
-        { field: "purchased", headerName: "Purchased", flex: .5 },
-        { field: "created_at", headerName: "Created At", flex: 0.5 },
+        { field: "title", headerName: "Course Title", flex: 0.8 },
+        { field: "ratings", headerName: "Ratings", flex: .4 },
+        { field: "purchased", headerName: "Purchased", flex: .4 },
+        { field: "created_at", headerName: "Created At", flex: 0.4 },
         {
             field: " ",
             headerName: "Edit",
@@ -54,6 +54,26 @@ const AllCourses = (props: Props) => {
         },
         {
             field: "  ",
+            headerName: "Edit Quizzes",
+            flex: 0.4,
+            renderCell: (params: any) => {
+                return (
+                    <>
+                        <Link href={`/admin/quizzes/${params.row.id}`}
+                        >
+                            <Button>
+                                <FiEdit2
+                                    className="dark:text-white text-black"
+                                    size={20}
+                            />
+                            </Button>
+                        </Link>
+                    </>
+                );
+            },
+        },
+        {
+            field: "   ",
             headerName: "Delete",
             flex: 0.2,
             renderCell: (params: any) => {
