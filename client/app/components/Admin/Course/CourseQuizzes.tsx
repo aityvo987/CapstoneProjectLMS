@@ -41,7 +41,9 @@ const CourseQuizzes: FC<Props> = ({ id }) => {
             setCourseInfo({
                 name: editCourseData.name,
                 description: editCourseData.description,
+                category:editCourseData.category,
                 price: editCourseData.price,
+                lecturer:editCourseData.lecturer,
                 estimatedPrice: editCourseData.estimatedPrice,
                 tags: editCourseData.tags,
                 level: editCourseData.level,
@@ -54,7 +56,9 @@ const CourseQuizzes: FC<Props> = ({ id }) => {
     const [courseInfo, setCourseInfo] = useState({
         name: "",
         description: "",
+        category: "",
         price: "",
+        lecturer: "",
         estimatedPrice: "",
         tags: "",
         level: "",
@@ -69,6 +73,7 @@ const CourseQuizzes: FC<Props> = ({ id }) => {
             title: "",
             description: "",
             videoSection: "Untitled Section",
+            videoLength: "",
             links: [
                 {
                     title: "",
@@ -85,63 +90,56 @@ const CourseQuizzes: FC<Props> = ({ id }) => {
                 multipleChoiceQuizzes: [{
                     question: "",
                     options: [
-                        {
-                            title: ""
-                        },
+                        "",
                     ],
                     correctOptionIndex: 0,
                 },
                 ],
-            }
+            },
 
         },
     ]);
-    const [courseData, setCourseData] = useState({});
-    // const handleSubmit = async () => {
-    //     const formattedBenefits = benefits.map((benefit) => ({ title: benefit.title }))
-    //     const formattedPrerequisites = prerequisites.map((prerequisite) => ({ title: prerequisite.title }))
-        
-    //     const formattedCourseContentData = courseContentData.map((courseContent) => ({
-    //         videoUrl: courseContent.videoUrl,
-    //         title: courseContent.title,
-    //         description: courseContent.description,
-    //         videoSection: courseContent.videoSection,
-    //         links: courseContent.links.map((link) => ({
-    //             title: link.title,
-    //             url: link.url,
-    //         })),
-    //         quizzes:{
-    //             essayQuizzes: courseContent.quizzes.essayQuizzes.map((eq) => ({
-    //                 question: eq.question,
-    //             })),
-    //             multipleChoiceQuizzes: courseContent.quizzes.multipleChoiceQuizzes.map((mq) => ({
-    //                 question: mq.question,
-    //                 options:mq.options,
-    //                 correctOptionIndex:mq.correctOptionIndex,
-    //             })),
-    //         },
-    //         suggestion: courseContent.suggestion,
-
-    //     }));
-    //     const data = {
-    //         name: courseInfo.name,
-    //         description: courseInfo.description,
-    //         price: courseInfo.price,
-    //         estimatedPrice: courseInfo.estimatedPrice,
-    //         tags: courseInfo.tags,
-    //         thumbnail: courseInfo.thumbnail,
-    //         level: courseInfo.level,
-    //         demoUrl: courseInfo.demoUrl,
-    //         totalVideos: courseContentData.length,
-    //         benefits: formattedBenefits,
-    //         prerequisites: formattedPrerequisites,
-    //         courseContent: formattedCourseContentData,
-    //     };
-    //     setCourseData(data);
-    // };
-    console.log("Data", courseContentData);
+    
+    
     const handleCourseEdit = async (e: any) => {
-        const data = courseData;
+        const formattedCourseContentData = courseContentData.map((courseContent) => ({
+            videoUrl: courseContent.videoUrl,
+            title: courseContent.title,
+            description: courseContent.description,
+            videoLength: courseContent.videoLength,
+            videoSection: courseContent.videoSection,
+            links: courseContent.links.map((link) => ({
+                title: link.title,
+                url: link.url,
+            })),
+            quizzes:{
+                essayQuizzes:courseContent.quizzes.essayQuizzes.map((essayQuiz) => ({
+                    question:essayQuiz.question
+                })),
+                multipleChoiceQuizzes:courseContent.quizzes.multipleChoiceQuizzes.map((multipleChoiceQuiz) => ({
+                    question:multipleChoiceQuiz.question,
+                    options:multipleChoiceQuiz.options,
+                    correctOptionIndex:multipleChoiceQuiz.correctOptionIndex,
+                })),
+            },
+            suggestion: courseContent.suggestion,
+
+        }));
+        const data = {
+            name: courseInfo.name,
+            description: courseInfo.description,
+            category: courseInfo.category,
+            lecturer: courseInfo.lecturer,
+            price: courseInfo.price,
+            estimatedPrice: courseInfo.estimatedPrice,
+            tags: courseInfo.tags,
+            thumbnail: courseInfo.thumbnail,
+            level: courseInfo.level,
+            demoUrl: courseInfo.demoUrl,
+            totalVideos: courseContentData.length,
+            courseData: formattedCourseContentData,
+        };
+        console.log("CourseData1", data);
         await editCourse({ id: editCourseData?._id, data });
     }
 

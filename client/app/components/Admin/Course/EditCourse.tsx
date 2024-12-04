@@ -40,7 +40,9 @@ const EditCourse: FC<Props> = ({ id }) => {
             setCourseInfo({
                 name: editCourseData.name,
                 description: editCourseData.description,
+                category:editCourseData.category,
                 price: editCourseData.price,
+                lecturer:editCourseData.lecturer,
                 estimatedPrice: editCourseData.estimatedPrice,
                 tags: editCourseData.tags,
                 level: editCourseData.level,
@@ -55,7 +57,9 @@ const EditCourse: FC<Props> = ({ id }) => {
     const [courseInfo, setCourseInfo] = useState({
         name: "",
         description: "",
+        category: "",
         price: "",
+        lecturer: "",
         estimatedPrice: "",
         tags: "",
         level: "",
@@ -71,6 +75,7 @@ const EditCourse: FC<Props> = ({ id }) => {
             title: "",
             description: "",
             videoSection: "Untitled Section",
+            videoLength: "",
             links: [
                 {
                     title: "",
@@ -78,6 +83,22 @@ const EditCourse: FC<Props> = ({ id }) => {
                 },
             ],
             suggestion: "",
+            quizzes: {
+                essayQuizzes: [
+                    {
+                        question: ""
+                    },
+                ],
+                multipleChoiceQuizzes: [{
+                    question: "",
+                    options: [
+                        "",
+                    ],
+                    correctOptionIndex: 0,
+                },
+                ],
+            },
+
         },
     ]);
     const [courseData, setCourseData] = useState({});
@@ -88,17 +109,21 @@ const EditCourse: FC<Props> = ({ id }) => {
             videoUrl: courseContent.videoUrl,
             title: courseContent.title,
             description: courseContent.description,
+            videoLength: courseContent.videoLength,
             videoSection: courseContent.videoSection,
             links: courseContent.links.map((link) => ({
                 title: link.title,
                 url: link.url,
             })),
             suggestion: courseContent.suggestion,
+            quizzes: courseContent.quizzes,
 
         }));
         const data = {
             name: courseInfo.name,
             description: courseInfo.description,
+            category: courseInfo.category,
+            lecturer: courseInfo.lecturer,
             price: courseInfo.price,
             estimatedPrice: courseInfo.estimatedPrice,
             tags: courseInfo.tags,
@@ -108,7 +133,7 @@ const EditCourse: FC<Props> = ({ id }) => {
             totalVideos: courseContentData.length,
             benefits: formattedBenefits,
             prerequisites: formattedPrerequisites,
-            courseContent: formattedCourseContentData,
+            courseData: formattedCourseContentData,
         };
         setCourseData(data);
     };

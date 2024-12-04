@@ -106,15 +106,7 @@ const handleOptionChange = (index:any, i:number, o:number, value:any) => {
 };
 
     const handleOptions = () => {
-        if (courseContentData[courseContentData.length - 1].quizzes.multipleChoiceQuizzes[0].question !== "") {
-            if (courseContentData[courseContentData.length - 1].quizzes.multipleChoiceQuizzes[0].options.length() < 2) {
-                toast.error("You must put at least two or more answers");
-            }
-        } else {
-            // setActive(active + 1);
-            handleCourseSubmit();
-
-        }
+        handleCourseSubmit();
     };
     const handleAddEssaysQuizzes = (index: number) => {
         const updatedData = [...courseContentData];
@@ -248,7 +240,7 @@ const handleOptionChange = (index:any, i:number, o:number, value:any) => {
                                                             placeholder="What do you understand about the video?"
                                                             required
                                                             className={`${styles.input} my-2`}
-                                                            value={essayQuizzes.title}
+                                                            value={essayQuizzes.question}
                                                             onChange={(e) => handleEssayQuestionChange(index, i, e.target.value)}
                                                         />
                                                     ))
