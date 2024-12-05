@@ -1,5 +1,5 @@
 import mongoose, { Document, Model, Schema } from "mongoose";
-import { IUser } from "./user.model";
+import { IUser, userSchema } from "./user.model";
 import { ICourseData } from "./course.model";
 
 export interface IStudentEssayAnswer extends Document {
@@ -14,7 +14,8 @@ export interface IStudentMultipleChoiceAnswer extends Document {
 
 export interface IStudentAnswer extends Document {
     user: IUser;
-    courseData: String;
+    courseId:String;
+    courseDataId: String;
     essayAnswers?: [IStudentEssayAnswer];
     multipleChoiceAnswers?: [IStudentMultipleChoiceAnswer];
 }
@@ -30,8 +31,9 @@ const studentMultipleChoiceAnswerSchema = new Schema<IStudentMultipleChoiceAnswe
 });
 
 const studentAnswerSchema = new Schema<IStudentAnswer>({
-    user: Object,
-    courseData: String,
+    user: userSchema,
+    courseId:String,
+    courseDataId: String,
     essayAnswers: [studentEssayAnswerSchema],
     multipleChoiceAnswers: [studentMultipleChoiceAnswerSchema],
 }, { timestamps: true });

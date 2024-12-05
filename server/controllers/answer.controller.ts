@@ -52,7 +52,7 @@ export const addQuizzAnswer = CatchAsyncError(async (req: Request, res: Response
         }));
 
         const newAnswer = {
-            userId: user._id,
+            user: user,
             courseId: courseId,
             courseDataId: courseDataId,
             essayAnswers: newEssayAnswers,
