@@ -34,7 +34,11 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
   const [active, setActive] = useState(false);
   const [openSidebar, setOpenSidebar] = useState(false);
   // const { user } = useSelector((state: any) => state.auth);
-  const {data:userData,isLoading,refetch} = useLoadUserQuery(undefined,{})
+  const {
+    data: userData,
+    isLoading,
+    refetch,
+  } = useLoadUserQuery(undefined, {});
   const { data } = useSession();
   const [socialAuth, { isSuccess, error }] = useSocialAuthMutation();
   const [logout, setLogout] = useState(false);
@@ -43,42 +47,41 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
   });
 
   useEffect(() => {
-   if(!isLoading){
-    console.log("UserData:",userData);
-     //check user existence
-     if (!userData) {
-      if (data) {
-        socialAuth({
-          email: data?.user?.email,
-          name: data?.user?.name,
-          avatar: data?.user?.image,
-        });
+    if (!isLoading) {
+      console.log("UserData:", userData);
+      //check user existence
+      if (!userData) {
+        if (data) {
+          socialAuth({
+            email: data?.user?.email,
+            name: data?.user?.name,
+            avatar: data?.user?.image,
+          });
+        }
       }
-      
-    }
 
-    if (data === null) {
-      //Success
-      if (!isSuccess) {
-        // setLogout(true); //log out
+      if (data === null) {
+        //Success
+        if (!isSuccess) {
+          setLogout(true); //log out
 
-        // if (logout === false) {
-        //   toast.success("Logout successfully!");
-        //   return;
+          if (logout === true) {
+            toast.success("Logout successfully!");
+            return;
+          }
+
+          // toast.success("Logout successfully!");
+        }
+        // else {
+        //   toast.success("Login successfully!");
         // }
 
-        toast.success("Logout successfully!");
-      } 
-      // else {
-      //   toast.success("Login successfully!");
-      // }
-
-      if(!isLoading && !userData){
-        setLogout(true);
+        if (!isLoading && !userData) {
+          setLogout(true);
+        }
       }
     }
-   }
-  }, [data, userData,isLoading]);
+  }, [data, userData, isLoading]);
 
   // console.log(data);
 
@@ -131,13 +134,15 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
               {userData ? (
                 <Link href={"/profile"}>
                   <Image
-                    src={userData.user.avatar ? userData.user.avatar.url : avatar}
+                    src={
+                      userData.user.avatar ? userData.user.avatar.url : avatar
+                    }
                     width={30}
                     height={30}
                     alt="avatar"
                     className={`${styles.avatar}`}
                     style={{
-                      border: activeItem == 5 ? "2px solid #37a39a" : "none"
+                      border: activeItem == 5 ? "2px solid #37a39a" : "none",
                     }}
                   ></Image>
                 </Link>
@@ -163,13 +168,15 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
               {userData ? (
                 <Link href={"/profile"}>
                   <Image
-                    src={userData.user.avatar ? userData.user.avatar.url : avatar}
+                    src={
+                      userData.user.avatar ? userData.user.avatar.url : avatar
+                    }
                     width={30}
                     height={30}
                     alt="avatar"
                     className={`${styles.avatar}w-[30px] h-[30px] rounded-full ml-[20px] cursor-pointer`}
                     style={{
-                      border: activeItem == 5 ? "2px solid #37a39a" : "none"
+                      border: activeItem == 5 ? "2px solid #37a39a" : "none",
                     }}
                   ></Image>
                 </Link>
@@ -200,7 +207,7 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
                 setRoute={setRoute}
                 activeItem={activeItem}
                 component={Login}
-                refetch= {refetch}
+                refetch={refetch}
               />
             )}
           </>
@@ -233,8 +240,8 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
             )}
           </>
         )}
-         {/* Forget-password */}
-         {route === "Forget-password" && (
+        {/* Forget-password */}
+        {route === "Forget-password" && (
           <>
             {open && (
               <CustomModal
@@ -247,8 +254,8 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
             )}
           </>
         )}
-         {/* Recovery */}
-         {route === "Recovery" && (
+        {/* Recovery */}
+        {route === "Recovery" && (
           <>
             {open && (
               <CustomModal

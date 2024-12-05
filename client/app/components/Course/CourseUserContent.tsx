@@ -48,7 +48,6 @@ const CourseUserContent = ({ id, user }: Props) => {
                                 setActiveVideo={setActiveVideo}
                                 user={user}
                                 refetch={refetch}
-                                setRoute={setRoute}
                             ></CourseContentMedia>
                         </div>
                         <div className="hidden 800px:block 800px:col-span-3">

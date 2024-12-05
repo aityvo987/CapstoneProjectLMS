@@ -60,8 +60,8 @@ export const updateNotificationStatus = CatchAsyncError(async (req: Request, res
 cron.schedule("0 0 0 * * *", //0 0 0 * * * ==> midnight every days
     async () => {
 
-        //set 30 days variable
-        const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+        //set 1days variable
+        const thirtyDaysAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
 
         //automatically delete notifications
 

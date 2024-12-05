@@ -24,6 +24,7 @@ type Props = {
 const CheckOutForm = ({ setOpen, data, user }: Props) => {
   const stripe = useStripe();
   const elements = useElements();
+  const [route,setRoute] = useState("Login");
   const [message, setMessage] = useState<any>("");
   const [createOrder, { data: orderData, error }] = useCreateOrderMutation();
   const [loadUser, setLoadUser] = useState(false);
@@ -63,6 +64,8 @@ const CheckOutForm = ({ setOpen, data, user }: Props) => {
         userId: user._id,
       });
       redirect(`/course-access/${data._id}`);
+      // setRoute(`/course-access/${data._id}`);
+
     }
 
     //Nếu có lỗi

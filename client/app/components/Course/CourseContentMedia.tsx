@@ -24,6 +24,8 @@ import toast from "react-hot-toast";
 import { format } from "timeago.js";
 import { BiMessage } from "react-icons/bi";
 import { VscVerifiedFilled } from "react-icons/vsc";
+import router, { Router } from "next/router";
+import { redirect } from "next/navigation";
 
 type Props = {
   data: any;
@@ -32,7 +34,6 @@ type Props = {
   setActiveVideo: (activeVideo: number) => void;
   user: any;
   refetch: any;
-  setRoute: (route: string) => void;
 };
 
 const CourseContentMedia: FC<Props> = ({
@@ -42,8 +43,8 @@ const CourseContentMedia: FC<Props> = ({
   setActiveVideo,
   user,
   refetch,
-  setRoute
 }) => {
+  const [route,setRoute] = useState("Login");
   const [activeBar, setActiveBar] = useState(0);
   const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState("");
@@ -211,10 +212,17 @@ const CourseContentMedia: FC<Props> = ({
         {/* Nút Go to Quiz */}
         <div
           className={`${styles.button} dark:text-white text-black !w-[unset] !min-h-[40px] !py-[unset]`}
-          onClick={() => {
-            // Chuyển hướng tới Quiz
-            setRoute("Login");
-          }}
+          onClick={
+            () => {
+              console.log('direct to quiz')
+              // Chuyển hướng tới Quiz
+              // setRoute("Quiz")
+              redirect("Quiz")
+              console.log('direct to quiz2')
+            }
+
+            // router.push("/quiz")
+          }
         >
           Go to Quiz
           <AiOutlineFileText className="ml-2" />
