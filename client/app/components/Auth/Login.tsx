@@ -135,6 +135,15 @@ const Login: FC<Props> = ({ setRoute,setOpen,refetch}) => {
             Sign up
           </span>
         </h5>
+        <h5 className="text-center pt-4 font-Poppins text-[14px] dark:text-white">
+          Forget password?{""}
+          <span
+            className="text-[#2190ff] pl-1 cursor-pointer"
+            onClick={() => setRoute("Forget-password")}
+          >
+            Click here
+          </span>
+        </h5>
       </form>
       <br />
     </div>

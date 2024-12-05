@@ -10,6 +10,14 @@ type RegistrationData = {
 
 };
 
+type RecoveryResponse = {
+    message: string,
+    tokenCode: string,  // Mã OTP được gửi tới email
+};
+
+type RecoveryData = {
+    email: string,
+};
 
 //injectEndpoints() to inject endpoints into apiSlice
 export const authApi = apiSlice.injectEndpoints({
@@ -130,6 +138,42 @@ export const authApi = apiSlice.injectEndpoints({
 
         }
         ),
+        //forget password
+        forgetPassword: builder.mutation<RegistrationResponse, RegistrationData>(
+            {
+                query: (data) => ({
+                    url: "forget-password",
+                    method: "POST",
+                    body: data,
+                    credentials: "include" as const,
+                }),
+                async onQueryStarted(arg, { queryFulfilled, dispatch }) {
+                    try {
+                        const result = await queryFulfilled;
+
+                        dispatch(
+                            userRegistration({
+                                token: result.data.activationToken,
+                            })
+                        );
+                    } catch (e: any) {
+                        console.log(e);
+                    }
+                }
+            }
+        ),
+        //recovery
+        recoveryPassword: builder.mutation({
+            query: ({ activation_token, activation_code }) => ({
+                url: "recovery-password",
+                method: "POST",
+                body: {
+                    activation_token,
+                    activation_code,
+                },
+
+            }),
+        }),
     }),
 }
 );
@@ -140,5 +184,7 @@ export const {
     useActivationMutation,
     useLoginMutation,
     useSocialAuthMutation,
-    useLogOutQuery
+    useLogOutQuery,
+    useForgetPasswordMutation,
+    useRecoveryPasswordMutation,
 } = authApi;
