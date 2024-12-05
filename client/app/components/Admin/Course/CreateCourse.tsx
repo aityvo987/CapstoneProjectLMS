@@ -29,15 +29,15 @@ const CreateCourse = (props: Props) => {
             }
         }
 
-    }, [isLoading,isSuccess,error])
+    }, [isLoading, isSuccess, error])
 
     const [active, setActive] = useState(0);
     const [courseInfo, setCourseInfo] = useState({
         name: "",
         description: "",
-        category:"",
+        category: "",
         price: "",
-        lecturer:"",
+        lecturer: "",
         estimatedPrice: "",
         tags: "",
         level: "",
@@ -53,7 +53,7 @@ const CreateCourse = (props: Props) => {
             title: "",
             description: "",
             videoSection: "Untitled Section",
-            videoLength:"",
+            videoLength: "",
             links: [
                 {
                     title: "",
@@ -61,6 +61,22 @@ const CreateCourse = (props: Props) => {
                 },
             ],
             suggestion: "",
+            quizzes: {
+                essayQuizzes: [
+                    {
+                        question: ""
+                    },
+                ],
+                multipleChoiceQuizzes: [{
+                    question: "",
+                    options: [
+                        "",
+                    ],
+                    correctOptionIndex: 0,
+                },
+                ],
+            },
+
         },
     ]);
     const [courseData, setCourseData] = useState({});
@@ -71,20 +87,21 @@ const CreateCourse = (props: Props) => {
             videoUrl: courseContent.videoUrl,
             title: courseContent.title,
             description: courseContent.description,
-            videoLength:courseContent.videoLength,
+            videoLength: courseContent.videoLength,
             videoSection: courseContent.videoSection,
             links: courseContent.links.map((link) => ({
                 title: link.title,
                 url: link.url,
             })),
             suggestion: courseContent.suggestion,
+            quizzes: courseContent.quizzes,
 
         }));
         const data = {
             name: courseInfo.name,
             description: courseInfo.description,
-            category:courseInfo.category,
-            lecturer:user,
+            category: courseInfo.category,
+            lecturer: user,
             price: courseInfo.price,
             estimatedPrice: courseInfo.estimatedPrice,
             tags: courseInfo.tags,
@@ -101,12 +118,15 @@ const CreateCourse = (props: Props) => {
     console.log(courseData);
     const handleCourseCreate = async (e: any) => {
         const data = courseData;
-        if (!isLoading){
+        if (!isLoading) {
             await createCourse(data);
         }
-        
+
 
     }
+    useEffect(() => {
+        console.log("Data", courseContentData);
+    })
 
     return (
         <div className="w-full flex min-h-screen">

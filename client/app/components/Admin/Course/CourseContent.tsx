@@ -63,6 +63,21 @@ const CourseContent: FC<Props> = ({
                 description: "",
                 videoSection: newVideoSection,
                 links: [{ title: "", url: "" }],
+                quizzes: {
+                    essayQuizzes: [
+                        {
+                            question: ""
+                        },
+                    ],
+                    multipleChoiceQuizzes: [{
+                        question: "",
+                        options: [
+                            "",
+                        ],
+                        correctOptionIndex: 0,
+                    },
+                    ],
+                },
             };
             setCourseContentData([...courseContentData, newContent]);
         }
@@ -84,6 +99,21 @@ const CourseContent: FC<Props> = ({
                 description: "",
                 videoSection: `Untitled Section ${activeSection}`,
                 links: [{ title: "", url: "" }],
+                quizzes: {
+                    essayQuizzes: [
+                        {
+                            question: ""
+                        },
+                    ],
+                    multipleChoiceQuizzes: [{
+                        question: "",
+                        options: [
+                            "",
+                        ],
+                        correctOptionIndex: 0,
+                    },
+                    ],
+                },
             };
             setCourseContentData([...courseContentData, newContent]);
         }

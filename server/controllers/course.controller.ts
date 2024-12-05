@@ -89,7 +89,7 @@ export const getSingleCourse = CatchAsyncError(async (req: Request, res: Respons
         }
         else {
             const course = await CourseModel.findById(req.params.id).select(
-                "-courseData.videoUrl -courseData.suggestion -courseData.question -courseData.links"
+                "-courseData.videoUrl -courseData.suggestion -courseData.question -courseData.links -courseData.quizzes"
             ).select("courseData");
             await redis.set(courseId, JSON.stringify(course), 'EX', 604800) //expired after 7 days
             console.log(course);
@@ -116,7 +116,7 @@ export const getAllCourse = CatchAsyncError(async (req: Request, res: Response, 
         //     });
         // } else {
         const courses = await CourseModel.find().select(
-            "-courseData.videoUrl -courseData.suggestion -courseData.question -courseData.links"
+            "-courseData.videoUrl -courseData.suggestion -courseData.question -courseData.links -courseData.quizzes" 
         ).select("courseData");
 
         // await redis.set("allCourses", JSON.stringify(courses));
@@ -131,6 +131,7 @@ export const getAllCourse = CatchAsyncError(async (req: Request, res: Response, 
         return next(new ErrorHandler(error.message, 500));
     }
 });
+
 
 export const getCourseContent = CatchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -443,3 +444,7 @@ export const updateProgress = CatchAsyncError(async (req: Request, res: Response
         return next(new ErrorHandler(err.message, 500));
     }
 });
+
+export const CheckCourseAvailability = (userCourses: any, courseId: string): boolean => {
+    return userCourses?.some((course: any) => course._id.toString() === courseId);
+};

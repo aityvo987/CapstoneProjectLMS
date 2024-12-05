@@ -1,5 +1,5 @@
 import mongoose,{Document,Model,Schema} from "mongoose";
-import { IUser } from "./user.model";
+import { IUser, userSchema } from "./user.model";
 
 export interface IComment extends Document{
     user:IUser,
@@ -19,8 +19,17 @@ interface ILink extends Document {
     title: string;
     url: string;
 }
+interface IQuizEssay extends Document {
+    question: string;
+}
 
-interface ICourseData extends Document{
+interface IQuizMultipleChoice extends Document {
+    question: string;
+    options: string[];
+    correctOptionIndex: number;
+}
+
+export interface ICourseData extends Document{
     title:string;
     description:string;
     videoUrl:string;
@@ -31,6 +40,10 @@ interface ICourseData extends Document{
     links:ILink[];
     suggestion:string;
     questions:IComment[];
+    quizzes: {
+        essayQuizzes: IQuizEssay[];
+        multipleChoiceQuizzes: IQuizMultipleChoice[];
+    };
 
 }
 
@@ -38,7 +51,7 @@ export interface ICourse extends Document {
     name: string;
     description?: string;
     category:string;
-    lecturer:object;
+    lecturer:IUser;
     price: number;
     estimatedPrice?: number;
     thumbnail: object;
@@ -74,6 +87,16 @@ const commentSchema = new Schema<IComment>({
     questionReplies:[Object],
 },{timestamps:true});
 
+const quizEssaySchemma = new Schema<IQuizEssay>({
+    question:String,
+});
+
+const quizMultipleSchema = new Schema<IQuizMultipleChoice>({
+    question: String,
+    options: [String],
+    correctOptionIndex:Number,
+}); 
+
 const courseDataSchema = new Schema<ICourseData>({
     videoUrl:String, 
     videoThumbnail:Object,
@@ -85,6 +108,10 @@ const courseDataSchema = new Schema<ICourseData>({
     links:[linkSchema],
     suggestion:String,
     questions:[commentSchema],
+    quizzes: {
+        essayQuizzes: [quizEssaySchemma],
+        multipleChoiceQuizzes: [quizMultipleSchema],
+    },
 });
 
 const courseSchema = new Schema<ICourse>({
@@ -101,7 +128,7 @@ const courseSchema = new Schema<ICourse>({
         required:true,
     },
     lecturer:{
-        type:Object,
+        type:userSchema,
         required:true,
     },
     price: {

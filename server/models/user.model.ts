@@ -26,7 +26,7 @@ export interface IUser extends Document {
     SignRefreshToken: () => string;
 };
 
-const userSchema: Schema<IUser> = new Schema({
+export const userSchema: Schema<IUser> = new Schema({
     name: {
         type: String,
         required: [true, "Please enter your name"],

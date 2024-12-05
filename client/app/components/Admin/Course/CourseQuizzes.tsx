@@ -9,12 +9,13 @@ import CoursePreview from './CoursePreview'
 import toast from 'react-hot-toast'
 import { redirect, useParams } from 'next/navigation'
 import { useEditCourseMutation, useGetLecturerAllCoursesQuery } from '@/redux/features/courses/coursesApi'
+import CourseQuizzesComp from './CourseQuizzesComp'
 
 type Props = {
     id: string;
 };
 
-const EditCourse: FC<Props> = ({ id }) => {
+const CourseQuizzes: FC<Props> = ({ id }) => {
     const [editCourse, { isSuccess, error }] = useEditCourseMutation({});
     const { isLoading, data, refetch } = useGetLecturerAllCoursesQuery({}, { refetchOnMountOrArgChange: true });
 
@@ -32,7 +33,7 @@ const EditCourse: FC<Props> = ({ id }) => {
             }
         }
 
-    }, [isLoading,isSuccess,error])
+    }, [isLoading, isSuccess, error])
 
     const [active, setActive] = useState(0);
     useEffect(() => {
@@ -49,8 +50,6 @@ const EditCourse: FC<Props> = ({ id }) => {
                 demoUrl: editCourseData.demoUrl,
                 thumbnail: editCourseData?.thumbnail?.url,
             })
-            setBenefits(editCourseData.benefits);
-            setPrerequisites(editCourseData.prerequisites);
             setCourseContentData(editCourseData.courseData);
         }
     }, [editCourseData]);
@@ -67,8 +66,7 @@ const EditCourse: FC<Props> = ({ id }) => {
         thumbnail: "",
     });
 
-    const [benefits, setBenefits] = useState([{ title: "" }])
-    const [prerequisites, setPrerequisites] = useState([{ title: "" }])
+    
     const [courseContentData, setCourseContentData] = useState([
         {
             videoUrl: "",
@@ -101,10 +99,9 @@ const EditCourse: FC<Props> = ({ id }) => {
 
         },
     ]);
-    const [courseData, setCourseData] = useState({});
-    const handleSubmit = async () => {
-        const formattedBenefits = benefits.map((benefit) => ({ title: benefit.title }))
-        const formattedPrerequisites = prerequisites.map((prerequisite) => ({ title: prerequisite.title }))
+    
+    
+    const handleCourseEdit = async (e: any) => {
         const formattedCourseContentData = courseContentData.map((courseContent) => ({
             videoUrl: courseContent.videoUrl,
             title: courseContent.title,
@@ -115,8 +112,17 @@ const EditCourse: FC<Props> = ({ id }) => {
                 title: link.title,
                 url: link.url,
             })),
+            quizzes:{
+                essayQuizzes:courseContent.quizzes.essayQuizzes.map((essayQuiz) => ({
+                    question:essayQuiz.question
+                })),
+                multipleChoiceQuizzes:courseContent.quizzes.multipleChoiceQuizzes.map((multipleChoiceQuiz) => ({
+                    question:multipleChoiceQuiz.question,
+                    options:multipleChoiceQuiz.options,
+                    correctOptionIndex:multipleChoiceQuiz.correctOptionIndex,
+                })),
+            },
             suggestion: courseContent.suggestion,
-            quizzes: courseContent.quizzes,
 
         }));
         const data = {
@@ -131,72 +137,24 @@ const EditCourse: FC<Props> = ({ id }) => {
             level: courseInfo.level,
             demoUrl: courseInfo.demoUrl,
             totalVideos: courseContentData.length,
-            benefits: formattedBenefits,
-            prerequisites: formattedPrerequisites,
             courseData: formattedCourseContentData,
         };
-        setCourseData(data);
-    };
-    console.log(courseData);
-    const handleCourseEdit = async (e: any) => {
-        const data = courseData;
-        await editCourse({id:editCourseData?._id,data});
-
-
+        console.log("CourseData1", data);
+        await editCourse({ id: editCourseData?._id, data });
     }
 
     return (
         <div className="w-full flex min-h-screen">
             <div className="w-[80%]">
-                {
-                    active === 0 && (
-                        <CourseInformation
-                            courseInfo={courseInfo}
-                            setCourseInfo={setCourseInfo}
-                            active={active}
-                            setActive={setActive}
-                        />
-                    )
-                }
-                {
-                    active === 1 && (
-                        <CourseDataComp
-                            benefits={benefits}
-                            setBenefits={setBenefits}
-                            prerequisites={prerequisites}
-                            setPrerequisites={setPrerequisites}
-                            active={active}
-                            setActive={setActive}
-                        />
-                    )
-                }
-                {
-                    active === 2 && (
-                        <CourseContent
-                            courseContentData={courseContentData}
-                            setCourseContentData={setCourseContentData}
-                            handleSubmit={handleSubmit}
-                            active={active}
-                            setActive={setActive}
-                        />
-                    )
-                }
-                {
-                    active === 3 && (
-                        <CoursePreview
-                            courseData={courseData}
-                            handleCourseCreate={handleCourseEdit}
-                            active={active}
-                            setActive={setActive}
-                            isEdit={true}
-                        />
-                    )
-                }
-            </div>
-            <div className="w-[20%] mt-[100px] h-screen fixed z-[-1] top-18 right-0">
-                <CourseOptions active={active} setActive={setActive} />
+                <CourseQuizzesComp
+                    courseContentData={courseContentData}
+                    setCourseContentData={setCourseContentData}
+                    handleSubmit={handleCourseEdit}
+                    active={active}
+                    setActive={setActive}
+                />
             </div>
         </div>
     )
 }
-export default EditCourse
+export default CourseQuizzes
