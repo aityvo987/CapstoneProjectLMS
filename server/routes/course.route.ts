@@ -2,7 +2,7 @@ import express from "express";
 import { addAnswer, addQuestion, addReview, addReviewReply, editCourse, getAdminAllCourses, getAllCourse, getCourseContent, getLecturerAllCourses, getSingleCourse, updateProgress, uploadCourse } from "../controllers/course.controller";
 import { authorizeRoles, isAutheticated } from "../middleware/auth";
 import { deleteCourse } from "../controllers/course.controller";
-import { updateAccessToken } from "../controllers/user.controller";
+import { addQuizzAnswer } from "../controllers/answer.controller";
 
 const courseRouter = express.Router();
 
@@ -33,6 +33,6 @@ courseRouter.get("/get-lecturer-courses/", isAutheticated, authorizeRoles("lectu
 
 courseRouter.delete('/delete-course/:id', isAutheticated, authorizeRoles("admin"), deleteCourse);
 
-
+courseRouter.post("/submit-quiz-answer",isAutheticated,addQuizzAnswer);
 
 export default courseRouter;

@@ -1,5 +1,5 @@
 import mongoose,{Document,Model,Schema} from "mongoose";
-import { IUser } from "./user.model";
+import { IUser, userSchema } from "./user.model";
 
 export interface IComment extends Document{
     user:IUser,
@@ -29,7 +29,7 @@ interface IQuizMultipleChoice extends Document {
     correctOptionIndex: number;
 }
 
-interface ICourseData extends Document{
+export interface ICourseData extends Document{
     title:string;
     description:string;
     videoUrl:string;
@@ -51,7 +51,7 @@ export interface ICourse extends Document {
     name: string;
     description?: string;
     category:string;
-    lecturer:object;
+    lecturer:IUser;
     price: number;
     estimatedPrice?: number;
     thumbnail: object;
@@ -128,7 +128,7 @@ const courseSchema = new Schema<ICourse>({
         required:true,
     },
     lecturer:{
-        type:Object,
+        type:userSchema,
         required:true,
     },
     price: {
