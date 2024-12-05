@@ -62,7 +62,7 @@ export const addQuizzAnswer = CatchAsyncError(async (req: Request, res: Response
         const studentAnswer = await StudentAnswerModel.create(newAnswer);
 
         await NotificationModel.create({
-            user: course?.lecturer?._id,
+            user: course?.lecturer,
             title: "New Submission",
             message: `You have a new submit answer in ${courseContent.title}`,
         });

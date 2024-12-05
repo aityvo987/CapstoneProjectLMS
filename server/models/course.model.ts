@@ -51,7 +51,7 @@ export interface ICourse extends Document {
     name: string;
     description?: string;
     category:string;
-    lecturer:IUser;
+    lecturer:object;
     price: number;
     estimatedPrice?: number;
     thumbnail: object;
@@ -128,7 +128,7 @@ const courseSchema = new Schema<ICourse>({
         required:true,
     },
     lecturer:{
-        type:userSchema,
+        type:Object,
         required:true,
     },
     price: {

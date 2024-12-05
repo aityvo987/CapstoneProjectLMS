@@ -113,6 +113,9 @@ const AllCourses = (props: Props) => {
         if(isLoading){
             console.log("isLoading",user);
         }
+        if(!isLoading){
+            console.log("emptyData",data);
+        }
         if (deleteSuccess) {
             refetch();
             toast.success("Delete course successfully")
@@ -136,9 +139,6 @@ const AllCourses = (props: Props) => {
         const id = courseId;
         await deleteCourse(id);
     };
-
-
-
     return (
         <div className="mt-[120px]">
             {
