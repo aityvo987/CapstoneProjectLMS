@@ -8,6 +8,8 @@ import CustomModal from "../utils/CustomModal";
 import Login from "../components/Auth/Login";
 import SignUp from "../components/Auth/SignUp";
 import Verification from "../components/Auth/Verification";
+import ForgetPassword from "../components/Auth/ForgetPassword";
+import Recovery from "../components/Auth/Recovery";
 import { useSelector } from "react-redux";
 import Image from "next/image";
 import avatar from "../../public/assets/avatar.png";
@@ -116,13 +118,15 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
               {userData ? (
                 <Link href={"/profile"}>
                   <Image
-                    src={userData.user.avatar ? userData.user.avatar.url : avatar}
+                    src={
+                      userData.user.avatar ? userData.user.avatar.url : avatar
+                    }
                     width={30}
                     height={30}
                     alt="avatar"
                     className={`${styles.avatar}`}
                     style={{
-                      border: activeItem == 5 ? "2px solid #37a39a" : "none"
+                      border: activeItem == 5 ? "2px solid #37a39a" : "none",
                     }}
                   ></Image>
                 </Link>
@@ -148,13 +152,15 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
               {userData ? (
                 <Link href={"/profile"}>
                   <Image
-                    src={userData.user.avatar ? userData.user.avatar.url : avatar}
+                    src={
+                      userData.user.avatar ? userData.user.avatar.url : avatar
+                    }
                     width={30}
                     height={30}
                     alt="avatar"
                     className={`${styles.avatar}w-[30px] h-[30px] rounded-full ml-[20px] cursor-pointer`}
                     style={{
-                      border: activeItem == 5 ? "2px solid #37a39a" : "none"
+                      border: activeItem == 5 ? "2px solid #37a39a" : "none",
                     }}
                   ></Image>
                 </Link>
@@ -214,6 +220,34 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
                 setRoute={setRoute}
                 activeItem={activeItem}
                 component={Verification}
+              />
+            )}
+          </>
+        )}
+        {/* Forget-password */}
+        {route === "Forget-password" && (
+          <>
+            {open && (
+              <CustomModal
+                open={open}
+                setOpen={setOpen}
+                setRoute={setRoute}
+                activeItem={activeItem}
+                component={ForgetPassword}
+              />
+            )}
+          </>
+        )}
+        {/* Recovery */}
+        {route === "Recovery" && (
+          <>
+            {open && (
+              <CustomModal
+                open={open}
+                setOpen={setOpen}
+                setRoute={setRoute}
+                activeItem={activeItem}
+                component={Recovery}
               />
             )}
           </>
