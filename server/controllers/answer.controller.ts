@@ -28,7 +28,7 @@ interface IStudentAnswer {
 
 export const addQuizzAnswer = CatchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const { courseId, courseDataId, essayAnswers, multipleAnswers }: IStudentAnswer = req.body;
+        const { courseId, courseDataId, essayAnswers }: IStudentAnswer = req.body;
         const user = req.user;
         if (!CheckCourseAvailability(user.courses, courseId)) {
             return next(new ErrorHandler("You have not paid for accessing this course", 404));
@@ -46,17 +46,11 @@ export const addQuizzAnswer = CatchAsyncError(async (req: Request, res: Response
             answer: essayAnswer.answer,
         }));
 
-        const newMultipleAnswers = multipleAnswers.map((multipleAnswer) => ({
-            questionId: multipleAnswer.questionId,
-            answer: multipleAnswer.answer,
-        }));
-
         const newAnswer = {
             user: user,
             courseId: courseId,
             courseDataId: courseDataId,
             essayAnswers: newEssayAnswers,
-            multipleChoiceAnswers: newMultipleAnswers,
         };
 
         const studentAnswer = await StudentAnswerModel.create(newAnswer);
@@ -64,7 +58,7 @@ export const addQuizzAnswer = CatchAsyncError(async (req: Request, res: Response
         await NotificationModel.create({
             user: course?.lecturer,
             title: "New Submission",
-            message: `You have a new submit answer in ${courseContent.title}`,
+            message: `You have a new submitted answer in ${courseContent.title}`,
         });
 
         res.status(200).json({

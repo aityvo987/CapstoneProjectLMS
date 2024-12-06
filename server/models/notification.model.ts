@@ -21,6 +21,10 @@ const notificationSchema=new Schema<INotification>({
         required:true,
         default:"unread"
     },
+    userId:{
+        type:String,
+        required:true
+    },
 },{timestamps:true});
 
 const NotificationModel: Model<INotification> = mongoose.model('Notification',notificationSchema);
