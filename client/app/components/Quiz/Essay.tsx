@@ -1,8 +1,8 @@
-
-'use client'
+"use client";
 
 import React, { useState } from "react";
-import { Editor } from "@tinymce/tinymce-react";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css"; // CSS của Quill
 import toast from "react-hot-toast";
 
 type Props = {};
@@ -18,25 +18,40 @@ const Essay: React.FC<Props> = () => {
 
   return (
     <div className="p-4">
-      <h1 className="text-xl font-bold mb-4">Question 1</h1>
-      <p className="mb-4">
+      <h1 className="text-xl font-bold mb-4 dark:text-white">Question 1</h1>
+      <p className="mb-4 dark:text-white">
         Write a detailed essay about the importance of sustainable development
         in modern society.
       </p>
 
       <form onSubmit={handleSubmit}>
-        {/* TinyMCE Editor */}
-        <Editor
-          apiKey="your-tinymce-api-key"
+        {/* Quill Editor */}
+        <ReactQuill
+          className="dark:bg-white"
+          theme="snow"
           value={answer}
-          init={{
-            height: 300,
-            menubar: false,
-            plugins: ["advlist", "autolink", "lists", "link", "image"],
-            toolbar:
-              "undo redo | bold italic | alignleft aligncenter alignright | bullist numlist | link image",
+          onChange={setAnswer}
+          modules={{
+            toolbar: [
+              [{ header: [1, 2, false] }],
+              ["bold", "italic", "underline", "strike"],
+              [{ list: "ordered" }, { list: "bullet" }],
+              ["link", "image"],
+              ["clean"], // Remove formatting
+            ],
           }}
-          onEditorChange={(content) => setAnswer(content)}
+          formats={[
+            "header",
+            "bold",
+            "italic",
+            "underline",
+            "strike",
+            "list",
+            "bullet",
+            "link",
+            "image",
+          ]}
+          style={{ height: "300px", overflowY: "auto" }} // Inline style cho chiều cao
         />
 
         {/* Submit Button */}

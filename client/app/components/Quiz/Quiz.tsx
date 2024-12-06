@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
 interface Answer {
   text: string;
@@ -54,15 +54,17 @@ const Quiz: React.FC<Props> = ({ questions }) => {
 
   return (
     <div className="quiz-app font-sans">
-      <h1 className="text-3xl font-bold mb-4">Quiz</h1>
-      <div className="quiz-container bg-gray-100 p-6 rounded-lg shadow-md">
+      <div className="flex justify-center">
+        <h1 className="text-3xl font-bold mb-4 dark:text-white text-[#3b82f6]">Quiz</h1>
+      </div>
+      <div className="quiz-container p-6 rounded-lg shadow-md mx-12 dark:bg-[#64748b] bg-[#3b82f6]">
         {/* Hiển thị câu hỏi */}
-        <h2 className="text-xl mb-4">{`${currentQuestionIndex + 1}. ${
+        <h2 className="text-xl mb-4 text-white">{`${currentQuestionIndex + 1}. ${
           currentQuestion.question
         }`}</h2>
 
         {/* Hiển thị hình ảnh nếu có */}
-        {currentQuestion.image && (
+        {/* {currentQuestion.image && (
           <div className="mb-4">
             <img
               src={currentQuestion.image}
@@ -70,7 +72,7 @@ const Quiz: React.FC<Props> = ({ questions }) => {
               className="w-full h-auto rounded-md"
             />
           </div>
-        )}
+        )} */}
 
         {/* Hiển thị các nút câu trả lời */}
         <div className="answers mb-4">
@@ -80,9 +82,9 @@ const Quiz: React.FC<Props> = ({ questions }) => {
               className={`w-full p-2 mb-2 text-left rounded-md border ${
                 selectedAnswer === index
                   ? answer.correct
-                    ? 'bg-green-500 text-white'
-                    : 'bg-red-500 text-white'
-                  : 'bg-white'
+                    ? "bg-green-500 text-white"
+                    : "bg-red-500 text-white"
+                  : "bg-white"
               }`}
               onClick={() => handleAnswerClick(index)}
               disabled={selectedAnswer !== null} // Chỉ cho phép chọn một câu trả lời
@@ -98,7 +100,7 @@ const Quiz: React.FC<Props> = ({ questions }) => {
             className="w-full p-2 bg-blue-500 text-white rounded-md"
             onClick={handleNextClick}
           >
-            {currentQuestionIndex < questions.length - 1 ? 'Next' : 'Restart'}
+            {currentQuestionIndex < questions.length - 1 ? "Next" : "Restart"}
           </button>
         )}
       </div>
