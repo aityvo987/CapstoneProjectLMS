@@ -30,15 +30,15 @@ const DashboardHeader: FC<Props> = ({ open, setOpen }) => {
   const [notifications, setNotifications] = useState<any>([]);
 
   // Audio setup
-  const [audio] = useState(
-    new Audio(
-      "https://res.cloudinary.com/dkpcwsg6z/video/upload/v1730618925/audio/notification_yhsrwt.mp3"
-    )
-  );
+  // const [audio] = useState(
+  //   new Audio(
+  //     "https://res.cloudinary.com/dkpcwsg6z/video/upload/v1730618925/audio/notification_yhsrwt.mp3"
+  //   )
+  // );
 
-  const playerNotificationSound = () => {
-    audio.play();
-  };
+  // const playerNotificationSound = () => {
+  //   audio.play();
+  // };
 
   useEffect(() => {
     if (data) {
@@ -51,13 +51,13 @@ const DashboardHeader: FC<Props> = ({ open, setOpen }) => {
       refetch();
     }
 
-    audio.load();
+    // audio.load();
   }, [data, isSuccess]);
 
   useEffect(() => {
     socketId.on("newNotification", (data) => {
       refetch();
-      playerNotificationSound();
+      // playerNotificationSound();
     });
   }, []);
 
