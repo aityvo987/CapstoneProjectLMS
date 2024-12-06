@@ -51,7 +51,7 @@ export interface ICourse extends Document {
     name: string;
     description?: string;
     category:string;
-    lecturer:object;
+    lecturer:IUser;
     price: number;
     estimatedPrice?: number;
     thumbnail: object;

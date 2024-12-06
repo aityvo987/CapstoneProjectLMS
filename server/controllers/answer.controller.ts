@@ -79,3 +79,60 @@ export const addQuizzAnswer = CatchAsyncError(async (req: Request, res: Response
         return next(new ErrorHandler(error.message, 500));
     }
 });
+
+export const getQuizzAnswer = CatchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { courseId, courseDataId, user }: { courseId: string, courseDataId: string, user: IUser } = req.body;
+
+        // Find and return the user's answer for the specified courseId and courseDataId
+        const answer = await StudentAnswerModel.findOne({
+            user: user,
+            courseId: courseId,
+            courseDataId: courseDataId
+        });
+
+        if (!answer) {
+            return res.status(404).json({
+                success: false,
+                message: "Answer not found for the specified user, courseId, and courseDataId."
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            answer
+        });
+    } catch (error: any) {
+        console.log("Error getting answer", error.message);
+        return next(new ErrorHandler(error.message, 500));
+    }
+});
+
+export const deleteQuizzAnswer = CatchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { courseId, courseDataId, user }: { courseId: string, courseDataId: string, user: IUser } = req.body;
+
+        // Find and delete the user's answer for the specified courseId and courseDataId
+        const deletedAnswer = await StudentAnswerModel.findOneAndDelete({
+            user:user,
+            courseId: courseId,
+            courseDataId: courseDataId
+        });
+
+        if (!deletedAnswer) {
+            return res.status(404).json({
+                success: false,
+                message: "Answer not found for the specified user, Course ID , and Course Data Id."
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            message: "Answer deleted successfully.",
+            deletedAnswer
+        });
+    } catch (error: any) {
+        console.log("Error deleting answer", error.message);
+        return next(new ErrorHandler(error.message, 500));
+    }
+});

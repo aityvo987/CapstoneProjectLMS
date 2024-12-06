@@ -108,6 +108,23 @@ export const courseApi = apiSlice.injectEndpoints({
                 credentials: "include" as const,
             }),
         }),
+
+        getEssayAnswer: builder.mutation({
+            query: ({ courseId, courseDataId, user }) => ({
+                url: "get-essay-answer",
+                method: "GET",
+                body: { courseId, courseDataId, user },
+                credentials: "include" as const,
+            }),
+        }),
+        deleteEssayAnswer: builder.mutation({
+            query: ({ courseId, courseDataId, user }) => ({
+                url: "delete-essay-answer",
+                method: "DELETE",
+                body: { courseId, courseDataId, user },
+                credentials: "include" as const,
+            }),
+        }),
     })
 })
 

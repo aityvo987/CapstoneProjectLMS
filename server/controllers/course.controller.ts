@@ -410,9 +410,10 @@ export const getAdminAllCourses = CatchAsyncError(
 
 export const getLecturerAllCourses = CatchAsyncError(
     async (req: Request, res: Response, next: NextFunction) => {
-        const lecturerId = req.user;
+        const lecturer = req.user;
         try {
-            getCoursesByLecturerId(res,lecturerId);
+            console.log("Lecturer user",lecturer);
+            getCoursesByLecturerId(res,lecturer);
         } catch (error: any) {
 
             return next(new ErrorHandler(error.message, 400));

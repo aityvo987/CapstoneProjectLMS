@@ -28,6 +28,7 @@ import Image from "next/image";
 import { useTheme } from "next-themes";
 import { IoMdList } from "react-icons/io";
 import { styles } from "@/app/styles/styles";
+import { QuestionMarkOutlined } from "@mui/icons-material";
 
 interface ItemProps {
   title: string;
@@ -324,6 +325,14 @@ const AdminSidebar = () => {
                         title="Courses"
                         to="/admin/courses"
                         icon={<OndemandVideoIcon />}
+                        selected={selected}
+                        setSelected={setSelected}
+                      />
+                      {/* Logout */}
+                      <Item
+                        title="Manage Quiz"
+                        to="/admin/manage-quizzes"
+                        icon={<QuestionMarkOutlined />}
                         selected={selected}
                         setSelected={setSelected}
                       />
