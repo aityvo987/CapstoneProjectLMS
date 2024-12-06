@@ -100,6 +100,14 @@ export const courseApi = apiSlice.injectEndpoints({
                 credentials: "include" as const,
             }),
         }),
+        submitEssayAnswer: builder.mutation({
+            query: ({ courseId, courseDataId, essayAnswers }) => ({
+                url: "submit-essay-answer",
+                method: "POST",
+                body: { courseId, courseDataId, essayAnswers },
+                credentials: "include" as const,
+            }),
+        }),
     })
 })
 
@@ -117,4 +125,5 @@ export const {
     useAddNewReviewMutation,
     useAddNewReviewReplyMutation,
     useUpdateProgressMutation,
+    useSubmitEssayAnswerMutation,
 } = courseApi;

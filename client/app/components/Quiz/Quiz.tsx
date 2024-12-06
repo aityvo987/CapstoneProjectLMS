@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 
-interface MultipleChoiceQuestion {
+interface  MultipleChoiceQuizzes{
   question: string;
   options: string[];
   correctOptionIndex: number;
 }
 
 interface Props {
-  questions: MultipleChoiceQuestion[];
+  questions: MultipleChoiceQuizzes[];
 }
 
 const Quiz: React.FC<Props> = ({ questions }) => {
@@ -17,7 +17,6 @@ const Quiz: React.FC<Props> = ({ questions }) => {
   const [showNextButton, setShowNextButton] = useState(false);
 
   const currentQuestion = questions[currentQuestionIndex];
-
   const startQuiz = () => {
     setCurrentQuestionIndex(0);
     setScore(0);
@@ -47,7 +46,7 @@ const Quiz: React.FC<Props> = ({ questions }) => {
   return (
     <div className="quiz-app font-sans">
       <div className="flex justify-center">
-        <h1 className="text-3xl font-bold mb-4 dark:text-white text-[#3b82f6]">Quiz</h1>
+        <h1 className="text-3xl font-bold mb-4 dark:text-white text-black text-[#3b82f6]">Quiz</h1>
       </div>
       <div className="quiz-container p-6 rounded-lg shadow-md mx-12 dark:bg-[#64748b] bg-[#3b82f6]">
         <h2 className="text-xl mb-4 text-white">{`${currentQuestionIndex + 1}. ${
@@ -58,7 +57,7 @@ const Quiz: React.FC<Props> = ({ questions }) => {
           {currentQuestion.options.map((option, index) => (
             <button
               key={index}
-              className={`w-full p-2 mb-2 text-left rounded-md border ${
+              className={`w-full p-2 mb-2 text-left text-black rounded-md border ${
                 selectedOptionIndex === index
                   ? index === currentQuestion.correctOptionIndex
                     ? "bg-green-500 text-white"

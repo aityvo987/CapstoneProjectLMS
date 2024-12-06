@@ -33,6 +33,6 @@ courseRouter.get("/get-lecturer-courses/", isAutheticated, authorizeRoles("lectu
 
 courseRouter.delete('/delete-course/:id', isAutheticated, authorizeRoles("admin"), deleteCourse);
 
-courseRouter.post("/submit-quiz-answer",isAutheticated,addQuizzAnswer);
+courseRouter.post("/submit-essay-answer",isAutheticated,addQuizzAnswer);
 
 export default courseRouter;

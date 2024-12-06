@@ -14,25 +14,35 @@ interface IEssayAnswer {
     questionId: string;
     answer: string;
 }
-
-interface IMultipleAnswer {
-    questionId: string;
-    answer: number;
-}
 interface IStudentAnswer {
     courseId:string;
     courseDataId:string;
     essayAnswers:IEssayAnswer[];
-    multipleAnswers:IMultipleAnswer[];
 }
 
 export const addQuizzAnswer = CatchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { courseId, courseDataId, essayAnswers }: IStudentAnswer = req.body;
+        
         const user = req.user;
         if (!CheckCourseAvailability(user.courses, courseId)) {
             return next(new ErrorHandler("You have not paid for accessing this course", 404));
         }
+        
+        // Check if the user has already submitted an answer for the given courseId and courseDataId
+        const existingAnswer = await StudentAnswerModel.findOne({
+            user:user,
+            courseId: courseId,
+            courseDataId: courseDataId
+        });
+
+        if (existingAnswer) {
+            return res.status(400).json({
+                success: false,
+                message: "You have already submitted an answer for this course section."
+            });
+        }
+
         const course = await CourseModel.findById(courseId);
         
         const courseContent = course?.courseData?.find((courseDataContent: any) => courseDataContent._id.toString() === courseDataId);
@@ -54,7 +64,6 @@ export const addQuizzAnswer = CatchAsyncError(async (req: Request, res: Response
         };
 
         const studentAnswer = await StudentAnswerModel.create(newAnswer);
-
         await NotificationModel.create({
             user: course?.lecturer,
             title: "New Submission",
@@ -66,6 +75,7 @@ export const addQuizzAnswer = CatchAsyncError(async (req: Request, res: Response
             studentAnswer,
         });
     } catch (error: any) {
+        console.log("Error Submit Answer", error.message);
         return next(new ErrorHandler(error.message, 500));
     }
 });
