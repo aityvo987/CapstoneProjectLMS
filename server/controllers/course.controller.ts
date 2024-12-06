@@ -413,7 +413,7 @@ export const getLecturerAllCourses = CatchAsyncError(
         const lecturer = req.user;
         try {
             console.log("Lecturer user",lecturer);
-            getCoursesByLecturerId(res,lecturer);
+            getCoursesByLecturerId(res,lecturer._id);
         } catch (error: any) {
 
             return next(new ErrorHandler(error.message, 400));

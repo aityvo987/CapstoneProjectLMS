@@ -1,6 +1,6 @@
 'use client'
 import AllCourses from '@/app/components/Admin/Course/AllCourses';
-import ManageQuizzes from '@/app/components/Admin/Course/ManageQuizzes';
+import ManageQuizzes from '@/app/components/Admin/Course/Quizzes/ManageQuizzes';
 import DashboardHeader from '@/app/components/Admin/DashboardHeader';
 import AdminSidebar from '@/app/components/Admin/sidebar/AdminSidebar';
 import AdminProtected from '@/app/hooks/adminProtected';

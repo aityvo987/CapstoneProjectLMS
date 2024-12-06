@@ -6,6 +6,7 @@ import AdminProtected from '@/app/hooks/adminProtected'
 import AdminSidebar from '@/app/components/Admin/sidebar/AdminSidebar'
 import DashboardHeader from '@/app/components/Admin/DashboardHeader'
 import CourseQuizzes from '@/app/components/Admin/Course/Quizzes/CourseQuizzes'
+
 type Props = {}
 
 const page = ({params}:any) => {

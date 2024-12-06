@@ -4,13 +4,13 @@ import { DataGrid } from "@mui/x-data-grid";
 import { Box, Button, Modal } from "@mui/material";
 import { AiOutlineDelete } from "react-icons/ai";
 import { useTheme } from "next-themes";
-import { FiEdit2 } from 'react-icons/fi';
+import { FiEdit2, FiPenTool } from 'react-icons/fi';
 import { useDeleteCourseMutation, useGetAllCoursesQuery, useGetLecturerAllCoursesQuery } from '@/redux/features/courses/coursesApi';
 import { format } from "timeago.js";
 import toast from 'react-hot-toast';
 import Link from 'next/link';
 import { styles } from '@/app/styles/styles';
-import Loader from '../../Loader/Loader';
+import Loader from '../../../Loader/Loader';
 import { useSelector } from 'react-redux';
 type Props = {
 }
@@ -27,9 +27,9 @@ const ManageQuizzes = (props: Props) => {
     const columns = [
         { field: "title", headerName: "Course Title", flex: 0.8 },
         {
-            field: "  ",
+            field: " ",
             headerName: "Edit Quizzes",
-            flex: 0.4,
+            flex: 0.2,
             renderCell: (params: any) => {
                 return (
                     <>
@@ -47,9 +47,30 @@ const ManageQuizzes = (props: Props) => {
             },
         },
         {
+            field: "  ",
+            headerName: "Evaluate",
+            flex: 0.2,
+            renderCell: (params: any) => {
+                return (
+                    <>
+                       <Link href={`/admin/manage-quizzes/${params.row.id}`}
+                        >
+                            <Button>
+                                <FiPenTool
+                                    className="dark:text-white text-black"
+                                    size={20}
+                            />
+                            </Button>
+                            
+                        </Link>
+                    </>
+                );
+            },
+        },
+        {
             field: "   ",
             headerName: "Delete Quizzes",
-            flex: 0.4,
+            flex: 0.2,
             renderCell: (params: any) => {
                 return (
                     <>
@@ -74,7 +95,11 @@ const ManageQuizzes = (props: Props) => {
         data && data.courses.forEach((item: any) => {
             console.log(data)
             rows.push({
+                id: item._id,
                 title: item.name,
+                ratings: item.ratings,
+                purchased: item.purchased,
+                created_at: format(item.createdAt),
             })
         });
     }
