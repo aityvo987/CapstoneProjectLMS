@@ -226,7 +226,7 @@ const handleOptionChange = (index:any, i:number, o:number, value:any) => {
                                             />
                                         </div>
                                     </div>
-                                    {
+                                    {/* {
                                         !isCollapsed[index] && (
                                             <>
                                                 <label className={`${styles.label} text-[20px]`} htmlFor="essay">
@@ -307,7 +307,7 @@ const handleOptionChange = (index:any, i:number, o:number, value:any) => {
 
                                             </>
                                         )
-                                    }
+                                    } */}
                                     <br></br>
                                 </div>
                             </>

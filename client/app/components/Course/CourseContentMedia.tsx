@@ -34,6 +34,7 @@ const CourseContentMedia: FC<Props> = ({ data, id, activeVideo, setActiveVideo, 
   const [reviewId, setReviewId] = useState('');
   const [isReviewReply, setIsReviewReply] = useState(false);
   const [progressPercentage, setProgressPercentage] = useState(0);
+  const [isValidate,setIsValidate] = useState(false);
   const [addNewQuestion, { isSuccess, error, isLoading: questionCreateLoading }] = useAddNewQuestionMutation({});
   const [updateProgress, { isSuccess: progressSuccess, error: progressError, isLoading: progressLoading }] = useUpdateProgressMutation({});
   const [addNewAnswer, { isSuccess: answerSuccess, error: answerError, isLoading: answerCreateLoading }] = useAddNewAnswerMutation({});
@@ -138,17 +139,24 @@ const CourseContentMedia: FC<Props> = ({ data, id, activeVideo, setActiveVideo, 
   ])
 
   const handleNextLessonClick = async () => {
-    if (data && data.length - 1 !== activeVideo) {
-      setActiveVideo(activeVideo + 1);
-
-      try {
-        // Call the updateProgressMutation function
-        await updateProgress({ userId: user._id, courseId: id, progress: activeVideo + 1 });
-      } catch (error) {
-        // Handle any errors from updating the progress
-        console.error('Error updating progress:', error);
+    if (isValidate){
+      if (data && data.length - 1 !== activeVideo) {
+        setActiveVideo(activeVideo + 1);
+        try {
+          // Call the updateProgressMutation function
+          await updateProgress({ userId: user._id, courseId: id, progress: activeVideo + 1 });
+        } catch (error) {
+          // Handle any errors from updating the progress
+          console.error('Error updating progress:', error);
+        }
       }
     }
+    else {
+      toast.error("You must finish the quizzes");
+    }
+
+
+    
   };
 
   const handleAnswerSubmit = () => {
@@ -490,10 +498,11 @@ const CourseContentMedia: FC<Props> = ({ data, id, activeVideo, setActiveVideo, 
             
             {
               data[activeVideo].quizzes?.multipleChoiceQuizzes[0].question !== "" && (
-                <Quiz questions={data[activeVideo].quizzes?.multipleChoiceQuizzes} />
+                <Quiz questions={data[activeVideo].quizzes?.multipleChoiceQuizzes} 
+                setIsValidate={setIsValidate}/>
               )
             }
-            {
+            {/* {
               data[activeVideo].quizzes?.essayQuizzes[0].question !== "" && (
                 <Essay essayAnswers={essayAnswers} 
                 setEssayAnswers={setEssayAnswers} 
@@ -501,7 +510,7 @@ const CourseContentMedia: FC<Props> = ({ data, id, activeVideo, setActiveVideo, 
                 handleSubmitAnswer={handleSubmitAnswer}
                 />
               )
-            }
+            } */}
           </div>
         </div>
       )}

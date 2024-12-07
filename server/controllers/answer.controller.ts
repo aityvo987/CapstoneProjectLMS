@@ -82,6 +82,33 @@ export const addQuizzAnswer = CatchAsyncError(async (req: Request, res: Response
 
 export const getQuizzAnswer = CatchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
     try {
+        const { courseId, courseDataId }: { courseId: string, courseDataId: string} = req.body;
+
+        // Find and return the user's answer for the specified courseId and courseDataId
+        const answers = await StudentAnswerModel.find({
+            courseId: courseId,
+            courseDataId: courseDataId
+        });
+
+        if (!answers) {
+            return res.status(404).json({
+                success: false,
+                message: "Answer not found for the courseId, and courseDataId."
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            answers
+        });
+    } catch (error: any) {
+        console.log("Error getting answer", error.message);
+        return next(new ErrorHandler(error.message, 500));
+    }
+});
+
+export const evaluateQuizzAnswer = CatchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
+    try {
         const { courseId, courseDataId, user }: { courseId: string, courseDataId: string, user: IUser } = req.body;
 
         // Find and return the user's answer for the specified courseId and courseDataId

@@ -46,27 +46,27 @@ const ManageQuizzes = (props: Props) => {
                 );
             },
         },
-        {
-            field: "  ",
-            headerName: "Evaluate",
-            flex: 0.2,
-            renderCell: (params: any) => {
-                return (
-                    <>
-                       <Link href={`/admin/manage-quizzes/${params.row.id}`}
-                        >
-                            <Button>
-                                <FiPenTool
-                                    className="dark:text-white text-black"
-                                    size={20}
-                            />
-                            </Button>
+        // {
+        //     field: "  ",
+        //     headerName: "Evaluate",
+        //     flex: 0.2,
+        //     renderCell: (params: any) => {
+        //         return (
+        //             <>
+        //                <Link href={`/admin/manage-quizzes/${params.row.id}`}
+        //                 >
+        //                     <Button>
+        //                         <FiPenTool
+        //                             className="dark:text-white text-black"
+        //                             size={20}
+        //                     />
+        //                     </Button>
                             
-                        </Link>
-                    </>
-                );
-            },
-        },
+        //                 </Link>
+        //             </>
+        //         );
+        //     },
+        // },
         {
             field: "   ",
             headerName: "Delete Quizzes",
@@ -195,7 +195,7 @@ const ManageQuizzes = (props: Props) => {
                                 >
                                     <Box className="absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 w-[450px] bg-white dark:bg-slate-900 rounded-[8px] shadow p-4 outline-none">
                                         <h1 className={`${styles.title}`}>
-                                            Are you sure you want to delete this course?
+                                            Are you sure you want to delete this question?
                                         </h1>
                                         <div className="flex w-full items-center justify-between mb-6 mt-4">
                                             <div className={`${styles.button} !w-[120px] h-[30px] bg-[#57c7a3]`}
