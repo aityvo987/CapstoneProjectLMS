@@ -32,8 +32,9 @@ type Props = {
   route: string;
   setRoute: (route: string) => void;
   changedCartItems?: boolean;
+  setChangedCartItems?:any;
 };
-const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute,changedCartItems  }) => {
+const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute,changedCartItems, setChangedCartItems  }) => {
   const [cart, setCart] = useState([]);
   const [showCart, setShowCart] = useState(false);
   const [active, setActive] = useState(false);
@@ -80,12 +81,11 @@ const [deleteFromCart, { isSuccess: deleteCartSuccess, error: deleteCartError }]
         }
       }
       if (dataCart) {
-        
         setCart(dataCart.cartItems);
-        cartRefetch();
       }
       if (changedCartItems){
         cartRefetch();
+        setChangedCartItems(false);
       }
       if (addCartSuccess) {
         cartRefetch();

@@ -21,7 +21,7 @@ const CourseDetailPage = ({ id }: Props) => {
   const [open, setOpen] = useState(false);
   const [route, setRoute] = useState("Login");
   const { data, isLoading } = useGetUserCourseDetailQuery({ id });
-  const [changedCartItems,setchangedCartItems]= useState(false);
+  const [changedCartItems,setChangedCartItems]= useState(false);
   const { data: config } = useGetStripePublishablekeyQuery({});
   const [createPaymentIntent, { data: paymentIntentData }] =
     useCreatePaymentIntentMutation();
@@ -67,6 +67,7 @@ const CourseDetailPage = ({ id }: Props) => {
             setOpen={setOpen}
             activeItem={1}
             changedCartItems={changedCartItems}
+            setChangedCartItems={setChangedCartItems}
           />
           {stripePromise && (
             <CourseDetail
@@ -77,7 +78,7 @@ const CourseDetailPage = ({ id }: Props) => {
                 /* logic chuyển hướng hoặc cập nhật route */
               }}
               setOpen={setOpen}
-              setChangedCartItems={setchangedCartItems}
+              setChangedCartItems={setChangedCartItems}
             />
           )}
 
