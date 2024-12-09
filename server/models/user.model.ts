@@ -7,6 +7,22 @@ import jwt from "jsonwebtoken";
 //RegExp-REgular Expression(Biểu thức chính quy):ktra định dạng email
 const emailRegexPattern: RegExp = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
 
+
+export interface CartItem extends Document {
+    courseId: string;
+    name: string;
+    thumbnail:object;
+    price: number;
+    estimatedPrice?: number;
+}
+const cartSchema: Schema<CartItem> = new Schema({
+    courseId: String,
+    name: String,
+    thumbnail:Object,
+    price: Number,
+    estimatedPrice: Number,
+}, {});
+
 export interface IUser extends Document {
     name: string;
     email: string;
@@ -21,6 +37,7 @@ export interface IUser extends Document {
         courseId: string;
         progress: number; // Add progress field for each course section
     }>;
+    cart:CartItem[];
     comparePassword(password: string): Promise<boolean>;
     SignAccessToken: () => string;
     SignRefreshToken: () => string;
@@ -70,6 +87,7 @@ export const userSchema: Schema<IUser> = new Schema({
             },
         },
     ],
+    cart:[cartSchema],
     // create 2 fields createdAt & updatedAt fields
 }, { timestamps: true });
 

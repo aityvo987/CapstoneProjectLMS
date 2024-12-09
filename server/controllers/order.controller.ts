@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { CatchAsyncError } from "../middleware/catchAsyncErrors";
 import ErrorHandler from "../utils/ErrorHandler";
 import OrderModel, { IOrder } from "../models/order.model";
-import userModel from "../models/user.model";
+import userModel, { CartItem } from "../models/user.model";
 import CourseModel, { ICourse } from "../models/course.model";
 import path from "path";
 import ejs from "ejs";
@@ -166,3 +166,147 @@ export const newPayment = CatchAsyncError(async (req: Request, res: Response, ne
         return next(new ErrorHandler(err.message, 500));
     }
 });
+
+
+export const addToCartUser = async (req: Request, res: Response) => {
+    try {
+        const { courseId, name, thumbnail, price, estimatedPrice } = req.body;
+        const user = await userModel.findById(req.user._id);
+
+        if (user) {
+            const existingCartItem = user.cart.find((item) => item.courseId === courseId);
+
+            if (existingCartItem) {
+                return res.status(400).json({ message: 'The course was already in the cart' });
+            }
+
+            const newCartItem: any = {
+                courseId: courseId,
+                name: name,
+                thumbnail: thumbnail,
+                price: price,
+                estimatedPrice: estimatedPrice
+            };
+
+            user.cart.push(newCartItem);
+
+            await user.save();
+            await redis.set(req.user._id, JSON.stringify(user));
+
+            return res.status(200).json({ message: 'Cart item added successfully to user cart', cartItems: user.cart });
+        } else {
+            return res.status(404).json({ error: 'User not found' });
+        }
+    } catch (error) {
+        return res.status(500).json({ error: 'Internal server error' });
+    }
+};
+
+
+export const fetchCartUser = async (req: Request, res: Response) => {
+    try {
+        const user = await userModel.findById(req.user._id);
+
+        if (user) {
+            return res.status(200).json({ cartItems: user.cart });
+        } else {
+            return res.status(404).json({ error: 'User not found' });
+        }
+    } catch (error) {
+        return res.status(500).json({ error: 'Internal server error' });
+    }
+};
+
+export const deleteCartItemUser = async (req: Request, res: Response) => {
+    try {
+        const { id } = req.params;
+        const user = await userModel.findById(req.user._id);
+        if (!id){
+            return res.status(404).json({ message: 'Course not found' });
+        }
+        if (user) {
+            user.cart = user.cart.filter((item: CartItem) => item.courseId.toString() !== id);
+
+            await user.save();
+            await redis.set(req.user._id, JSON.stringify(user));
+
+            return res.status(200).json({ message: 'Cart item deleted successfully', cartItems: user.cart });
+        } else {
+            return res.status(404).json({ message: 'User not found' });
+        }
+    } catch (error) {
+        return res.status(500).json({ error: 'Internal server error' });
+    }
+};
+
+export const addToCartGuest = async (req: Request, res: Response) => {
+    try {
+        const { courseId, name, thumbnail, price, estimatedPrice } = req.body;
+        let cartItems: CartItem[] = [];
+
+        // Retrieve existing cart items from the cookie
+        if (req.cookies.cart_items) {
+            cartItems = JSON.parse(req.cookies.cart_items);
+        }
+        const existingCartItem = cartItems.find((item) => item.courseId === courseId);
+
+        if (existingCartItem) {
+            return res.status(400).json({ message: 'The course was already in the cart' });
+        }
+
+        const newCartItem: any = {
+            courseId: courseId,
+            name: name,
+            thumbnail: thumbnail,
+            price: price,
+            estimatedPrice: estimatedPrice
+        };
+
+        cartItems.push(newCartItem);
+
+        // Save the updated cart items into the cookie
+        res.cookie("cart_items", JSON.stringify(cartItems), { /* Add your cookie options here */ });
+
+        return res.status(200).json({ message: 'Cart item added successfully to cookie', cartItems: cartItems });
+    
+    } catch (error) {
+        return res.status(500).json({ error: 'Internal server error' });
+    }
+};
+
+export const fetchCartGuest = async (req: Request, res: Response) => {
+    try {
+        let cartItems = [];
+        if (req.cookies.cart_items) {
+            cartItems = JSON.parse(req.cookies.cart_items);
+        }
+        return res.status(200).json({ cartItems: cartItems });
+    } catch (error) {
+        return res.status(500).json({ error: 'Internal server error' });
+    }
+};
+
+export const deleteCartItemGuest = async (req: Request, res: Response) => {
+    try {
+        const { id } = req.params;
+        let cartItems: CartItem[] = [];
+
+        // Retrieve cart items from the cookie
+        if (req.cookies.cart_items) {
+            cartItems = JSON.parse(req.cookies.cart_items);
+
+            // Filter out the item to be deleted from the cart
+            console.log("DataCart",id);
+            cartItems = cartItems.filter((item: CartItem) => item.courseId.toString() !== id);
+
+            // Update the cookie with the modified cart items
+            res.cookie("cart_items", JSON.stringify(cartItems), { /* Add your cookie options here */ });
+
+            return res.status(200).json({ message: 'Cart item deleted successfully', cartItems: cartItems });
+        } else {
+            return res.status(404).json({ error: 'Cart is empty' });
+        }
+    } catch (error) {
+        return res.status(500).json({ error: 'Internal server error' });
+    }
+};

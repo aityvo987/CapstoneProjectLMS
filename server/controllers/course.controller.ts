@@ -77,11 +77,11 @@ export const getSingleCourse = CatchAsyncError(async (req: Request, res: Respons
     try {
 
         const courseId = req.params.id;
-        console.log("courseid",courseId);
+        
         const isCacheExists = await redis.get(courseId);
         if (isCacheExists) {
             const course = JSON.parse(isCacheExists)
-            console.log(course);
+           
             res.status(200).json({
                 success: true,
                 course,
@@ -92,7 +92,7 @@ export const getSingleCourse = CatchAsyncError(async (req: Request, res: Respons
                 "-courseData.videoUrl -courseData.suggestion -courseData.question -courseData.links -courseData.quizzes"
             ).select("courseData");
             await redis.set(courseId, JSON.stringify(course), 'EX', 604800) //expired after 7 days
-            console.log(course);
+         
             res.status(200).json({
                 success: true,
                 course,
@@ -253,7 +253,7 @@ export const addAnswer = CatchAsyncError(async (req: Request, res: Response, nex
             }
             const html = await ejs.renderFile(path.join(__dirname, "../mails/question-reply.ejs"), data);
             try {
-                console.log(question.user.email);
+            
                 await sendMail({
                     email: question.user.email,
                     subject: "Question Reply",
@@ -412,7 +412,7 @@ export const getLecturerAllCourses = CatchAsyncError(
     async (req: Request, res: Response, next: NextFunction) => {
         const lecturer = req.user;
         try {
-            console.log("Lecturer user",lecturer);
+           
             getCoursesByLecturerId(res,lecturer._id);
         } catch (error: any) {
 
@@ -430,7 +430,7 @@ export const updateProgress = CatchAsyncError(async (req: Request, res: Response
         if (!user) {
             return next(new ErrorHandler("User not found", 404));
         }
-        console.log("User data",user);
+     
         // Find the course in the user's courses
         const courseIndex = user.courses.findIndex((course: any) => course._id.toString() === courseId);
         if (courseIndex === -1) {

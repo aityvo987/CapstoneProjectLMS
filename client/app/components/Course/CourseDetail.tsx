@@ -11,6 +11,8 @@ import { Elements } from "@stripe/react-stripe-js";
 import CheckOutForm from "../Payment/CheckOutForm";
 import { useLoadUserQuery } from "@/redux/features/api/apiSlice";
 import Image from "next/image";
+import { useAddToCartMutation, useAddToUserCartMutation } from "@/redux/features/orders/ordersApi";
+import toast from "react-hot-toast";
 
 type Props = {
   data: any;
@@ -18,6 +20,7 @@ type Props = {
   clientSecret: string;
   setRoute: any;
   setOpen: any;
+  setChangedCartItems?:any;
 };
 
 const CourseDetail = ({
@@ -25,7 +28,7 @@ const CourseDetail = ({
   stripePromise,
   clientSecret,
   setRoute,
-  setOpen: openAuthModal,
+  setOpen: openAuthModal,setChangedCartItems
 }: Props) => {
   const { data: userData } = useLoadUserQuery(undefined, {});
   const [user, setUser] = useState<any>();
@@ -33,25 +36,42 @@ const CourseDetail = ({
   // const { user } = useSelector((state: any) => state.auth);
   const [open, setOpen] = useState(false);
   const [isPurchased, setIsPurchased] = useState(false);
+  const [isAddedToCart, setIsAddedToCart] = useState(false);
+  const [addToCart, { isSuccess: addCartSuccess, error: addCartError }] = userData === undefined
+    ? useAddToCartMutation({})
+    : useAddToUserCartMutation({});
 
   useEffect(() => {
     if (userData) {
       setLoadUser(true);
       setUser(userData.user);
-  
+
       // Kiểm tra và cập nhật trạng thái purchased
       if (userData.user.courses?.find((item: any) => item._id === data._id)) {
         setIsPurchased(true);
       }
+      if (userData.user.courses?.find((item: any) => item._id === data._id)) {
+        setIsPurchased(true);
+      }
     }
+    if (addCartSuccess) {
+      toast.success("Add to cart successfully")
+      setChangedCartItems(true);
 
+    }
+    if (addCartError) {
+      if ("data" in addCartError) {
+        const errorMessage = addCartError as any;
+        toast.error(errorMessage.data.message);
+      }
+    }
     // Kiểm tra trạng thái đăng nhập khi tải trang
     // if (!userData?.user) {
     //   // Nếu chưa đăng nhập, hiển thị modal đăng nhập
     //   setRoute("Login");
     //   openAuthModal(true);
     // }
-  }, [userData]);
+  }, [userData,addCartSuccess,addCartError]);
 
   const discountPercentage =
     ((data?.estimatedPrice - data?.price) / data?.estimatedPrice) * 100;
@@ -71,7 +91,15 @@ const CourseDetail = ({
       openAuthModal(true);
     }
   };
-
+  const handleAddToCart = async (e: any) => {
+    const courseId = data._id;
+    const name = data.name;
+    const thumbnail = data.thumbnail;
+    const price = data.price;
+    const estimatedPrice = data.estimatedPrice;
+    await addToCart({courseId, name, thumbnail, price, estimatedPrice});
+    
+  };
   return (
     <div>
       <div className="w-[90%] 800px:w-[90%] m-auto py-5">
@@ -109,7 +137,7 @@ const CourseDetail = ({
                     borderRadius: "50%",
                   }}
                 />
-                <h5 className="pl-2 text-[20px] text-black dark:text-[#fff]">{data.lecturer?data.lecturer?.name:"Anonymous Lecturer"}</h5>
+                <h5 className="pl-2 text-[20px] text-black dark:text-[#fff]">{data.lecturer ? data.lecturer?.name : "Anonymous Lecturer"}</h5>
               </div>
             </div>
             <br></br>
@@ -248,7 +276,7 @@ const CourseDetail = ({
             </div>
           </div>
           <div className="w-full 800px:w-[35%] relative">
-            <div className="sticky top-[100px] left-0 z-50 w-full">
+            <div className="sticky top-[100px] left-0 z-1 w-full">
               <CoursePlayer videoUrl={data?.demoUrl} title={data?.title} />
               <div className="flex items-center">
                 <h1 className="pt-5 text-[25px] ☐ text-black dark:text-white">
@@ -261,7 +289,7 @@ const CourseDetail = ({
                   {discountPercentagePrice}% Off
                 </h4>
               </div>
-              <div className="flex items-center">
+              <div className="">
                 {isPurchased ? (
                   <Link
                     className={`${styles.button} !w-[180px] my-3 font-Poppins cursor-pointer !bg-[crimson]`}
@@ -270,13 +298,22 @@ const CourseDetail = ({
                     Enter to Course
                   </Link>
                 ) : (
-                  <div
-                    className={`${styles.button} !w-[180px] my-3 font-Poppins cursor-pointer !bg-[crimson]`}
-                    onClick={handleOrder}
-                  >
-                    Buy Now {data.price}$
+                  <div className="flex items-center justify-between">
+                    <div
+                      className={`${styles.button} !w-[180px] my-3 font-Poppins cursor-pointer !bg-[crimson]`}
+                      onClick={handleOrder}
+                    >
+                      Buy Now {data.price}$
+                    </div>
+                    <div
+                      className={`${styles.button} !w-[180px] my-3 font-Poppins cursor-pointer !bg-[crimson]`}
+                      onClick={handleAddToCart}
+                    >
+                      Add to cart
+                    </div>
                   </div>
                 )}
+
               </div>
               <br />
               <p className="pb-1 text-black dark:text-white">
