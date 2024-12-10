@@ -24,6 +24,7 @@ import { useLoadUserQuery } from "@/redux/features/api/apiSlice";
 import { useEditHeroDataMutation } from "@/redux/features/layout/layoutApi";
 import Cart from "./Course/Cart/CartComponent";
 import { useAddToCartMutation, useAddToUserCartMutation, useDeleteFromCartMutation, useDeleteFromUserCartMutation, useGetCartQuery, useGetUserCartQuery } from "@/redux/features/orders/ordersApi";
+import { redirect } from "next/navigation";
 
 type Props = {
   open: boolean;
@@ -34,7 +35,7 @@ type Props = {
   changedCartItems?: boolean;
   setChangedCartItems?:any;
 };
-const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute,changedCartItems, setChangedCartItems  }) => {
+const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute,changedCartItems, setChangedCartItems,  }) => {
   const [cart, setCart] = useState([]);
   const [showCart, setShowCart] = useState(false);
   const [active, setActive] = useState(false);
@@ -68,6 +69,7 @@ const [deleteFromCart, { isSuccess: deleteCartSuccess, error: deleteCartError }]
             name: data?.user?.name,
             avatar: data?.user?.image,
           });
+
         }
       }
       if (data === null) {
@@ -78,6 +80,12 @@ const [deleteFromCart, { isSuccess: deleteCartSuccess, error: deleteCartError }]
 
         if (!isLoading && !userData) {
           setRoute("Login");
+        }
+      }
+      if (userData){
+        console.log("Redirecting",userData.user);
+        if(userData.user.role==="admin"||userData.user.role==="lecturer"){
+          redirect("/admin");
         }
       }
       if (dataCart) {
@@ -316,7 +324,7 @@ const [deleteFromCart, { isSuccess: deleteCartSuccess, error: deleteCartError }]
         <div className="cart-box">
           <Cart cart={cart} setCart={setCart} 
           deleteFromCart={handleDeleteCart} 
-          user={userData.user} setRoute={setRoute} 
+          user={userData?.user} setRoute={setRoute} 
           setOpen={setOpen} />
         </div>
       )}

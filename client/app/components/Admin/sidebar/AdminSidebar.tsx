@@ -29,6 +29,9 @@ import { useTheme } from "next-themes";
 import { IoMdList } from "react-icons/io";
 import { styles } from "@/app/styles/styles";
 import { QuestionMarkOutlined } from "@mui/icons-material";
+import { signOut } from "next-auth/react";
+import toast from "react-hot-toast";
+import { useLogOutQuery } from "@/redux/features/auth/authApi";
 
 interface ItemProps {
   title: string;
@@ -57,12 +60,22 @@ const AdminSidebar = () => {
   const [selected, setSelected] = useState("Dashboard");
   const [mounted, setMounted] = useState(false);
   const { theme, setTheme } = useTheme();
-
+  const [logout, setLogout] = useState(false);
+  const { } = useLogOutQuery(undefined, {
+    skip: !logout ? true : false,
+  });
   useEffect(() => setMounted(true), []);
   if (!mounted) {
     return null;
   }
+  const handleLogout = async () => {
+    toast.success("Logout successfully!");
+    signOut();
+    await setLogout(true);
 
+    // redirect("/"); 
+    // ==> Automatically redirect to homepage thank to Protected component
+  };
   return (
     <Box
       sx={{
@@ -184,24 +197,7 @@ const AdminSidebar = () => {
                         className="!text-[18px] text:black dark:text-[#fff] capitalize !font-[400]"
                         sx={{ m: "15px 0 5px 25px" }}
                       >
-                        {!isCollapsed && "Content"}
                       </Typography>
-                      {/* Create Course */}
-                      <Item
-                        title="Create course"
-                        to="/admin/create-course"
-                        icon={<VideoCallIcon />}
-                        selected={selected}
-                        setSelected={setSelected}
-                      />
-                      {/* Courses */}
-                      <Item
-                        title="Courses"
-                        to="/admin/courses"
-                        icon={<OndemandVideoIcon />}
-                        selected={selected}
-                        setSelected={setSelected}
-                      />
                       {/* Customize */}
                       <Typography
                         variant="h5"
@@ -302,13 +298,9 @@ const AdminSidebar = () => {
                         setSelected={setSelected}
                       />
                       {/* Logout */}
-                      <Item
-                        title="Logout"
-                        to="/profile"
-                        icon={<ExitToAppIcon />}
-                        selected={selected}
-                        setSelected={setSelected}
-                      />
+                      <button className="pl-6" onClick={handleLogout}>
+                        <ExitToAppIcon /> Logout
+                      </button>
                     </>
                   ) : (
                     <>
@@ -337,19 +329,15 @@ const AdminSidebar = () => {
                         setSelected={setSelected}
                       />
                       {/* Logout */}
-                      <Item
-                        title="Logout"
-                        to="/profile"
-                        icon={<ExitToAppIcon />}
-                        selected={selected}
-                        setSelected={setSelected}
-                      />
+                      <button className="pl-6" onClick={handleLogout}>
+                        <ExitToAppIcon /> Logout
+                      </button>
                     </>
 
                   )
                 }
               </div>
-              
+
             </Box>
           )}
         </Menu>
