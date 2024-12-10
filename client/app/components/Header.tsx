@@ -114,9 +114,8 @@ const [deleteFromCart, { isSuccess: deleteCartSuccess, error: deleteCartError }]
         }
       }
     }
-  }, [data, userData, isLoading, route, dataCart, addCartSuccess, deleteCartSuccess, 
-    addCartError, deleteCartError, changedCartItems,
-    cartRefetch, cartError]);
+  }, [data, userData, isLoading, dataCart, addCartSuccess, deleteCartSuccess, 
+    addCartError, deleteCartError, changedCartItems,cartError]);
 
   if (typeof window !== "undefined") {
     window.addEventListener("scroll", () => {
@@ -317,7 +316,7 @@ const [deleteFromCart, { isSuccess: deleteCartSuccess, error: deleteCartError }]
         <div className="cart-box">
           <Cart cart={cart} setCart={setCart} 
           deleteFromCart={handleDeleteCart} 
-          user={userData} setRoute={setRoute} 
+          user={userData.user} setRoute={setRoute} 
           setOpen={setOpen} />
         </div>
       )}

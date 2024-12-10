@@ -1,6 +1,6 @@
 import { styles } from "@/app/styles/styles";
 import { useLoadUserQuery } from "@/redux/features/api/apiSlice";
-import { useCreateOrderMutation } from "@/redux/features/orders/ordersApi";
+import { useCreateCartOrderMutation, useCreateOrderMutation } from "@/redux/features/orders/ordersApi";
 import {
   LinkAuthenticationElement,
   PaymentElement,
@@ -19,16 +19,17 @@ type Props = {
   setOpen: any;
   data: any;
   user: any;
+  setIsSuccess?:any;
 };
 
-const CheckOutForm = ({ setOpen, data, user }: Props) => {
+const CheckOutForm = ({ setOpen, data, user, setIsSuccess }: Props) => {
   const stripe = useStripe();
   const elements = useElements();
-  const [route,setRoute] = useState("Login");
+  const [route, setRoute] = useState("Login");
   const [message, setMessage] = useState<any>("");
-  const [createOrder, { data: orderData, error }] = useCreateOrderMutation();
+  const [createOrder, { data: orderData, error:orderError,isSuccess:orderSuccess }] = useCreateOrderMutation();
+  const [createCartOrder, { data: orderCartData, error: cartError,isSuccess:cartSuccess }] = useCreateCartOrderMutation();
   const [loadUser, setLoadUser] = useState(false);
-  const {} = useLoadUserQuery({ skip: loadUser ? false : true });
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e: any) => {
@@ -47,35 +48,48 @@ const CheckOutForm = ({ setOpen, data, user }: Props) => {
     if (error) {
       setMessage(error.message);
       setIsLoading(false);
-      // return;
-    } else if (paymentIntent && paymentIntent.status === "succeeded") {
+
+    } 
+    else if (paymentIntent && paymentIntent.status === "succeeded") {
       setIsLoading(false);
-      createOrder({ courseId: data._id, payment_info: paymentIntent });
+      if (Array.isArray(data.courseIds)) {
+        createCartOrder({ courseIds: data.courseIds, payment_info: paymentIntent });
+      } else {
+        createOrder({ courseId: data.courseIds, payment_info: paymentIntent });
+      }
     }
   };
 
   useEffect(() => {
     if (orderData) {
       setLoadUser(true);
-      
+
+      const orderedCourses = Array.isArray(data.courseIds) ? data.courseIds.join(", ") : data.courseIds;
+
       socketId.emit("notification", {
         title: "New Order",
-        message: `You have new order: ${data.name}`,
+        message: `You have new order(s): ${orderedCourses}`,
         userId: user._id,
       });
-      redirect(`/course-access/${data._id}`);
-      // setRoute(`/course-access/${data._id}`);
-
+      
     }
 
-    //Nếu có lỗi
-    if (error) {
-      if ("data" in error) {
-        const errorMessage = error as any;
+    if (orderError) {
+      if ("data" in orderError) {
+        const errorMessage = orderError as any;
         toast.error(errorMessage.data.message);
       }
     }
-  }, [orderData, error]);
+    if (cartError) {
+      if ("data" in cartError) {
+        const errorMessage = cartError as any;
+        toast.error(errorMessage.data.message);
+      }
+    }
+    if (cartSuccess || orderSuccess){
+      setIsSuccess(true);
+    }
+  }, [orderData, orderError,orderCartData,cartError,cartSuccess,orderSuccess]);
 
   return (
     <form id="payment-form" onSubmit={handleSubmit}>
@@ -86,7 +100,6 @@ const CheckOutForm = ({ setOpen, data, user }: Props) => {
           {isLoading ? "Paying..." : "Pay now"}
         </span>
       </button>
-      {/* Show any error or success messages */}
       {message && (
         <div id="payment-message" className="text-[red] font-Poppins pt-2">
           {message}

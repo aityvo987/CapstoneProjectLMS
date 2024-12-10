@@ -18,7 +18,7 @@ const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 export const createOrder = CatchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const { courseId, payment_info } = req.body as IOrder;
+        const { courseId, payment_info } = req.body as {courseId:string,payment_info:any};
 
         if (payment_info) {
             if ("id" in payment_info) {
@@ -47,7 +47,7 @@ export const createOrder = CatchAsyncError(async (req: Request, res: Response, n
         }
 
         const data: any = {
-            courseId: course._id,
+            courseIds: [course._id],
             userId: user?.id,
             payment_info,
         };
@@ -121,7 +121,61 @@ export const createOrder = CatchAsyncError(async (req: Request, res: Response, n
         return next(new ErrorHandler(err.message, 500));
     }
 });
+export const createCartOrder = CatchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { courseIds, payment_info } = req.body as { courseIds: string[], payment_info: any };
+        console.log("Paying",courseIds);
+        if (payment_info) {
+            if ("id" in payment_info) {
+                const paymentIntentId = payment_info.id;
+                const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
 
+                if (paymentIntent.status !== "succeeded") {
+                    return next(new ErrorHandler("Payment not authorized!", 400));
+                }
+            }
+        }
+
+        const user = await userModel.findById(req.user?._id);
+        
+        for (const courseId of courseIds) {
+            const courseExistInUser = user?.courses.some((course: any) => course._id.toString() === courseId);
+            if (courseExistInUser) {
+                return next(new ErrorHandler("You have already purchased one or more of the selected courses", 400));
+            }
+
+            const course: ICourse | null = await CourseModel.findById(courseId);
+            if (!course) {
+                return next(new ErrorHandler(`Course with ID ${courseId} not found`, 404));
+            }
+
+            user?.courses.push(course?._id);
+
+            await NotificationModel.create({
+                userId: user?._id,
+                title: "New Order",
+                message: `You have new order: ${course?.name}`,
+            });
+
+            course.purchased = (course.purchased ?? 0) + 1;
+            await course.save();
+        }
+
+        const data: any = {
+            courseIds: courseIds,
+            userId: user?.id,
+            payment_info,
+        };
+
+        await redis.set(req.user?._id, JSON.stringify(user));
+        await user?.save();
+
+        newOrder(data, res, next);
+
+    } catch (err: any) {
+        return next(new ErrorHandler(err.message, 500));
+    }
+});
 //get all Orders
 export const getAllOrders = CatchAsyncError(
     async (req: Request, res: Response, next: NextFunction) => {
@@ -226,7 +280,6 @@ export const deleteCartItemUser = async (req: Request, res: Response) => {
         }
         if (user) {
             user.cart = user.cart.filter((item: CartItem) => item.courseId.toString() !== id);
-
             await user.save();
             await redis.set(req.user._id, JSON.stringify(user));
 
@@ -235,6 +288,28 @@ export const deleteCartItemUser = async (req: Request, res: Response) => {
             return res.status(404).json({ message: 'User not found' });
         }
     } catch (error) {
+        return res.status(500).json({ error: 'Internal server error' });
+    }
+};
+
+export const clearCartItemsUser = async (req: Request, res: Response) => {
+    try {
+        const user = await userModel.findById(req.user._id);
+        
+        if (user) {
+            // Clear all items in the user's cart
+            user.cart = [];
+            
+            await user.save();
+            await redis.set(req.user._id, JSON.stringify(user));
+            console.log("1");
+            return res.status(200).json({ message: 'Cart items cleared successfully', cartItems: user.cart });
+        } else {
+            console.log("2");
+            return res.status(404).json({ message: 'User not found' });
+        }
+    } catch (error) {
+        console.log("3");
         return res.status(500).json({ error: 'Internal server error' });
     }
 };

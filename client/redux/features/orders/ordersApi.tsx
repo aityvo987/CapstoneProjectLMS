@@ -37,6 +37,17 @@ export const orderApi = apiSlice.injectEndpoints({
         credentials: "include" as const,
       }),
     }),
+    createCartOrder: builder.mutation({
+      query: ({ courseIds, payment_info }) => ({
+        url: "/create-cart-order",
+        method: "POST",
+        body: {
+          courseIds,
+          payment_info,
+        },
+        credentials: "include" as const,
+      }),
+    }),
     getCart: builder.query({
       query: () => ({
         url: "/get-cart",
@@ -73,7 +84,14 @@ export const orderApi = apiSlice.injectEndpoints({
     }),
     deleteFromUserCart: builder.mutation({
       query: (id) => ({
-        url: `delete-user-cart/${id}`,
+        url: `/delete-user-cart/${id}`,
+        method: "DELETE",
+        credentials: "include" as const,
+      }),
+    }),
+    clearUserCart: builder.mutation({
+      query: (id) => ({
+        url: `/clear-user-cart/`,
         method: "DELETE",
         credentials: "include" as const,
       }),
@@ -92,4 +110,6 @@ export const {
   useGetUserCartQuery,
   useAddToUserCartMutation,
   useDeleteFromUserCartMutation,
+  useCreateCartOrderMutation,
+  useClearUserCartMutation,
 } = orderApi;
