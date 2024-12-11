@@ -14,8 +14,6 @@ const page: FC<Props> = () => {
   const [open, setOpen] = useState(false);
   const [activeItem, setActiveItem] = useState(0);
   const [route,setRoute] = useState("Login");
-  const {data,isLoading,refetch} = useLoadUserQuery(undefined,{})
-  const user = data.user;
   return (
     <div>
       

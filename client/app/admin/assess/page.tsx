@@ -5,7 +5,7 @@ import EditCourse from '@/app/components/Admin/Course/EditCourse'
 import AdminProtected from '@/app/hooks/adminProtected'
 import AdminSidebar from '@/app/components/Admin/sidebar/AdminSidebar'
 import DashboardHeader from '@/app/components/Admin/DashboardHeader'
-import CourseQuizzes from '@/app/components/Admin/Course/CourseQuizzes'
+import CourseQuizzes from '@/app/components/Admin/Course/Quizzes/CourseQuizzes'
 type Props = {}
 
 const page = ({params}:any) => {
@@ -24,7 +24,7 @@ const page = ({params}:any) => {
                     </div>
                     <div className="w-[85%]">
                         <DashboardHeader open={open} setOpen={setOpen}/>
-                        <CourseQuizzes 
+                        <CourseQuizzes
                         id={id}
                         />
                     </div>
