@@ -3,7 +3,7 @@ import React, { FC, useEffect, useState } from "react";
 import Link from "next/link";
 import NavItems from "../utils/NavItems";
 import { ThemeSwitcher } from "../utils/ThemeSwitcher";
-import { HiOutlineMenuAlt3, HiOutlineUserCircle } from "react-icons/hi";
+import { HiOutlineMenuAlt3, HiOutlineShoppingCart, HiOutlineUserCircle } from "react-icons/hi";
 import CustomModal from "../utils/CustomModal";
 import Login from "../components/Auth/Login";
 import SignUp from "../components/Auth/SignUp";
@@ -22,6 +22,9 @@ import {
 import toast from "react-hot-toast";
 import { useLoadUserQuery } from "@/redux/features/api/apiSlice";
 import { useEditHeroDataMutation } from "@/redux/features/layout/layoutApi";
+import Cart from "./Course/Cart/CartComponent";
+import { useAddToCartMutation, useAddToUserCartMutation, useDeleteFromCartMutation, useDeleteFromUserCartMutation, useGetCartQuery, useGetUserCartQuery } from "@/redux/features/orders/ordersApi";
+import { redirect } from "next/navigation";
 
 type Props = {
   open: boolean;
@@ -29,8 +32,12 @@ type Props = {
   activeItem: number;
   route: string;
   setRoute: (route: string) => void;
+  changedCartItems?: boolean;
+  setChangedCartItems?:any;
 };
-const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
+const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute,changedCartItems, setChangedCartItems,  }) => {
+  const [cart, setCart] = useState([]);
+  const [showCart, setShowCart] = useState(false);
   const [active, setActive] = useState(false);
   const [openSidebar, setOpenSidebar] = useState(false);
   // const { user } = useSelector((state: any) => state.auth);
@@ -38,14 +45,23 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
   const { data } = useSession();
   const [socialAuth, { isSuccess, error }] = useSocialAuthMutation();
   const [logout, setLogout] = useState(false);
+  const { data: dataCart, refetch: cartRefetch, error: cartError } = userData === undefined
+    ? useGetCartQuery({}, { refetchOnMountOrArgChange: true })
+    : useGetUserCartQuery({}, { refetchOnMountOrArgChange: true });
+
+const [addToCart, { isSuccess: addCartSuccess, error: addCartError }] = userData === undefined
+    ? useAddToCartMutation({})
+    : useAddToUserCartMutation({});
+
+const [deleteFromCart, { isSuccess: deleteCartSuccess, error: deleteCartError }] = userData === undefined
+    ? useDeleteFromCartMutation({})
+    : useDeleteFromUserCartMutation({});
   const { } = useLogOutQuery(undefined, {
     skip: !logout ? true : false,
   });
 
   useEffect(() => {
     if (!isLoading) {
-      console.log("UserData:", userData);
-      //check user existence
       if (!userData) {
         if (data) {
           socialAuth({
@@ -53,13 +69,12 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
             name: data?.user?.name,
             avatar: data?.user?.image,
           });
+
         }
-
       }
-
       if (data === null) {
         //Success
-        if (route==="Logout") {
+        if (route === "Logout") {
           toast.success("Logout successfully!");
         }
 
@@ -67,8 +82,48 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
           setRoute("Login");
         }
       }
+      if (userData){
+        console.log("Redirecting",userData.user);
+        if(userData.user.role==="admin"||userData.user.role==="lecturer"){
+          redirect("/admin");
+        }
+      }
+      if (dataCart) {
+        setCart(dataCart.cartItems);
+      }
+      if (changedCartItems){
+        cartRefetch();
+        setChangedCartItems(false);
+      }
+      if (addCartSuccess) {
+        cartRefetch();
+        toast.success("Add to cart successfully")
+      }
+      if (deleteCartSuccess) {
+        cartRefetch();
+        toast.success("Delete cart successfully")
+      }
+      if (cartError) {
+        if ("data" in cartError) {
+          const errorMessage = cartError as any;
+          toast.error(errorMessage.data.message);
+        }
+      }
+      if (addCartError) {
+        if ("data" in addCartError) {
+          const errorMessage = addCartError as any;
+          toast.error(errorMessage.data.message);
+        }
+      }
+      if (deleteCartError) {
+        if ("data" in deleteCartError) {
+          const errorMessage = deleteCartError as any;
+          toast.error(errorMessage.data.message);
+        }
+      }
     }
-  }, [data, userData, isLoading]);
+  }, [data, userData, isLoading, dataCart, addCartSuccess, deleteCartSuccess, 
+    addCartError, deleteCartError, changedCartItems,cartError]);
 
   if (typeof window !== "undefined") {
     window.addEventListener("scroll", () => {
@@ -87,13 +142,20 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
       }
     }
   };
+  const handleToggleCart = () => {
+    setShowCart(!showCart);
+  };
+  const handleDeleteCart = async (courseId:string) => {
+    console.log("DeleteCart",courseId);
+    await deleteFromCart(courseId);
+  };
 
   return (
     <div className="w-full relative">
       <div
         className={`${active
-            ? "dark:bg-opacity-50 dark:bg-gradient-to-b dark:from-gray-900 dark:to-black fixed top-0 left-0 w-full h-[80px] z-[80] border-b dark:border-[#ffffff1c] shadow-xl transistion duration-500"
-            : "w-full border-b dark:border-[#fffff1c] h-[80px] z-[80] dark:shadow "
+          ? "dark:bg-opacity-50 dark:bg-gradient-to-b dark:from-gray-900 dark:to-black fixed top-0 left-0 w-full h-[80px] z-[80] border-b dark:border-[#ffffff1c] shadow-xl transistion duration-500"
+          : "w-full border-b dark:border-[#fffff1c] h-[80px] z-[80] dark:shadow "
           }`}
       >
         <div className="w-[95%] 800px:w-[92%] m-auto py-2 h-full">
@@ -137,6 +199,11 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
                   onClick={() => setOpen(true)}
                 />
               )}
+              <HiOutlineShoppingCart
+                size={25}
+                className="cursor-pointer ml-5 my-2 dark:text-white text-black items-center"
+                onClick={() => handleToggleCart()}
+              />
             </div>
           </div>
         </div>
@@ -253,6 +320,15 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
           </>
         )}
       </div>
+      {showCart && (
+        <div className="cart-box">
+          <Cart cart={cart} setCart={setCart} 
+          deleteFromCart={handleDeleteCart} 
+          user={userData?.user} setRoute={setRoute} 
+          setOpen={setOpen} />
+        </div>
+      )}
+
     </div>
   );
 };

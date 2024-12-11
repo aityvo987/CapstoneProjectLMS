@@ -21,7 +21,7 @@ const CourseDetailPage = ({ id }: Props) => {
   const [open, setOpen] = useState(false);
   const [route, setRoute] = useState("Login");
   const { data, isLoading } = useGetUserCourseDetailQuery({ id });
-
+  const [changedCartItems,setChangedCartItems]= useState(false);
   const { data: config } = useGetStripePublishablekeyQuery({});
   const [createPaymentIntent, { data: paymentIntentData }] =
     useCreatePaymentIntentMutation();
@@ -56,7 +56,7 @@ const CourseDetailPage = ({ id }: Props) => {
           <Heading
             title={data.course.name + " ELearning"}
             description={
-              "ELearning is a programming community which is developed by shahriar sajeeb for helping programmers"
+              "ELearning is a programming community which is developed by Dat Cuong for helping programmers"
             }
             keywords={data?.course?.tags}
           ></Heading>
@@ -66,6 +66,8 @@ const CourseDetailPage = ({ id }: Props) => {
             open={open}
             setOpen={setOpen}
             activeItem={1}
+            changedCartItems={changedCartItems}
+            setChangedCartItems={setChangedCartItems}
           />
           {stripePromise && (
             <CourseDetail
@@ -76,6 +78,7 @@ const CourseDetailPage = ({ id }: Props) => {
                 /* logic chuyển hướng hoặc cập nhật route */
               }}
               setOpen={setOpen}
+              setChangedCartItems={setChangedCartItems}
             />
           )}
 

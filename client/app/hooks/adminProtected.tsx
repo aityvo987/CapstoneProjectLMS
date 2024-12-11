@@ -24,5 +24,6 @@ export default function AdminProtected({ children }: ProtectedProps) {
   }
   else {
     console.log("Missing User", user);
+    return redirect("/");
   }
 }

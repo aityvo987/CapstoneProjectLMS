@@ -229,7 +229,7 @@ const handleOptionChange = (index:any, i:number, o:number, value:any) => {
                                     {
                                         !isCollapsed[index] && (
                                             <>
-                                                <label className={`${styles.label} text-[20px]`} htmlFor="essay">
+                                                {/* <label className={`${styles.label} text-[20px]`} htmlFor="essay">
                                                     Essay Quizzes
                                                 </label>
                                                 {
@@ -244,11 +244,11 @@ const handleOptionChange = (index:any, i:number, o:number, value:any) => {
                                                             onChange={(e) => handleEssayQuestionChange(index, i, e.target.value)}
                                                         />
                                                     ))
-                                                }
-                                                <IoIosAddCircle
+                                                } */}
+                                                {/* <IoIosAddCircle
                                                     style={{ margin: "10px 0px", cursor: "pointer", width: "30px" }}
                                                     onClick={() => handleAddEssaysQuizzes(index)}
-                                                />
+                                                /> */}
                                                 <br />
                                                 <label className={`${styles.label} text-[20px]`} htmlFor="essay">
                                                     Multiple Choice Question

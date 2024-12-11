@@ -20,11 +20,19 @@ export const getAllcoursesService = async (res: Response) => {
     });
 };
 
-export const getCoursesByLecturerId = async (res:Response, lecturerId:string) => {
-    const courses = await CourseModel.find({ lecturer: lecturerId }).sort({ createdAt: -1 });
+export const getCoursesByLecturerId = async (res: Response, lecturerId: string) => {
+    try {
+        const courses = await CourseModel.find({ 'lecturer._id': lecturerId }).sort({ createdAt: -1 });
 
-    res.status(200).json({
-        success:true,
-        courses,
-    });
+        res.status(200).json({
+            success: true,
+            courses,
+        });
+    } catch (error) {
+        console.error("Error fetching courses by lecturer ID:", error);
+        res.status(500).json({
+            success: false,
+            message: "An error occurred while fetching courses by lecturer ID.",
+        });
+    }
 };

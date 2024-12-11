@@ -1,15 +1,14 @@
-import mongoose,{Document,Model,Schema} from "mongoose";
+import mongoose, { Document, Model, Schema } from "mongoose";
 
-export interface IOrder extends Document{
-    courseId: string;
+export interface IOrder extends Document {
+    courseIds: string[];
     userId: string;
     payment_info: object;
-
 }
 
 const orderSchema = new Schema<IOrder>({
-    courseId: {
-        type:String,
+    courseIds: {
+        type: [String],
         required: true
     },
     userId: {
@@ -20,8 +19,8 @@ const orderSchema = new Schema<IOrder>({
         type: Object,
         // required: true
     },
-},{timestamps:true});
+}, { timestamps: true });
 
-const OrderModel:Model<IOrder> = mongoose.model('Order', orderSchema);
+const OrderModel: Model<IOrder> = mongoose.model('Order', orderSchema);
 
 export default OrderModel;

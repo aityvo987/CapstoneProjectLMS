@@ -22,7 +22,7 @@ const studentEssayAnswerSchema = new Schema<IStudentEssayAnswer>({
 
 
 const studentAnswerSchema = new Schema<IStudentAnswer>({
-    user: userSchema,
+    user: Object,
     courseId:String,
     courseDataId: String,
     essayAnswers: [studentEssayAnswerSchema],

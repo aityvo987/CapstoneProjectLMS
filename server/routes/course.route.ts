@@ -2,7 +2,7 @@ import express from "express";
 import { addAnswer, addQuestion, addReview, addReviewReply, editCourse, getAdminAllCourses, getAllCourse, getCourseContent, getLecturerAllCourses, getSingleCourse, updateProgress, uploadCourse } from "../controllers/course.controller";
 import { authorizeRoles, isAutheticated } from "../middleware/auth";
 import { deleteCourse } from "../controllers/course.controller";
-import { addQuizzAnswer } from "../controllers/answer.controller";
+import { addQuizzAnswer, getQuizzAnswer } from "../controllers/answer.controller";
 
 const courseRouter = express.Router();
 
@@ -31,8 +31,13 @@ courseRouter.get("/get-admin-courses", isAutheticated, authorizeRoles("admin"), 
 
 courseRouter.get("/get-lecturer-courses/", isAutheticated, authorizeRoles("lecturer"), getLecturerAllCourses);
 
-courseRouter.delete('/delete-course/:id', isAutheticated, authorizeRoles("admin"), deleteCourse);
+courseRouter.delete('/delete-course/:id', isAutheticated, authorizeRoles("admin","lecturer"), deleteCourse);
 
-courseRouter.post("/submit-quiz-answer",isAutheticated,addQuizzAnswer);
+courseRouter.post("/submit-essay-answer",isAutheticated,addQuizzAnswer);
+
+courseRouter.get("/get-essay-answer/", isAutheticated, authorizeRoles("admin","lecturer"), getQuizzAnswer);
+
+courseRouter.delete("/delete-essay-answer/", isAutheticated, authorizeRoles("admin","lecturer"), getQuizzAnswer);
+
 
 export default courseRouter;
