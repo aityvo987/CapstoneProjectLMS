@@ -54,10 +54,6 @@ export const createOrder = CatchAsyncError(async (req: Request, res: Response, n
 
         //create mailData to fetch data to the email user after success purchasing
         const mailData = {
-            // user: {
-            //     name: user?.name,
-            // },
-            //order object 
             order: {
                 _id: course._id.toString().slice(0, 6), //error   _id: course._id.slice(0, 6),
                 name: course.name,
@@ -65,10 +61,7 @@ export const createOrder = CatchAsyncError(async (req: Request, res: Response, n
                 //order Date: type===> 2014 September 29
                 date: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
             },
-            // ORIGIN: process.env.ORIGIN,
         };
-
-        //fetch emailData to user mail
 
         const html = await ejs.renderFile(
             path.join(__dirname, '../mails/order-confirmmation.ejs'),

@@ -1,3 +1,8 @@
+
+import NextAuth from "next-auth";
+import GoogleProvider from "next-auth/providers/google";
+import GithubProvider from "next-auth/providers/github";
+
 const crypto = require('crypto');
 const algorithm = 'aes-256-cbc';
 const key = '2011001120110356tiendatphantancg'; // Same key used for encryption
@@ -14,9 +19,6 @@ function decrypt(text:string) {
   }
 }
 
-import NextAuth from "next-auth";
-import GoogleProvider from "next-auth/providers/google";
-import GithubProvider from "next-auth/providers/github";
 
 export const authOptions = {
   providers: [

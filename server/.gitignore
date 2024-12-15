@@ -8,6 +8,10 @@
 # testing
 /coverage
 
+# production
+#/build
+
+/ute-elearning
 
 # misc
 .DS_Store
