@@ -304,12 +304,6 @@ const CourseDetail = ({
                   <div className="flex items-center justify-between">
                     <div
                       className={`${styles.button} !w-[180px] my-3 font-Poppins cursor-pointer !bg-[crimson]`}
-                      onClick={handleOrder}
-                    >
-                      Buy Now {data.price}$
-                    </div>
-                    <div
-                      className={`${styles.button} !w-[180px] my-3 font-Poppins cursor-pointer !bg-[crimson]`}
                       onClick={handleAddToCart}
                     >
                       Add to cart
