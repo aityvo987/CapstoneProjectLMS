@@ -130,7 +130,9 @@ export const createCartOrder = CatchAsyncError(async (req: Request, res: Respons
         }
 
         const user = await userModel.findById(req.user?._id);
-        
+        const mailData = {
+            orders: [] as { _id: string; name: string; price: number; date: string }[]
+        };
         for (const courseId of courseIds) {
             const courseExistInUser = user?.courses.some((course: any) => course._id.toString() === courseId);
             if (courseExistInUser) {
@@ -141,6 +143,13 @@ export const createCartOrder = CatchAsyncError(async (req: Request, res: Respons
             if (!course) {
                 return next(new ErrorHandler(`Course with ID ${courseId} not found`, 404));
             }
+
+            mailData.orders.push({
+                _id: course._id.toString().slice(0, 6),
+                name: course.name,
+                price: course.price,
+                date: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
+            });
 
             user?.courses.push(course?._id);
 
@@ -153,6 +162,37 @@ export const createCartOrder = CatchAsyncError(async (req: Request, res: Respons
             course.purchased = (course.purchased ?? 0) + 1;
             await course.save();
         }
+        
+        try{
+            console.log("MailData",mailData);
+            const html = await ejs.renderFile(
+                path.join(__dirname, '../mails/order-confirmmation.ejs'),
+                { order: mailData }
+            );
+            console.log("MailData 1",{ order: mailData });
+        }catch (err:any) {
+            console.log("Error Email Creating:",err);
+            return next(new ErrorHandler(err.message, 500));
+        }
+        
+        
+        try {
+            if (user) {
+                let data={ order: mailData }
+                await sendMail({
+                    email: user.email,
+                    subject: "Order Confirmation",
+                    template: "order-confirmmation.ejs",
+                    data,
+                });
+                console.log("MailData 2",data);
+            }
+        } catch (err:any) {
+            console.log("Error Email:",err);
+            return next(new ErrorHandler(err.message, 500));
+        }
+
+
 
         const data: any = {
             courseIds: courseIds,
