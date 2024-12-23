@@ -32,7 +32,8 @@ import { QuestionMarkOutlined } from "@mui/icons-material";
 import { signOut } from "next-auth/react";
 import toast from "react-hot-toast";
 import { useLogOutQuery } from "@/redux/features/auth/authApi";
-
+import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 interface ItemProps {
   title: string;
   to: string;
@@ -61,21 +62,21 @@ const AdminSidebar = () => {
   const [mounted, setMounted] = useState(false);
   const { theme, setTheme } = useTheme();
   const [logout, setLogout] = useState(false);
+  const router = useRouter(); 
   const { } = useLogOutQuery(undefined, {
     skip: !logout ? true : false,
   });
-  useEffect(() => setMounted(true), []);
+  useEffect(() => {
+    setMounted(true)
+    if(!user){
+      router.push("/admin")
+    }
+  }, []);
   if (!mounted) {
     return null;
   }
-  const handleLogout = async () => {
-    toast.success("Logout successfully!");
-    signOut();
-    await setLogout(true);
-
-    // redirect("/"); 
-    // ==> Automatically redirect to homepage thank to Protected component
-  };
+  
+  
   return (
     <Box
       sx={{
@@ -298,9 +299,13 @@ const AdminSidebar = () => {
                         setSelected={setSelected}
                       />
                       {/* Logout */}
-                      <button className="pl-6" onClick={handleLogout}>
-                        <ExitToAppIcon /> Logout
-                      </button>
+                      <Item
+                        title="Logout"
+                        to="/admin/redirect"
+                        icon={<ExitToAppIcon />}
+                        selected={selected}
+                        setSelected={setSelected}
+                      />
                     </>
                   ) : (
                     <>
@@ -329,9 +334,13 @@ const AdminSidebar = () => {
                         setSelected={setSelected}
                       />
                       {/* Logout */}
-                      <button className="pl-6" onClick={handleLogout}>
-                        <ExitToAppIcon /> Logout
-                      </button>
+                      <Item
+                        title="Logout"
+                        to="/admin/redirect"
+                        icon={<ExitToAppIcon />}
+                        selected={selected}
+                        setSelected={setSelected}
+                      />
                     </>
 
                   )
