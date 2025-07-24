@@ -58,5 +58,7 @@ npm run init
 # Start development server
 npm run dev
 
-
+```
+### Note:
+- For the project to work, you might need to add your own Mongodb, Cloudinary, Redis, Stripe into the .env
 ### :black_nib: Topic Management
